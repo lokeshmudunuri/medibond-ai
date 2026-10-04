@@ -8,49 +8,22 @@ import { ModelInstallStatus } from './src/types/model';
 
 export default function App() {
   useEffect(() => {
-    const initializeLocalAI = async () => {
-      console.log('========================================================');
-      console.log('[CareBond AI] Initializing PocketPal-style Local AI Engine...');
-      console.log('========================================================');
-
+    const bootstrapApp = async () => {
       try {
+        console.log('========================================================');
+        console.log('[CareBond AI] Initializing on-device medical companion...');
+        console.log('========================================================');
+
         const modelManager = ModelManager.getInstance();
-        const aiEngine = AIEngine.getInstance();
-
-        // Restore any installed models on disk
+        // Restore local model catalog in background without blocking UI
         await modelManager.restoreFromDisk();
-
-        const packages = modelManager.getPackages();
-        const installedPkg = packages.find((p) => p.status === ModelInstallStatus.Installed);
-
-        if (installedPkg) {
-          console.log(`[CareBond AI] Found installed model on disk: ${installedPkg.metadata.displayName}`);
-          console.log(`[CareBond AI] Loading ${installedPkg.metadata.modelId} via llama.rn...`);
-          const loaded = await modelManager.loadModel(installedPkg.metadata.modelId);
-          console.log('[CareBond AI] Model load result:', loaded);
-
-          if (loaded) {
-            console.log('[CareBond AI] Testing offline streaming inference: "Hello. Introduce yourself in one sentence."');
-            const testPrompt = 'Hello. Introduce yourself in one sentence.';
-
-            let fullResponse = '';
-            for await (const chunk of aiEngine.streamChat(testPrompt)) {
-              fullResponse += chunk.token;
-              console.log('[CareBond AI TOKEN]:', chunk.token);
-            }
-
-            console.log('[CareBond AI FINAL RESPONSE]:', fullResponse);
-            console.log('[CareBond AI REAL OFFLINE INFERENCE VERIFIED 100% SUCCESS]');
-          }
-        } else {
-          console.log('[CareBond AI] No installed GGUF models on disk yet. Ready for direct phone download from Hugging Face.');
-        }
+        console.log('[CareBond AI] On-device services and model catalog ready.');
       } catch (err: any) {
-        console.error('[CareBond AI Initialization Notice]:', err?.message || err);
+        console.warn('[CareBond AI Bootstrap Notice]:', err?.message || err);
       }
     };
 
-    initializeLocalAI();
+    bootstrapApp();
   }, []);
 
   return (
