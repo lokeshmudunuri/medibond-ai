@@ -44,6 +44,22 @@ export class ModelRouter {
     return ModelRouter.instance;
   }
 
+  public static selectModelForTask(
+    taskType: 'medical_reasoning' | 'fast_checkin' | 'recovery_escalation' | 'general' = 'general',
+    ramGb?: number
+  ): { modelId: string; displayName: string } {
+    const router = ModelRouter.getInstance();
+    if (ramGb) {
+      router.setDetectedRamGb(ramGb);
+    }
+    const t = taskType === 'recovery_escalation' ? 'medical_reasoning' : taskType;
+    const decision = router.routeModel(t as any);
+    return {
+      modelId: decision.selectedModelId,
+      displayName: decision.modelDisplayName,
+    };
+  }
+
   public async detectDeviceProfile(): Promise<void> {
     try {
       this.cachedStorage = await NativeDownloader.getStorageInfo();

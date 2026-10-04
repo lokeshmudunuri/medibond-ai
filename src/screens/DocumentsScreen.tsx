@@ -15,6 +15,7 @@ import { useDocumentStore } from '../store/useDocumentStore';
 import { HealthMemoryService } from '../services/HealthMemoryService';
 import { MedicalDocumentReasoningService } from '../services/MedicalDocumentReasoningService';
 import { MedicationReminderService } from '../services/MedicationReminderService';
+import { DocumentVaultService } from '../services/DocumentVaultService';
 import { DocumentClassificationType } from '../services/DocumentProcessor';
 import { CaseFile, HealthTimelineEvent, MedicineEntity, ReportEntity } from '../types';
 
@@ -189,6 +190,18 @@ export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
     // Commit with reviewed medicines
     activeScanResult.extractedMedicines = reviewedMeds;
     confirmAndCommitToCase(selectedCaseId);
+
+    // Also persist to DocumentVaultService
+    DocumentVaultService.addDocumentRecord(selectedCaseId || 'default_case', {
+      title: activeScanResult.documentTitle || 'Confirmed Medical Document',
+      originalImageUri: activeScanResult.localFilePath || activeScanResult.report?.localFilePath || 'file:///default_image.jpg',
+      rawOcrText: activeScanResult.rawOcrText,
+      userVerifiedText: editableOcrText,
+      doctorName: activeScanResult.doctorInfo?.doctorName,
+      hospitalName: activeScanResult.doctorInfo?.hospitalName,
+      status: 'STORED',
+    });
+
     setTimelineEvents(memory.getTimelineEvents(selectedCaseId));
     setReviewModalVisible(false);
     setAiExplanation('');

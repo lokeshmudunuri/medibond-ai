@@ -89,4 +89,12 @@ export class EmergencySafetyEngine {
       isEmergency: false,
     };
   }
+
+  public static evaluate(input: string): EmergencyEvaluation & { urgentActionSummary?: string } {
+    const res = this.evaluateRedFlags(input);
+    return {
+      ...res,
+      urgentActionSummary: res.immediateAction,
+    };
+  }
 }

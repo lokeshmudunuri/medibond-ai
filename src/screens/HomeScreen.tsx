@@ -117,6 +117,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <Text style={[styles.actionTitle, styles.voiceTitle]}>Voice Agent</Text>
             <Text style={styles.actionSubtitle}>Talk to CareBond</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('Vault')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionIcon}>📁</Text>
+            <Text style={styles.actionTitle}>Record Vault</Text>
+            <Text style={styles.actionSubtitle}>Scans & Labs</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('Storage')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionIcon}>💾</Text>
+            <Text style={styles.actionTitle}>Storage</Text>
+            <Text style={styles.actionSubtitle}>Models & Data</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Case Files Section */}

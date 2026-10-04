@@ -11,17 +11,21 @@ import { ChatScreen } from '../screens/ChatScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { ModelManagerScreen } from '../screens/ModelManagerScreen';
 import { DebugScreen } from '../screens/DebugScreen';
+import { StorageScreen } from '../screens/StorageScreen';
+import { DocumentVaultScreen } from '../screens/DocumentVaultScreen';
 
 export type ScreenType =
   | 'Home'
   | 'CaseDetail'
   | 'Voice'
   | 'Documents'
+  | 'Vault'
   | 'Recovery'
   | 'Doctor'
   | 'Chat'
   | 'Settings'
   | 'Models'
+  | 'Storage'
   | 'Debug';
 
 interface NavigationState {
@@ -77,6 +81,8 @@ export const AppNavigator = () => {
         return <VoiceScreen />;
       case 'Documents':
         return <DocumentsScreen />;
+      case 'Vault':
+        return <DocumentVaultScreen />;
       case 'Recovery':
         return <RecoveryScreen navigation={navigation} />;
       case 'Doctor':
@@ -87,6 +93,8 @@ export const AppNavigator = () => {
         return <SettingsScreen navigation={navigation} />;
       case 'Models':
         return <ModelManagerScreen navigation={navigation} />;
+      case 'Storage':
+        return <StorageScreen />;
       case 'Debug':
         return <DebugScreen />;
       default:
@@ -99,6 +107,8 @@ export const AppNavigator = () => {
     currentScreen === 'Chat' ||
     currentScreen === 'Settings' ||
     currentScreen === 'Models' ||
+    currentScreen === 'Storage' ||
+    currentScreen === 'Vault' ||
     currentScreen === 'Debug';
 
   return (
