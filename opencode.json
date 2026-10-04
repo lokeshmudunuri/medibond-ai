@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "ollama-local/qwen3-coder-16k:latest",
+  "provider": {
+    "ollama-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama Local",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3-coder-16k:latest": {
+          "name": "Qwen3 Coder 16K Latest",
+          "tool_call": true,
+          "limit": {
+            "context": 16384,
+            "output": 8192
+          }
+        }
+      }
+    }
+  }
+}

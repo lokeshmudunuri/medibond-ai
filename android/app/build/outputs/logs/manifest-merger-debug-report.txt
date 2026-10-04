@@ -1,0 +1,434 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-29:12
+MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-29:12
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
+MERGED from [:llama.rn] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\llama.rn\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:react-native-safe-area-context] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:react-native-screens] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:2:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9e47b01a4e8c579ddf8d031bb6671842\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3cecd2d2a59be5589d3048bff9b0a25d\transformed\appcompat-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.facebook.fresco:fresco:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\71bcf29ccdd0a399a313c9fe8cae9235\transformed\jetified-fresco-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8dfb4d5459b92566a398b241b0e805f2\transformed\jetified-imagepipeline-okhttp3-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:drawee:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4714c0cdc6daf6e9ac13d4ddb9561d64\transformed\jetified-drawee-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:nativeimagefilters:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e1527abf52272b3f6567819b88258bd9\transformed\jetified-nativeimagefilters-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:memory-type-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f8f723a6ef48a37372de8a788fa16f0b\transformed\jetified-memory-type-native-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:memory-type-java:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d1613f6eac0007728f4a87e499ff52ec\transformed\jetified-memory-type-java-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:imagepipeline-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\be3016635d5fa9379d8cbda8834e3ecf\transformed\jetified-imagepipeline-native-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:memory-type-ashmem:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2b629d3ebef7e427ac4be82918c9f49\transformed\jetified-memory-type-ashmem-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:imagepipeline:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\59ad7284705830bd56afdd2263036be6\transformed\jetified-imagepipeline-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:nativeimagetranscoder:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ca1d8fc7203b88be5acbf445adfc673f\transformed\jetified-nativeimagetranscoder-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:imagepipeline-base:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c9fd422e8f9e25ff9c1f3c5afda993e0\transformed\jetified-imagepipeline-base-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:urimod:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5c435162109d13d5787e647b55706079\transformed\jetified-urimod-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:vito-source:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88a341a37b7b00e984513fd77fa1fbb3\transformed\jetified-vito-source-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f2c7bb646658a43bac8ad25bf6f4020b\transformed\jetified-middleware-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\34af0cc46f5c6c96ff889bb506174318\transformed\fragment-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment-ktx:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fb62019cc0a6cfefebc869e3add7b7fb\transformed\jetified-fragment-ktx-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.facebook.fresco:ui-core:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a18cbee6e53302086c04c4bbf4c75084\transformed\jetified-ui-core-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:soloader:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1791987478b1211d61f76cfbe5bb2b03\transformed\jetified-soloader-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fresco:fbcore:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b5a04a17bff66263a90f5e61b10d77b\transformed\jetified-fbcore-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a938427dc760089389a50b5fa07c1f4\transformed\jetified-activity-1.7.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-ktx:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\aeeee6ae8d29729a7258fe4d640328a1\transformed\jetified-activity-ktx-1.7.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b96a4b40303d34d41a9521afcf9cb52a\transformed\jetified-savedstate-ktx-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.autofill:autofill:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1ee2d9cd9f6ac4e3f20d18099c755e61\transformed\jetified-autofill-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\60c2d70d93795ab0aa745561fb92dc15\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\36aca3ad8a5ab054ddd23fa5a6481c01\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5d03bed10c66fab30387b1331cec23d0\transformed\jetified-emoji2-views-helper-1.2.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2faf3f7ae18fb04fbbf1286cd1eb95d1\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8ede720498cd8de508e481d7ffb8d260\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b74723d7b9b445e88bf88e9c672d7100\transformed\drawerlayout-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2360b83c579947821be9eebd6edb883b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e62670007c98b5bfd7b1428ef3a8eba1\transformed\transition-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81dd53084a4307beeb7daf9a56eccd10\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f1504eb49276b488589642096350d34f\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9c4b6690c9c08eec99093b669a503819\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5676b3af536450a815cf5aeb5dfaa02d\transformed\recyclerview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39817e2ada81141a273af7978aa6cde0\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\93cc1b37a82a0f7bf17d2ca6828c05ef\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b3494f506c0ef8cd87e666495d9827d\transformed\jetified-lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88e15c6f59a00b73ed0a7be1c0d85380\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2886aeaab25f229664e89354a7d51638\transformed\lifecycle-viewmodel-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d91d19e3c6598e85ca376e339a5f07be\transformed\jetified-lifecycle-livedata-core-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0e831bf0d6e42639ddbaee7a5ea70275\transformed\lifecycle-livedata-core-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\12eeabf011bd170cfdf9c643bfc0137f\transformed\lifecycle-livedata-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1f92447d14b42a408c8ef69f7abd9a4a\transformed\lifecycle-runtime-2.6.2\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81f1952c42d99ca57dae46906676a40a\transformed\jetified-lifecycle-viewmodel-savedstate-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2aa5437facda033b7ac269b7f0d50c81\transformed\jetified-savedstate-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.facebook.react:hermes-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\569e9bf770ae5e82decafb2950e30c2e\transformed\jetified-hermes-android-0.77.3-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fbf894e3762bb0689711ce5c6afd136f\transformed\jetified-tracing-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\195dff63600e73cd57d7fbe1d3117b71\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b28e6dc209d3ef4142b62b32710cca72\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd6955be48662d0ef6e2e56c99874e90\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2e98e438c6afa339d563efca1ebf67c\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a165e4b7cd824320bea16e47aa6f1e54\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f75267cedb23f29764b86bf7f71fd36d\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\78572bbe23e2ed53050c08f6a9620481\transformed\jetified-fbjni-0.7.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:2:1-17:12
+	package
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
+MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
+MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:22-64
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:5-80
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:5-81
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:22-78
+uses-permission#android.permission.READ_MEDIA_AUDIO
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:5-75
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:22-72
+application
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:8:5-28:19
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:18:5-22:19
+MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:18:5-22:19
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:11:5-15:19
+MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:11:5-15:19
+	android:extractNativeLibs
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:15:7-33
+	android:label
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:10:7-34
+	android:roundIcon
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:12:7-46
+	android:icon
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:11:7-41
+	android:allowBackup
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:13:7-34
+	android:theme
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:14:7-38
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:9:7-38
+activity#com.carewatch.medicalcompanion.MainActivity
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:16:7-27:18
+	android:label
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:18:9-36
+	android:launchMode
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:20:9-40
+	android:windowSoftInputMode
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:21:9-51
+	android:exported
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:22:9-32
+	android:configChanges
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:19:9-118
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:17:9-37
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:23:9-26:25
+action#android.intent.action.MAIN
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:24:13-65
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:24:21-62
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:25:13-73
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:25:23-70
+uses-sdk
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+MERGED from [:llama.rn] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\llama.rn\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:llama.rn] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\llama.rn\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:react-native-safe-area-context] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:react-native-safe-area-context] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:react-native-screens] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:react-native-screens] C:\Users\lokes\OneDrive\Documents\medicare ai\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:10:5-44
+MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:10:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9e47b01a4e8c579ddf8d031bb6671842\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9e47b01a4e8c579ddf8d031bb6671842\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3cecd2d2a59be5589d3048bff9b0a25d\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3cecd2d2a59be5589d3048bff9b0a25d\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [com.facebook.fresco:fresco:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\71bcf29ccdd0a399a313c9fe8cae9235\transformed\jetified-fresco-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:fresco:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\71bcf29ccdd0a399a313c9fe8cae9235\transformed\jetified-fresco-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8dfb4d5459b92566a398b241b0e805f2\transformed\jetified-imagepipeline-okhttp3-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8dfb4d5459b92566a398b241b0e805f2\transformed\jetified-imagepipeline-okhttp3-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:drawee:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4714c0cdc6daf6e9ac13d4ddb9561d64\transformed\jetified-drawee-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:drawee:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4714c0cdc6daf6e9ac13d4ddb9561d64\transformed\jetified-drawee-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:nativeimagefilters:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e1527abf52272b3f6567819b88258bd9\transformed\jetified-nativeimagefilters-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:nativeimagefilters:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e1527abf52272b3f6567819b88258bd9\transformed\jetified-nativeimagefilters-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f8f723a6ef48a37372de8a788fa16f0b\transformed\jetified-memory-type-native-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f8f723a6ef48a37372de8a788fa16f0b\transformed\jetified-memory-type-native-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-java:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d1613f6eac0007728f4a87e499ff52ec\transformed\jetified-memory-type-java-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-java:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d1613f6eac0007728f4a87e499ff52ec\transformed\jetified-memory-type-java-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\be3016635d5fa9379d8cbda8834e3ecf\transformed\jetified-imagepipeline-native-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-native:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\be3016635d5fa9379d8cbda8834e3ecf\transformed\jetified-imagepipeline-native-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-ashmem:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2b629d3ebef7e427ac4be82918c9f49\transformed\jetified-memory-type-ashmem-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:memory-type-ashmem:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2b629d3ebef7e427ac4be82918c9f49\transformed\jetified-memory-type-ashmem-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\59ad7284705830bd56afdd2263036be6\transformed\jetified-imagepipeline-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\59ad7284705830bd56afdd2263036be6\transformed\jetified-imagepipeline-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:nativeimagetranscoder:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ca1d8fc7203b88be5acbf445adfc673f\transformed\jetified-nativeimagetranscoder-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:nativeimagetranscoder:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ca1d8fc7203b88be5acbf445adfc673f\transformed\jetified-nativeimagetranscoder-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-base:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c9fd422e8f9e25ff9c1f3c5afda993e0\transformed\jetified-imagepipeline-base-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:imagepipeline-base:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c9fd422e8f9e25ff9c1f3c5afda993e0\transformed\jetified-imagepipeline-base-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:urimod:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5c435162109d13d5787e647b55706079\transformed\jetified-urimod-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:urimod:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5c435162109d13d5787e647b55706079\transformed\jetified-urimod-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:vito-source:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88a341a37b7b00e984513fd77fa1fbb3\transformed\jetified-vito-source-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:vito-source:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88a341a37b7b00e984513fd77fa1fbb3\transformed\jetified-vito-source-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f2c7bb646658a43bac8ad25bf6f4020b\transformed\jetified-middleware-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f2c7bb646658a43bac8ad25bf6f4020b\transformed\jetified-middleware-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\34af0cc46f5c6c96ff889bb506174318\transformed\fragment-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\34af0cc46f5c6c96ff889bb506174318\transformed\fragment-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment-ktx:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fb62019cc0a6cfefebc869e3add7b7fb\transformed\jetified-fragment-ktx-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment-ktx:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fb62019cc0a6cfefebc869e3add7b7fb\transformed\jetified-fragment-ktx-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [com.facebook.fresco:ui-core:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a18cbee6e53302086c04c4bbf4c75084\transformed\jetified-ui-core-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:ui-core:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a18cbee6e53302086c04c4bbf4c75084\transformed\jetified-ui-core-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:soloader:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1791987478b1211d61f76cfbe5bb2b03\transformed\jetified-soloader-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:soloader:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1791987478b1211d61f76cfbe5bb2b03\transformed\jetified-soloader-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:fbcore:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b5a04a17bff66263a90f5e61b10d77b\transformed\jetified-fbcore-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fresco:fbcore:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b5a04a17bff66263a90f5e61b10d77b\transformed\jetified-fbcore-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a938427dc760089389a50b5fa07c1f4\transformed\jetified-activity-1.7.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a938427dc760089389a50b5fa07c1f4\transformed\jetified-activity-1.7.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-ktx:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\aeeee6ae8d29729a7258fe4d640328a1\transformed\jetified-activity-ktx-1.7.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-ktx:1.7.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\aeeee6ae8d29729a7258fe4d640328a1\transformed\jetified-activity-ktx-1.7.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b96a4b40303d34d41a9521afcf9cb52a\transformed\jetified-savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b96a4b40303d34d41a9521afcf9cb52a\transformed\jetified-savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.autofill:autofill:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1ee2d9cd9f6ac4e3f20d18099c755e61\transformed\jetified-autofill-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1ee2d9cd9f6ac4e3f20d18099c755e61\transformed\jetified-autofill-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\60c2d70d93795ab0aa745561fb92dc15\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\60c2d70d93795ab0aa745561fb92dc15\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\36aca3ad8a5ab054ddd23fa5a6481c01\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\36aca3ad8a5ab054ddd23fa5a6481c01\transformed\coordinatorlayout-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5d03bed10c66fab30387b1331cec23d0\transformed\jetified-emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5d03bed10c66fab30387b1331cec23d0\transformed\jetified-emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2faf3f7ae18fb04fbbf1286cd1eb95d1\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2faf3f7ae18fb04fbbf1286cd1eb95d1\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8ede720498cd8de508e481d7ffb8d260\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8ede720498cd8de508e481d7ffb8d260\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b74723d7b9b445e88bf88e9c672d7100\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b74723d7b9b445e88bf88e9c672d7100\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2360b83c579947821be9eebd6edb883b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2360b83c579947821be9eebd6edb883b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e62670007c98b5bfd7b1428ef3a8eba1\transformed\transition-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e62670007c98b5bfd7b1428ef3a8eba1\transformed\transition-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81dd53084a4307beeb7daf9a56eccd10\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81dd53084a4307beeb7daf9a56eccd10\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f1504eb49276b488589642096350d34f\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f1504eb49276b488589642096350d34f\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9c4b6690c9c08eec99093b669a503819\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9c4b6690c9c08eec99093b669a503819\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5676b3af536450a815cf5aeb5dfaa02d\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\5676b3af536450a815cf5aeb5dfaa02d\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39817e2ada81141a273af7978aa6cde0\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39817e2ada81141a273af7978aa6cde0\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\93cc1b37a82a0f7bf17d2ca6828c05ef\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\93cc1b37a82a0f7bf17d2ca6828c05ef\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b3494f506c0ef8cd87e666495d9827d\transformed\jetified-lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0b3494f506c0ef8cd87e666495d9827d\transformed\jetified-lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88e15c6f59a00b73ed0a7be1c0d85380\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88e15c6f59a00b73ed0a7be1c0d85380\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2886aeaab25f229664e89354a7d51638\transformed\lifecycle-viewmodel-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2886aeaab25f229664e89354a7d51638\transformed\lifecycle-viewmodel-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d91d19e3c6598e85ca376e339a5f07be\transformed\jetified-lifecycle-livedata-core-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\d91d19e3c6598e85ca376e339a5f07be\transformed\jetified-lifecycle-livedata-core-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0e831bf0d6e42639ddbaee7a5ea70275\transformed\lifecycle-livedata-core-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0e831bf0d6e42639ddbaee7a5ea70275\transformed\lifecycle-livedata-core-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\12eeabf011bd170cfdf9c643bfc0137f\transformed\lifecycle-livedata-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\12eeabf011bd170cfdf9c643bfc0137f\transformed\lifecycle-livedata-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1f92447d14b42a408c8ef69f7abd9a4a\transformed\lifecycle-runtime-2.6.2\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1f92447d14b42a408c8ef69f7abd9a4a\transformed\lifecycle-runtime-2.6.2\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81f1952c42d99ca57dae46906676a40a\transformed\jetified-lifecycle-viewmodel-savedstate-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\81f1952c42d99ca57dae46906676a40a\transformed\jetified-lifecycle-viewmodel-savedstate-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2aa5437facda033b7ac269b7f0d50c81\transformed\jetified-savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\2aa5437facda033b7ac269b7f0d50c81\transformed\jetified-savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [com.facebook.react:hermes-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\569e9bf770ae5e82decafb2950e30c2e\transformed\jetified-hermes-android-0.77.3-debug\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.react:hermes-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\569e9bf770ae5e82decafb2950e30c2e\transformed\jetified-hermes-android-0.77.3-debug\AndroidManifest.xml:5:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fbf894e3762bb0689711ce5c6afd136f\transformed\jetified-tracing-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fbf894e3762bb0689711ce5c6afd136f\transformed\jetified-tracing-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\195dff63600e73cd57d7fbe1d3117b71\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\195dff63600e73cd57d7fbe1d3117b71\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b28e6dc209d3ef4142b62b32710cca72\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b28e6dc209d3ef4142b62b32710cca72\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd6955be48662d0ef6e2e56c99874e90\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd6955be48662d0ef6e2e56c99874e90\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2e98e438c6afa339d563efca1ebf67c\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2e98e438c6afa339d563efca1ebf67c\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a165e4b7cd824320bea16e47aa6f1e54\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\a165e4b7cd824320bea16e47aa6f1e54\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f75267cedb23f29764b86bf7f71fd36d\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f75267cedb23f29764b86bf7f71fd36d\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\78572bbe23e2ed53050c08f6a9620481\transformed\jetified-fbjni-0.7.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\78572bbe23e2ed53050c08f6a9620481\transformed\jetified-fbjni-0.7.0\AndroidManifest.xml:5:5-44
+MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:16:5-78
+	android:name
+		ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:16:22-75
+activity#com.facebook.react.devsupport.DevSettingsActivity
+ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:19:9-21:40
+	android:exported
+		ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:21:13-37
+	android:name
+		ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:20:13-77
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+permission#com.carewatch.medicalcompanion.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+uses-permission#com.carewatch.medicalcompanion.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+meta-data#com.facebook.soloader.enabled
+ADDED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:12:9-14:37
+	android:value
+		ADDED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:14:13-34
+	android:name
+		ADDED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:13:13-57
