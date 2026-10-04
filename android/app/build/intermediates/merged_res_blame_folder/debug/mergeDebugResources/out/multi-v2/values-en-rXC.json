@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.carewatch.medicalcompanion.app-mergeDebugResources-40:/values-en-rXC/values-en-rXC.xml",
+            "outputFile": "com.carewatch.medicalcompanion.app-mergeDebugResources-42:/values-en-rXC/values-en-rXC.xml",
             "map": [
                 {
                     "source": "C:\\Users\\lokes\\.gradle\\caches\\8.10.2\\transforms\\1bd43259e664626f948db47b5b954127\\transformed\\core-1.13.1\\res\\values-en-rXC\\values-en-rXC.xml",

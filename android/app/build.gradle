@@ -60,4 +60,5 @@ dependencies {
     implementation project(':llama.rn')
     implementation project(':react-native-safe-area-context')
     implementation project(':react-native-screens')
+    implementation 'com.google.mlkit:text-recognition:16.0.1'
 }

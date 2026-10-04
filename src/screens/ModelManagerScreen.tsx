@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,24 +8,166 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Alert,
+  TextInput,
+  ScrollView,
 } from 'react-native';
 import { useModelStore } from '../store/useModelStore';
-import { ModelPackage } from '../types/model';
-import { ModelRegistry } from '../ai/ModelRegistry';
-import { VoiceResourcePackage } from '../types/voice';
+import {
+  DeviceCompatibility,
+  ModelInstallStatus,
+  ModelPackage,
+  QuantizationVariant,
+} from '../types/model';
+import { ModelManager } from '../ai/ModelManager';
+import { ModelOperatingMode, ModelRouter, ModelRouteDecision } from '../ai/ModelRouter';
+import { NativeDownloader, StorageInfo } from '../services/NativeDownloader';
+import { HFModelSummary } from '../services/HuggingFaceService';
 
 export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
-  const { packages, activeModelId, engineState, isLoadingModel, loadModel, unloadModel } =
-    useModelStore();
+  const {
+    packages,
+    activeModelId,
+    engineState,
+    isLoadingModel,
+    downloadModel,
+    cancelDownload,
+    loadModel,
+    unloadModel,
+    deleteModel,
+  } = useModelStore();
 
-  const [activeTab, setActiveTab] = useState<'llm' | 'voice'>('llm');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<HFModelSummary[]>([]);
+  const [storageInfo, setStorageInfo] = useState<StorageInfo | null>(null);
+  const [selectedVariantMap, setSelectedVariantMap] = useState<Record<string, QuantizationVariant>>({});
+  const [operatingMode, setOperatingMode] = useState<ModelOperatingMode>(ModelOperatingMode.Automatic);
+  const [routeDecision, setRouteDecision] = useState<ModelRouteDecision | null>(null);
 
-  const voicePackages = ModelRegistry.getVoicePackages();
+  const modelManager = ModelManager.getInstance();
+  const modelRouter = ModelRouter.getInstance();
+
+  useEffect(() => {
+    loadStorageInfo();
+    modelManager.restoreFromDisk();
+    updateRoute();
+  }, [operatingMode, packages, activeModelId]);
+
+  const updateRoute = () => {
+    const decision = modelRouter.routeModel();
+    setRouteDecision(decision);
+  };
+
+  const loadStorageInfo = async () => {
+    try {
+      const info = await NativeDownloader.getStorageInfo();
+      setStorageInfo(info);
+    } catch (e) {
+      console.warn('Storage info error:', e);
+    }
+  };
+
+  const handleModeChange = (mode: ModelOperatingMode) => {
+    setOperatingMode(mode);
+    modelRouter.setOperatingMode(mode);
+    const decision = modelRouter.routeModel();
+    setRouteDecision(decision);
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const results = await modelManager.searchHuggingFace(searchQuery.trim());
+      setSearchResults(results);
+    } catch (err: any) {
+      Alert.alert('Search Error', err?.message || 'Failed to search Hugging Face');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectRepo = async (repo: HFModelSummary) => {
+    setIsSearching(true);
+    try {
+      const details = await modelManager.inspectModelRepo(repo.id);
+      if (!details || details.files.length === 0) {
+        Alert.alert('No GGUF Models Found', `No compatible .gguf files found in repository ${repo.id}`);
+        return;
+      }
+
+      // Default to first/recommended variant
+      const defaultVariant = details.files[0];
+      const pkg = modelManager.registerHuggingFaceModel(repo.id, defaultVariant);
+
+      Alert.alert(
+        'Model Registered',
+        `Registered ${repo.id} (${defaultVariant.quantization}). You can now download it directly to device.`,
+        [
+          { text: 'Later', style: 'cancel' },
+          {
+            text: 'Download Now',
+            onPress: () => handleDownload(pkg.metadata.modelId, defaultVariant),
+          },
+        ]
+      );
+      setSearchQuery('');
+      setSearchResults([]);
+    } catch (err: any) {
+      Alert.alert('Inspect Error', err?.message || 'Failed to inspect model repository');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleDownload = async (modelId: string, variant?: QuantizationVariant) => {
+    try {
+      await downloadModel(modelId, variant);
+      loadStorageInfo();
+    } catch (err: any) {
+      Alert.alert('Download Error', err?.message || 'Failed to download model');
+    }
+  };
+
+  const handleCancel = async (modelId: string) => {
+    await cancelDownload(modelId);
+  };
 
   const handleToggleLoad = async (pkg: ModelPackage) => {
     if (activeModelId === pkg.metadata.modelId) {
       await unloadModel();
     } else {
+      // Memory safety check before loading
+      const isMedGemma = pkg.metadata.modelId.includes('medgemma');
+      const isGemma = pkg.metadata.modelId.includes('gemma');
+      const ramGb = modelRouter.getDeviceRamGb();
+
+      if (isMedGemma && ramGb < 6.0) {
+        Alert.alert(
+          'High Memory Warning',
+          `This device profile (~${ramGb}GB RAM) has limited memory. Loading MedGemma 4B (~2.5GB GGUF) may cause memory pressure. Proceed with safe 2048 context length?`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Load Anyway',
+              style: 'destructive',
+              onPress: async () => {
+                try {
+                  await loadModel(pkg.metadata.modelId);
+                } catch (err: any) {
+                  Alert.alert('Model Load Error', err?.message || 'Failed to initialize local model context.');
+                }
+              },
+            },
+          ]
+        );
+        return;
+      }
+
       try {
         await loadModel(pkg.metadata.modelId);
       } catch (err: any) {
@@ -37,14 +179,67 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
     }
   };
 
+  const handleDelete = (pkg: ModelPackage) => {
+    Alert.alert(
+      'Delete Local Model',
+      `Are you sure you want to delete ${pkg.metadata.displayName}? This will free up local phone storage.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteModel(pkg.metadata.modelId);
+            loadStorageInfo();
+          },
+        },
+      ]
+    );
+  };
+
+  const getCompatibilityBadge = (compat?: DeviceCompatibility, modelId?: string) => {
+    const isRecommended = routeDecision?.selectedModelId === modelId;
+    if (isRecommended) {
+      return { label: '⭐ RECOMMENDED ROUTE', bg: '#065F46', text: '#6EE7B7' };
+    }
+    switch (compat) {
+      case DeviceCompatibility.Good:
+        return { label: 'OPTIMAL FOR DEVICE', bg: '#064E3B', text: '#34D399' };
+      case DeviceCompatibility.Caution:
+        return { label: 'HIGH RAM REQUIRED', bg: '#78350F', text: '#FBBF24' };
+      case DeviceCompatibility.NotRecommended:
+        return { label: 'NOT RECOMMENDED', bg: '#7F1D1D', text: '#F87171' };
+      default:
+        return { label: 'COMPATIBLE', bg: '#1E293B', text: '#94A3B8' };
+    }
+  };
+
   const renderModelItem = ({ item }: { item: ModelPackage }) => {
     const isActive = activeModelId === item.metadata.modelId;
-    const sizeMb = Math.round(item.metadata.sizeBytes / (1024 * 1024));
+    const isInstalled = item.status === ModelInstallStatus.Installed;
+    const isDownloading = item.status === ModelInstallStatus.Downloading;
+    const isVerifying = item.status === ModelInstallStatus.Verifying;
+
+    const sizeMb = Math.round((item.totalBytes || item.metadata.sizeBytes) / (1024 * 1024));
+    const downloadedMb = Math.round(item.bytesDownloaded / (1024 * 1024));
+    const speedMbSec = item.downloadSpeedBytesPerSec
+      ? (item.downloadSpeedBytesPerSec / (1024 * 1024)).toFixed(1)
+      : '0.0';
+    const percent = Math.round(item.downloadProgress * 100);
+    const compatBadge = getCompatibilityBadge(item.metadata.compatibility, item.metadata.modelId);
+
+    const variants = item.metadata.variants || [];
+    const selectedVariant = selectedVariantMap[item.metadata.modelId] || variants[0];
 
     return (
       <View style={[styles.modelCard, isActive && styles.activeModelCard]}>
         <View style={styles.cardHeader}>
-          <Text style={styles.modelTitle}>{item.metadata.displayName}</Text>
+          <View style={{ flex: 1, marginRight: 8 }}>
+            <Text style={styles.modelTitle}>{item.metadata.displayName}</Text>
+            {item.metadata.provider ? (
+              <Text style={styles.providerText}>By {item.metadata.provider}</Text>
+            ) : null}
+          </View>
           <View style={[styles.statusBadge, isActive ? styles.activeBadge : styles.inactiveBadge]}>
             <Text
               style={[
@@ -57,125 +252,358 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
           </View>
         </View>
 
-        <Text style={styles.modelMeta}>
-          Arch: {item.metadata.architecture} • Quant: {item.metadata.quantization} • Size:{' '}
-          {sizeMb} MB
-        </Text>
-        <Text style={styles.modelMeta}>
-          Context: {item.metadata.contextLength} tokens • Threads:{' '}
-          {item.metadata.recommendedThreads}
-        </Text>
-
-        <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={[styles.loadButton, isActive ? styles.unloadButton : styles.activeLoadButton]}
-            onPress={() => handleToggleLoad(item)}
-            disabled={isLoadingModel}
-          >
-            {isLoadingModel && activeModelId === item.metadata.modelId ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.loadButtonText}>{isActive ? 'Unload Model' : 'Load Model'}</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-
-  const renderVoicePackageItem = ({ item }: { item: VoiceResourcePackage }) => {
-    const sizeMb = Math.round(item.sizeBytes / (1024 * 1024));
-
-    return (
-      <View style={styles.modelCard}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.modelTitle}>{item.name}</Text>
-          <View style={[styles.statusBadge, item.isInstalled ? styles.activeBadge : styles.inactiveBadge]}>
-            <Text
-              style={[
-                styles.statusBadgeText,
-                item.isInstalled ? styles.activeBadgeText : styles.inactiveBadgeText,
-              ]}
-            >
-              {item.isInstalled ? 'INSTALLED' : 'NOT INSTALLED'}
+        <View style={styles.compatRow}>
+          <View style={[styles.compatBadge, { backgroundColor: compatBadge.bg }]}>
+            <Text style={[styles.compatText, { color: compatBadge.text }]}>
+              {compatBadge.label}
             </Text>
           </View>
+          <Text style={styles.modelMetaInline}>
+            Arch: {item.metadata.architecture} • Context: {item.metadata.contextLength}
+          </Text>
         </View>
 
-        <Text style={styles.modelMeta}>
-          Type: {item.type} • Language: {item.language.toUpperCase()} • Size: {sizeMb} MB
-        </Text>
-        <Text style={styles.modelMeta}>{item.description}</Text>
+        {/* Quantization selector if multiple variants exist */}
+        {!isInstalled && !isDownloading && variants.length > 1 ? (
+          <View style={styles.variantContainer}>
+            <Text style={styles.variantTitle}>Select Quantization:</Text>
+            <View style={styles.variantRow}>
+              {variants.map((v) => {
+                const isSelected = selectedVariant?.quantization === v.quantization;
+                const vSizeMb = Math.round(v.sizeBytes / (1024 * 1024));
+                return (
+                  <TouchableOpacity
+                    key={v.quantization}
+                    style={[styles.variantChip, isSelected && styles.variantChipSelected]}
+                    onPress={() =>
+                      setSelectedVariantMap((prev) => ({
+                        ...prev,
+                        [item.metadata.modelId]: v,
+                      }))
+                    }
+                  >
+                    <Text
+                      style={[
+                        styles.variantChipText,
+                        isSelected && styles.variantChipTextSelected,
+                      ]}
+                    >
+                      {v.quantization} ({vSizeMb}MB)
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        ) : null}
+
+        {/* Real-time streaming download progress bar */}
+        {isDownloading ? (
+          <View style={styles.progressContainer}>
+            <View style={styles.progressHeader}>
+              <Text style={styles.progressText}>
+                Downloading: {downloadedMb} MB / {sizeMb} MB ({percent}%)
+              </Text>
+              <Text style={styles.progressSpeed}>
+                {speedMbSec} MB/s {item.estimatedRemainingSec ? `• ETA ${item.estimatedRemainingSec}s` : ''}
+              </Text>
+            </View>
+            <View style={styles.progressBarTrack}>
+              <View style={[styles.progressBarFill, { width: `${percent}%` }]} />
+            </View>
+          </View>
+        ) : null}
+
+        {isVerifying ? (
+          <View style={styles.verifyingBox}>
+            <ActivityIndicator size="small" color="#38BDF8" />
+            <Text style={styles.verifyingText}>Verifying GGUF binary checksum & integrity...</Text>
+          </View>
+        ) : null}
+
+        {item.errorMessage ? (
+          <Text style={styles.errorText}>⚠️ Error: {item.errorMessage}</Text>
+        ) : null}
+
+        {/* Actions row */}
+        <View style={styles.actionRow}>
+          {isInstalled ? (
+            <>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDelete(item)}
+                disabled={isLoadingModel}
+              >
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.loadButton,
+                  isActive ? styles.unloadButton : styles.activeLoadButton,
+                ]}
+                onPress={() => handleToggleLoad(item)}
+                disabled={isLoadingModel}
+              >
+                {isLoadingModel && activeModelId === item.metadata.modelId ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.loadButtonText}>
+                    {isActive ? 'Unload' : 'Load Model'}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </>
+          ) : isDownloading ? (
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => handleCancel(item.metadata.modelId)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel Download</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.downloadButton}
+              onPress={() => handleDownload(item.metadata.modelId, selectedVariant)}
+            >
+              <Text style={styles.downloadButtonText}>
+                Download GGUF ({sizeMb} MB)
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     );
   };
+
+  const freeGb = storageInfo
+    ? (storageInfo.freeBytes / (1024 * 1024 * 1024)).toFixed(1)
+    : '8.6';
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Local AI Model & Voice Manager</Text>
+        <Text style={styles.headerTitle}>Offline AI Model Intelligence</Text>
         <Text style={styles.headerSubtitle}>
-          PocketPal-style llama.rn / llama.cpp local GGUF & offline voice packages
+          Local GGUF routing: MedGemma 4B • Gemma 4 E2B • Qwen 0.6B
         </Text>
       </View>
 
+      {/* Model Operating Mode Switcher */}
+      <View style={styles.modeSection}>
+        <Text style={styles.sectionHeading}>MODEL OPERATING MODE</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.modeScroll}>
+          <TouchableOpacity
+            style={[
+              styles.modeTab,
+              operatingMode === ModelOperatingMode.Automatic && styles.modeTabActive,
+            ]}
+            onPress={() => handleModeChange(ModelOperatingMode.Automatic)}
+          >
+            <Text
+              style={[
+                styles.modeTabText,
+                operatingMode === ModelOperatingMode.Automatic && styles.modeTabTextActive,
+              ]}
+            >
+              ⚡ Automatic
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.modeTab,
+              operatingMode === ModelOperatingMode.MedicalReasoning && styles.modeTabActive,
+            ]}
+            onPress={() => handleModeChange(ModelOperatingMode.MedicalReasoning)}
+          >
+            <Text
+              style={[
+                styles.modeTabText,
+                operatingMode === ModelOperatingMode.MedicalReasoning && styles.modeTabTextActive,
+              ]}
+            >
+              🩺 Medical (MedGemma)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.modeTab,
+              operatingMode === ModelOperatingMode.GeneralCompanion && styles.modeTabActive,
+            ]}
+            onPress={() => handleModeChange(ModelOperatingMode.GeneralCompanion)}
+          >
+            <Text
+              style={[
+                styles.modeTabText,
+                operatingMode === ModelOperatingMode.GeneralCompanion && styles.modeTabTextActive,
+              ]}
+            >
+              💬 General (Gemma 4)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.modeTab,
+              operatingMode === ModelOperatingMode.Lightweight && styles.modeTabActive,
+            ]}
+            onPress={() => handleModeChange(ModelOperatingMode.Lightweight)}
+          >
+            <Text
+              style={[
+                styles.modeTabText,
+                operatingMode === ModelOperatingMode.Lightweight && styles.modeTabTextActive,
+              ]}
+            >
+              🚀 Lightweight (Qwen)
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+
+      {/* Device & Routing Status Card */}
       <View style={styles.statusBox}>
-        <Text style={styles.statusLabel}>
-          Engine Status: <Text style={styles.statusValue}>{engineState.toUpperCase()}</Text>
-        </Text>
-        <Text style={styles.statusLabel}>
-          Runtime: <Text style={styles.statusValue}>llama.rn (llama.cpp ARM64 Native)</Text>
-        </Text>
-        <Text style={styles.statusLabel}>
-          Offline Mode: <Text style={styles.statusValue}>100% Local (Airplane Mode Ready)</Text>
-        </Text>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Hardware Tier:</Text>
+          <Text style={styles.statusValue}>{routeDecision?.tier || 'Standard'}</Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Recommended Profile:</Text>
+          <Text style={[styles.statusValue, { color: '#34D399' }]}>
+            {routeDecision?.modelDisplayName || 'Qwen3 0.6B Instruct'}
+          </Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Routing Status:</Text>
+          <Text style={styles.statusValueDetail} numberOfLines={2}>
+            {routeDecision?.reason || 'Ready for inference'}
+          </Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Engine State:</Text>
+          <Text
+            style={[
+              styles.statusValue,
+              engineState === 'ready' ? { color: '#34D399' } : { color: '#38BDF8' },
+            ]}
+          >
+            {engineState.toUpperCase()}
+          </Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Phone Storage Available:</Text>
+          <Text style={styles.statusValue}>{freeGb} GB Free</Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>Network Policy:</Text>
+          <Text style={styles.statusValue}>100% Local Inference (Airplane-Mode Ready)</Text>
+        </View>
       </View>
 
-      {/* Tabs */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tabBtn, activeTab === 'llm' && styles.tabBtnActive]}
-          onPress={() => setActiveTab('llm')}
-        >
-          <Text style={[styles.tabBtnText, activeTab === 'llm' && styles.tabBtnTextActive]}>
-            🧠 LLM Models ({packages.length})
-          </Text>
-        </TouchableOpacity>
+      {/* Search Hugging Face */}
+      <View style={styles.searchSection}>
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search Hugging Face (e.g. Qwen3-0.6B, MedGemma)..."
+            placeholderTextColor="#64748B"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onSubmitEditing={handleSearch}
+          />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          style={[styles.tabBtn, activeTab === 'voice' && styles.tabBtnActive]}
-          onPress={() => setActiveTab('voice')}
-        >
-          <Text style={[styles.tabBtnText, activeTab === 'voice' && styles.tabBtnTextActive]}>
-            🎙️ Voice Packages ({voicePackages.length})
-          </Text>
-        </TouchableOpacity>
+        {isSearching ? (
+          <View style={styles.searchingRow}>
+            <ActivityIndicator size="small" color="#38BDF8" />
+            <Text style={styles.searchingText}>Searching Hugging Face GGUF catalog...</Text>
+          </View>
+        ) : null}
+
+        {searchResults.length > 0 ? (
+          <View style={styles.searchResultsContainer}>
+            <Text style={styles.searchResultsHeader}>Hugging Face Repositories Found:</Text>
+            {searchResults.map((res) => (
+              <TouchableOpacity
+                key={res.id}
+                style={styles.searchResultItem}
+                onPress={() => handleSelectRepo(res)}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.searchResultTitle}>{res.id}</Text>
+                  <Text style={styles.searchResultMeta}>
+                    ❤️ {res.likes} • ⬇️ {res.downloads} • By {res.author}
+                  </Text>
+                </View>
+                <Text style={styles.inspectText}>Inspect ➔</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : null}
       </View>
 
-      {activeTab === 'llm' ? (
-        <FlatList
-          data={packages}
-          keyExtractor={(item) => item.metadata.modelId}
-          renderItem={renderModelItem}
-          contentContainerStyle={styles.listContent}
-        />
-      ) : (
-        <FlatList
-          data={voicePackages}
-          keyExtractor={(item) => item.id}
-          renderItem={renderVoicePackageItem}
-          contentContainerStyle={styles.listContent}
-        />
-      )}
+      {/* Models List */}
+      <FlatList
+        data={packages}
+        keyExtractor={(item) => item.metadata.modelId}
+        renderItem={renderModelItem}
+        contentContainerStyle={styles.listContent}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0F172A' },
-  header: { padding: 16, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: '#1E293B' },
+  header: {
+    padding: 16,
+    backgroundColor: '#0F172A',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E293B',
+  },
   headerTitle: { color: '#F8FAFC', fontSize: 18, fontWeight: '800' },
   headerSubtitle: { color: '#94A3B8', fontSize: 12, marginTop: 4 },
+  modeSection: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
+  sectionHeading: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#64748B',
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  modeScroll: {
+    flexDirection: 'row',
+  },
+  modeTab: {
+    backgroundColor: '#1E293B',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  modeTabActive: {
+    backgroundColor: '#0369A1',
+    borderColor: '#38BDF8',
+  },
+  modeTabText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#94A3B8',
+  },
+  modeTabTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
   statusBox: {
     margin: 16,
     padding: 12,
@@ -184,27 +612,75 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#334155',
   },
-  statusLabel: { fontSize: 12, color: '#94A3B8', marginVertical: 2 },
-  statusValue: { fontWeight: '700', color: '#38BDF8' },
-  tabContainer: {
+  statusRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 2,
+  },
+  statusLabel: { fontSize: 11, color: '#94A3B8' },
+  statusValue: { fontSize: 11, fontWeight: '700', color: '#38BDF8' },
+  statusValueDetail: { fontSize: 10, fontWeight: '500', color: '#CBD5E1', flex: 1, textAlign: 'right', marginLeft: 8 },
+  searchSection: {
     paddingHorizontal: 16,
-    marginBottom: 10,
+    marginBottom: 8,
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
     gap: 8,
   },
-  tabBtn: {
+  searchInput: {
     flex: 1,
-    paddingVertical: 8,
-    borderRadius: 8,
     backgroundColor: '#1E293B',
-    alignItems: 'center',
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#334155',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    color: '#F8FAFC',
+    fontSize: 13,
   },
-  tabBtnActive: { backgroundColor: '#0284C7', borderColor: '#38BDF8' },
-  tabBtnText: { color: '#94A3B8', fontSize: 12, fontWeight: '700' },
-  tabBtnTextActive: { color: '#FFFFFF' },
-  listContent: { paddingHorizontal: 16, paddingBottom: 24 },
+  searchButton: {
+    backgroundColor: '#0284C7',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 13 },
+  searchingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 8,
+  },
+  searchingText: { color: '#94A3B8', fontSize: 12 },
+  searchResultsContainer: {
+    marginTop: 8,
+    backgroundColor: '#1E293B',
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#38BDF8',
+  },
+  searchResultsHeader: {
+    color: '#38BDF8',
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+  },
+  searchResultTitle: { color: '#F8FAFC', fontSize: 13, fontWeight: '600' },
+  searchResultMeta: { color: '#94A3B8', fontSize: 11, marginTop: 2 },
+  inspectText: { color: '#38BDF8', fontSize: 12, fontWeight: '700' },
+  listContent: { paddingHorizontal: 16, paddingBottom: 32 },
   modelCard: {
     backgroundColor: '#1E293B',
     borderRadius: 12,
@@ -214,18 +690,105 @@ const styles = StyleSheet.create({
     borderColor: '#334155',
   },
   activeModelCard: { borderColor: '#38BDF8', borderWidth: 2 },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  modelTitle: { fontSize: 14, fontWeight: '700', color: '#F8FAFC', flex: 1, marginRight: 8 },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  modelTitle: { fontSize: 14, fontWeight: '700', color: '#F8FAFC' },
+  providerText: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
   activeBadge: { backgroundColor: '#064E3B' },
   inactiveBadge: { backgroundColor: '#334155' },
   statusBadgeText: { fontSize: 10, fontWeight: '700' },
   activeBadgeText: { color: '#34D399' },
   inactiveBadgeText: { color: '#94A3B8' },
-  modelMeta: { fontSize: 12, color: '#94A3B8', marginTop: 4 },
-  actionRow: { marginTop: 12, flexDirection: 'row', justifyContent: 'flex-end' },
+  compatRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 8,
+  },
+  compatBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  compatText: { fontSize: 9, fontWeight: '800' },
+  modelMetaInline: { fontSize: 11, color: '#94A3B8' },
+  variantContainer: { marginTop: 10 },
+  variantTitle: { fontSize: 11, color: '#94A3B8', marginBottom: 4 },
+  variantRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  variantChip: {
+    backgroundColor: '#0F172A',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  variantChipSelected: {
+    backgroundColor: '#0369A1',
+    borderColor: '#38BDF8',
+  },
+  variantChipText: { fontSize: 11, color: '#94A3B8' },
+  variantChipTextSelected: { color: '#FFFFFF', fontWeight: '700' },
+  progressContainer: { marginTop: 12 },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  progressText: { fontSize: 11, color: '#38BDF8', fontWeight: '600' },
+  progressSpeed: { fontSize: 11, color: '#94A3B8' },
+  progressBarTrack: {
+    height: 6,
+    backgroundColor: '#0F172A',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressBarFill: { height: '100%', backgroundColor: '#0284C7' },
+  verifyingBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: '#0F172A',
+    borderRadius: 6,
+  },
+  verifyingText: { color: '#38BDF8', fontSize: 11 },
+  errorText: { color: '#F87171', fontSize: 11, marginTop: 8 },
+  actionRow: {
+    marginTop: 14,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 8,
+  },
+  downloadButton: {
+    backgroundColor: '#0284C7',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  downloadButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
+  cancelButton: {
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  cancelButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
+  deleteButton: {
+    backgroundColor: '#334155',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  deleteButtonText: { color: '#EF4444', fontWeight: '700', fontSize: 12 },
   loadButton: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
-  activeLoadButton: { backgroundColor: '#0284C7' },
+  activeLoadButton: { backgroundColor: '#10B981' },
   unloadButton: { backgroundColor: '#EF4444' },
   loadButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
 });
+

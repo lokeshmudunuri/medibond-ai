@@ -2,7 +2,7 @@ import { VoiceLanguage } from '../types/voice';
 
 export class OfflineSTTService {
   private static instance: OfflineSTTService;
-  private installedLanguages: Set<VoiceLanguage> = new Set(['en', 'hi', 'te', 'kn', 'ta', 'mr']);
+  private installedLanguages: Set<VoiceLanguage> = new Set(['en', 'hi', 'te', 'kn']);
   private isTranscribing = false;
 
   private constructor() {}

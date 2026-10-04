@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,102 +9,351 @@ import {
   Alert,
   TextInput,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import { useDocumentStore } from '../store/useDocumentStore';
-import { useHealthStore } from '../store/useHealthStore';
-import { ProcessedDocumentResult } from '../services/DocumentProcessor';
-import { ProvenanceSource, ReportEntity } from '../types';
+import { HealthMemoryService } from '../services/HealthMemoryService';
+import { MedicalDocumentReasoningService } from '../services/MedicalDocumentReasoningService';
+import { MedicationReminderService } from '../services/MedicationReminderService';
+import { DocumentClassificationType } from '../services/DocumentProcessor';
+import { CaseFile, HealthTimelineEvent, MedicineEntity, ReportEntity } from '../types';
 
-export const DocumentsScreen: React.FC = () => {
-  const { reports, scanDocument, isScanning } = useDocumentStore();
-  const { addMedicine } = useHealthStore();
+export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
+  const {
+    reports,
+    processingState,
+    statusMessage,
+    activeScanResult,
+    captureFromCamera,
+    pickFromGallery,
+    importFile,
+    reprocessWithOcrText,
+    confirmAndCommitToCase,
+    deleteReport,
+    resetActiveScan,
+    refreshReports,
+  } = useDocumentStore();
 
-  const [activeTab, setActiveTab] = useState<'all' | 'prescriptions' | 'labs' | 'discharge'>('all');
-  const [scanModalVisible, setScanModalVisible] = useState(false);
-  const [docTitle, setDocTitle] = useState('New Medical Document');
-  const [ocrInputText, setOcrInputText] = useState('');
-  const [latestScanResult, setLatestScanResult] = useState<ProcessedDocumentResult | null>(null);
+  const memory = HealthMemoryService.getInstance();
+  const reasoningService = MedicalDocumentReasoningService.getInstance();
+  const reminderService = MedicationReminderService.getInstance();
 
-  const samplePrescription = `CLINIC PRESCRIPTION
-Dr. Arvind Swaminathan, MD (Cardiology)
-Date: 2026-10-04
-Patient: Alex Rivera
+  const [activeTab, setActiveTab] = useState<'all' | 'prescriptions' | 'labs' | 'discharge' | 'timeline'>('all');
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<ReportEntity | null>(null);
 
-Rx:
-1. Tab. Amoxicillin-Clavulanate 625mg - 1 tab BD (After meals) x 7 days
-2. Tab. Pantoprazole 40mg - 1 tab OD (Before breakfast) x 14 days
-3. Tab. Paracetamol 650mg - 1 tab SOS (For pain/fever)
-Instructions: Take complete antibiotic course.`;
+  const [editableOcrText, setEditableOcrText] = useState('');
+  const [isEditingOcr, setIsEditingOcr] = useState(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<string | undefined>(undefined);
+  const [cases, setCases] = useState<CaseFile[]>([]);
+  const [timelineEvents, setTimelineEvents] = useState<HealthTimelineEvent[]>([]);
 
-  const sampleLabReport = `CAREWATCH CLINICAL LABORATORY REPORT
-Patient: Alex Rivera | Ref: Dr. Sarah Chen
-Date: 2026-10-02
+  // Local AI Explanation & Question State
+  const [isExplaining, setIsExplaining] = useState(false);
+  const [aiExplanation, setAiExplanation] = useState('');
+  const [userCaseQuery, setUserCaseQuery] = useState('');
 
-COMPLETE BLOOD COUNT (CBC):
-- Hemoglobin: 13.8 g/dL (Normal: 13.5 - 17.5)
-- Platelet Count: 240 x10^3/uL (Normal: 150 - 450)
-- Total WBC: 7,200 /uL (Normal: 4,000 - 11,000)
-- Serum Creatinine: 0.9 mg/dL (Normal: 0.7 - 1.3)
-Status: All values within normal physiological ranges.`;
+  // Medication review state in modal
+  const [reviewedMeds, setReviewedMeds] = useState<MedicineEntity[]>([]);
 
-  const handleOpenScan = (type: 'rx' | 'lab') => {
-    if (type === 'rx') {
-      setDocTitle('Cardiology Prescription');
-      setOcrInputText(samplePrescription);
-    } else {
-      setDocTitle('Routine Blood Work Report');
-      setOcrInputText(sampleLabReport);
+  useEffect(() => {
+    refreshReports();
+    setCases(memory.getCases());
+    setTimelineEvents(memory.getTimelineEvents(selectedCaseId));
+  }, [selectedCaseId]);
+
+  useEffect(() => {
+    if (activeScanResult) {
+      setEditableOcrText(activeScanResult.rawOcrText);
+      setReviewedMeds([...(activeScanResult.extractedMedicines || [])]);
+      setReviewModalVisible(true);
     }
-    setScanModalVisible(true);
+  }, [activeScanResult]);
+
+  const handleScanPrescription = async () => {
+    try {
+      await captureFromCamera();
+    } catch (err: any) {
+      Alert.alert('Prescription Scan Error', err?.message || 'Failed to capture prescription');
+    }
   };
 
-  const handleRunOcrProcess = async () => {
-    if (!ocrInputText.trim()) {
-      Alert.alert('Empty Document', 'Please enter or capture document text.');
-      return;
+  const handleScanReport = async () => {
+    try {
+      await captureFromCamera();
+    } catch (err: any) {
+      Alert.alert('Report Scan Error', err?.message || 'Failed to capture report');
     }
+  };
+
+  const handleGalleryPick = async () => {
+    try {
+      await pickFromGallery();
+    } catch (err: any) {
+      Alert.alert('Gallery Selection Error', err?.message || 'Failed to pick image from gallery');
+    }
+  };
+
+  const handleFileImport = async () => {
+    try {
+      await importFile();
+    } catch (err: any) {
+      Alert.alert('File Import Error', err?.message || 'Failed to import medical document');
+    }
+  };
+
+  const handleReanalyzeOcr = async () => {
+    try {
+      await reprocessWithOcrText(editableOcrText);
+      setIsEditingOcr(false);
+    } catch (err: any) {
+      Alert.alert('Re-analysis Error', err?.message || 'Failed to parse edited text');
+    }
+  };
+
+  const handleConfirmMedicine = (index: number) => {
+    const updated = [...reviewedMeds];
+    updated[index] = {
+      ...updated[index],
+      isConfirmedByUser: true,
+      confirmationStatus: 'CONFIRMED',
+    };
+    setReviewedMeds(updated);
+  };
+
+  const handleRejectMedicine = (index: number) => {
+    const updated = [...reviewedMeds];
+    updated[index] = {
+      ...updated[index],
+      isConfirmedByUser: false,
+      confirmationStatus: 'REJECTED',
+      isActive: false,
+    };
+    setReviewedMeds(updated);
+  };
+
+  const handleScheduleReminder = async (med: MedicineEntity, timeSlot: string) => {
+    try {
+      if (!med.isConfirmedByUser) {
+        Alert.alert('Confirmation Required', 'Please confirm the medication dosage before setting a reminder.');
+        return;
+      }
+      await reminderService.scheduleReminderForMedicine(med, timeSlot);
+      Alert.alert('Reminder Scheduled', `Medication reminder set for ${med.name} at ${timeSlot}.`);
+    } catch (err: any) {
+      Alert.alert('Reminder Error', err?.message || 'Failed to schedule reminder.');
+    }
+  };
+
+  const handleExplainWithLocalAI = async () => {
+    if (!activeScanResult) return;
+    setIsExplaining(true);
+    setAiExplanation('');
 
     try {
-      const result = await scanDocument(ocrInputText, docTitle);
-      setLatestScanResult(result);
-      setScanModalVisible(false);
-      Alert.alert(
-        'Document Processed',
-        `Successfully extracted ${result.extractedMedicines.length} medications and ${result.extractedLabResults.length} lab results directly into Health Memory.`
-      );
+      const stream = reasoningService.explainDocument(activeScanResult, selectedCaseId);
+      let full = '';
+      for await (const chunk of stream) {
+        full += chunk.token;
+        setAiExplanation(full);
+      }
     } catch (err: any) {
-      Alert.alert('Processing Error', err?.message || 'Failed to process document');
+      Alert.alert('Medical AI Error', err?.message || 'Failed to generate local explanation');
+    } finally {
+      setIsExplaining(false);
     }
+  };
+
+  const handleAskCaseQuestion = async () => {
+    if (!userCaseQuery.trim()) return;
+    setIsExplaining(true);
+    setAiExplanation('');
+
+    try {
+      const stream = reasoningService.answerCaseQuestion(userCaseQuery.trim(), selectedCaseId);
+      let full = '';
+      for await (const chunk of stream) {
+        full += chunk.token;
+        setAiExplanation(full);
+      }
+    } catch (err: any) {
+      Alert.alert('Case Intelligence Error', err?.message || 'Failed to answer question');
+    } finally {
+      setIsExplaining(false);
+    }
+  };
+
+  const handleConfirmSave = () => {
+    if (!activeScanResult) return;
+    // Commit with reviewed medicines
+    activeScanResult.extractedMedicines = reviewedMeds;
+    confirmAndCommitToCase(selectedCaseId);
+    setTimelineEvents(memory.getTimelineEvents(selectedCaseId));
+    setReviewModalVisible(false);
+    setAiExplanation('');
+    Alert.alert(
+      'Document Confirmed & Saved',
+      `Document and structured medical records were committed to ${
+        selectedCaseId ? 'Case File' : 'Health Vault'
+      }.`
+    );
+  };
+
+  const handleDeleteReport = (report: ReportEntity) => {
+    Alert.alert(
+      'Delete Medical Document',
+      `Are you sure you want to delete "${report.title}"? Associated extracted medical entities will be removed from memory.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            deleteReport(report.id);
+            setTimelineEvents(memory.getTimelineEvents(selectedCaseId));
+            setDetailModalVisible(false);
+            setSelectedReport(null);
+          },
+        },
+      ]
+    );
   };
 
   const filteredReports = reports.filter((r) => {
+    if (selectedCaseId && r.caseId !== selectedCaseId) return false;
     if (activeTab === 'prescriptions') return r.type === 'Prescription';
     if (activeTab === 'labs') return r.type === 'Lab';
     if (activeTab === 'discharge') return r.type === 'Discharge';
     return true;
   });
 
+  const isBusy =
+    processingState === 'PREPARING_IMAGE' ||
+    processingState === 'LOADING_OCR' ||
+    processingState === 'EXTRACTING_TEXT' ||
+    processingState === 'ANALYZING_DOCUMENT';
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>Medical Documents & OCR</Text>
-          <Text style={styles.headerSubtitle}>Prescription Scanner • Lab Reports • Provenance Tracking</Text>
+          <Text style={styles.headerTitle}>Medical Document Intelligence</Text>
+          <Text style={styles.headerSubtitle}>
+            Offline OCR • Clinical Extraction • Case Memory • Local Medical AI
+          </Text>
         </View>
-        <View style={styles.actionButtonsRow}>
-          <TouchableOpacity style={styles.scanActionBtn} onPress={() => handleOpenScan('rx')}>
-            <Text style={styles.scanActionBtnText}>📷 Scan Rx</Text>
+
+        {/* 4 Dedicated Document Capture Triggers */}
+        <View style={styles.actionGrid}>
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.rxBtn]}
+            onPress={handleScanPrescription}
+            disabled={isBusy}
+          >
+            <Text style={styles.actionBtnText}>📋 Scan Prescription</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.scanActionBtn, styles.labActionBtn]} onPress={() => handleOpenScan('lab')}>
-            <Text style={styles.scanActionBtnText}>🧪 Scan Lab</Text>
+
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.labScanBtn]}
+            onPress={handleScanReport}
+            disabled={isBusy}
+          >
+            <Text style={styles.actionBtnText}>🔬 Scan Lab Report</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.galleryBtn]}
+            onPress={handleGalleryPick}
+            disabled={isBusy}
+          >
+            <Text style={styles.actionBtnText}>🖼️ Choose Gallery</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.fileBtn]}
+            onPress={handleFileImport}
+            disabled={isBusy}
+          >
+            <Text style={styles.actionBtnText}>📁 Upload Document</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Active Case Selector Strip */}
+        <View style={styles.caseSelectorBox}>
+          <Text style={styles.caseSelectorLabel}>Active Case Memory Scope:</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 4 }}>
+            <TouchableOpacity
+              style={[styles.caseChip, selectedCaseId === undefined && styles.caseChipActive]}
+              onPress={() => setSelectedCaseId(undefined)}
+            >
+              <Text style={[styles.caseChipText, selectedCaseId === undefined && styles.caseChipTextActive]}>
+                🌐 All Health Records
+              </Text>
+            </TouchableOpacity>
+
+            {cases.map((c) => (
+              <TouchableOpacity
+                key={c.id}
+                style={[styles.caseChip, selectedCaseId === c.id && styles.caseChipActive]}
+                onPress={() => setSelectedCaseId(c.id)}
+              >
+                <Text style={[styles.caseChipText, selectedCaseId === c.id && styles.caseChipTextActive]}>
+                  🏥 {c.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Case Intelligence & Diet Question Bar */}
+        <View style={styles.caseQuestionRow}>
+          <TextInput
+            style={styles.caseQuestionInput}
+            placeholder={
+              selectedCaseId
+                ? 'Ask about this case (e.g. "What did doctor prescribe?", "Can I eat biryani?")'
+                : 'Ask about latest report, prescriptions, or diet guidance...'
+            }
+            placeholderTextColor="#64748B"
+            value={userCaseQuery}
+            onChangeText={setUserCaseQuery}
+          />
+          <TouchableOpacity
+            style={styles.caseAskBtn}
+            onPress={handleAskCaseQuestion}
+            disabled={isExplaining}
+          >
+            <Text style={styles.caseAskBtnText}>{isExplaining ? '...' : 'Ask AI'}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
+      {/* Case Intelligence Streaming Answer Box */}
+      {aiExplanation ? (
+        <View style={styles.aiExplanationBanner}>
+          <View style={styles.aiExplanationHeader}>
+            <Text style={styles.aiExplanationTitle}>🤖 Clinical Reasoning & Case Intelligence</Text>
+            <TouchableOpacity onPress={() => setAiExplanation('')}>
+              <Text style={{ color: '#94A3B8', fontWeight: 'bold' }}>✕</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.aiExplanationText}>{aiExplanation}</Text>
+        </View>
+      ) : null}
+
+      {/* In-Progress Pipeline Indicator */}
+      {isBusy && (
+        <View style={styles.busyBanner}>
+          <ActivityIndicator size="small" color="#38BDF8" />
+          <Text style={styles.busyText}>{statusMessage}</Text>
+        </View>
+      )}
+
       {/* Filter Tabs */}
       <View style={styles.tabContainer}>
-        {(['all', 'prescriptions', 'labs', 'discharge'] as const).map((tab) => (
+        {(['all', 'prescriptions', 'labs', 'discharge', 'timeline'] as const).map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tabButton, activeTab === tab && styles.tabButtonActive]}
@@ -117,19 +366,58 @@ Status: All values within normal physiological ranges.`;
         ))}
       </View>
 
-      {/* Document List */}
+      {/* Main Content Area */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {filteredReports.length === 0 ? (
+        {activeTab === 'timeline' ? (
+          /* Health Timeline View */
+          <View>
+            <Text style={styles.timelineHeading}>
+              Chronological Health Timeline ({timelineEvents.length} Events)
+            </Text>
+            {timelineEvents.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyEmoji}>⏱️</Text>
+                <Text style={styles.emptyTitle}>No Timeline Events</Text>
+                <Text style={styles.emptySubtitle}>
+                  Confirmed prescriptions, lab reports, doctor notes, and symptoms will automatically appear here.
+                </Text>
+              </View>
+            ) : (
+              timelineEvents.map((evt) => (
+                <View key={evt.id} style={styles.timelineCard}>
+                  <View style={styles.timelineCardHeader}>
+                    <Text style={styles.timelineEventTypeBadge}>{evt.eventType}</Text>
+                    <Text style={styles.timelineDate}>
+                      {new Date(evt.timestamp).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  <Text style={styles.timelineTitle}>{evt.title}</Text>
+                  <Text style={styles.timelineDescription}>{evt.description}</Text>
+                  <Text style={styles.timelineProvenance}>
+                    🏷️ Provenance: {evt.provenance.source} ({Math.round(evt.provenance.confidence * 100)}%)
+                  </Text>
+                </View>
+              ))
+            )}
+          </View>
+        ) : filteredReports.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyEmoji}>📄</Text>
-            <Text style={styles.emptyTitle}>No Documents Found</Text>
+            <Text style={styles.emptyTitle}>No Documents in Scope</Text>
             <Text style={styles.emptySubtitle}>
-              Scan a prescription or medical report above to extract medications and test results automatically.
+              Capture a prescription or lab report using the actions above.
             </Text>
           </View>
         ) : (
           filteredReports.map((report) => (
-            <View key={report.id} style={styles.reportCard}>
+            <TouchableOpacity
+              key={report.id}
+              style={styles.reportCard}
+              onPress={() => {
+                setSelectedReport(report);
+                setDetailModalVisible(true);
+              }}
+            >
               <View style={styles.reportHeader}>
                 <View style={styles.typeBadge}>
                   <Text style={styles.typeBadgeText}>{report.type}</Text>
@@ -144,11 +432,17 @@ Status: All values within normal physiological ranges.`;
               {report.results && report.results.length > 0 && (
                 <View style={styles.labResultsContainer}>
                   <Text style={styles.labResultsHeader}>Extracted Metrics:</Text>
-                  {report.results.map((res, i) => (
+                  {report.results.slice(0, 3).map((res, i) => (
                     <View key={i} style={styles.labRow}>
                       <Text style={styles.labName}>{res.testName}:</Text>
-                      <Text style={styles.labValue}>
+                      <Text
+                        style={[
+                          styles.labValue,
+                          res.isAbnormal && { color: '#F87171', fontWeight: 'bold' },
+                        ]}
+                      >
                         {res.value} {res.unit} (Ref: {res.referenceRange})
+                        {res.isAbnormal ? ' [FLAGGED]' : ''}
                       </Text>
                     </View>
                   ))}
@@ -157,54 +451,303 @@ Status: All values within normal physiological ranges.`;
 
               <View style={styles.provenanceRow}>
                 <Text style={styles.provenanceText}>
-                  🛡️ Provenance: {report.provenance.source} (Confidence: {Math.round(report.provenance.confidence * 100)}%)
+                  🛡️ Provenance: {report.provenance.source} • Confidence:{' '}
+                  {Math.round(report.provenance.confidence * 100)}%
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         )}
       </ScrollView>
 
-      {/* Scan / OCR Processing Modal */}
-      <Modal visible={scanModalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Scan / Ingest Medical Document</Text>
-            <Text style={styles.modalSubtitle}>OCR will extract medications, dosages, and lab values locally.</Text>
+      {/* ======================================================== */}
+      {/* OCR EXTRACTION CONFIRMATION & REVIEW MODAL */}
+      {/* ======================================================== */}
+      <Modal visible={reviewModalVisible} animationType="slide" transparent={false}>
+        <SafeAreaView style={styles.reviewModalContainer}>
+          <View style={styles.reviewModalHeader}>
+            <View>
+              <Text style={styles.reviewModalTitle}>Document Verification & Review</Text>
+              <Text style={styles.reviewModalSubtitle}>
+                Verify on-device clinical extraction before committing to Case Memory
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.closeReviewBtn}
+              onPress={() => {
+                resetActiveScan();
+                setReviewModalVisible(false);
+              }}
+            >
+              <Text style={styles.closeReviewBtnText}>✕ Discard</Text>
+            </TouchableOpacity>
+          </View>
 
-            <Text style={styles.inputLabel}>Document Title:</Text>
-            <TextInput
-              style={styles.textInput}
-              value={docTitle}
-              onChangeText={setDocTitle}
-              placeholder="e.g. Cardiology Prescription"
-              placeholderTextColor="#64748B"
-            />
+          <ScrollView contentContainerStyle={styles.reviewScrollContent}>
+            {/* Document Classification */}
+            <View style={styles.reviewCard}>
+              <View style={styles.reviewCardRow}>
+                <Text style={styles.reviewSectionLabel}>CLASSIFIED TYPE:</Text>
+                <View style={styles.typeBadgeLarge}>
+                  <Text style={styles.typeBadgeLargeText}>
+                    {activeScanResult?.detectedDocumentType.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+              <Text style={styles.confidenceText}>
+                Extraction Confidence: {Math.round((activeScanResult?.confidenceScore || 0.9) * 100)}% (Offline On-Device)
+              </Text>
+            </View>
 
-            <Text style={styles.inputLabel}>OCR Scanned Text Content:</Text>
-            <TextInput
-              style={[styles.textInput, styles.textArea]}
-              value={ocrInputText}
-              onChangeText={setOcrInputText}
-              multiline={true}
-              numberOfLines={8}
-            />
+            {/* Target Case File Selector */}
+            <View style={styles.reviewCard}>
+              <Text style={styles.reviewSectionLabel}>ASSOCIATE TO PATIENT CASE FILE:</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.caseScrollRow}>
+                <TouchableOpacity
+                  style={[styles.caseChip, selectedCaseId === undefined && styles.caseChipActive]}
+                  onPress={() => setSelectedCaseId(undefined)}
+                >
+                  <Text style={[styles.caseChipText, selectedCaseId === undefined && styles.caseChipTextActive]}>
+                    🌐 Global Vault
+                  </Text>
+                </TouchableOpacity>
 
-            <View style={styles.modalButtonRow}>
-              <TouchableOpacity
-                style={styles.modalCancelBtn}
-                onPress={() => setScanModalVisible(false)}
-              >
-                <Text style={styles.modalCancelBtnText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalProcessBtn}
-                onPress={handleRunOcrProcess}
-                disabled={isScanning}
-              >
-                <Text style={styles.modalProcessBtnText}>
-                  {isScanning ? 'Processing...' : 'Extract Entities'}
+                {cases.map((c) => (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[styles.caseChip, selectedCaseId === c.id && styles.caseChipActive]}
+                    onPress={() => setSelectedCaseId(c.id)}
+                  >
+                    <Text style={[styles.caseChipText, selectedCaseId === c.id && styles.caseChipTextActive]}>
+                      🏥 {c.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+
+            {/* Extracted Medications with Edit / Confirm / Reject & Reminders */}
+            {reviewedMeds.length > 0 && (
+              <View style={styles.reviewCard}>
+                <Text style={styles.reviewSectionLabel}>
+                  EXTRACTED PRESCRIPTION MEDICINES ({reviewedMeds.length}):
                 </Text>
+                {reviewedMeds.map((med, index) => (
+                  <View key={med.id || index} style={styles.medReviewItem}>
+                    <View style={styles.medReviewHeader}>
+                      <Text style={styles.medReviewName}>{med.name}</Text>
+                      <Text style={styles.medReviewDosage}>{med.dosage}</Text>
+                    </View>
+                    <Text style={styles.medReviewGeneric}>Generic: {med.genericName}</Text>
+                    <Text style={styles.medReviewInstruction}>
+                      Dose: {med.dose || '1 tab'} • Freq: {med.frequency} • Duration: {med.duration || 'As prescribed'}
+                    </Text>
+                    <Text style={styles.medReviewInstruction}>Instructions: {med.instructions}</Text>
+                    <Text style={styles.medReviewInstruction}>
+                      Doctor: {med.prescribingDoctor} • Date: {med.startDate}
+                    </Text>
+
+                    {/* Status Badge */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 6 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 'bold',
+                          color: med.isConfirmedByUser ? '#4ADE80' : med.confirmationStatus === 'REJECTED' ? '#F87171' : '#FBBF24',
+                        }}
+                      >
+                        Status: {med.isConfirmedByUser ? 'Confirmed' : med.confirmationStatus === 'REJECTED' ? 'Rejected' : 'Extracted — Please verify'}
+                      </Text>
+                    </View>
+
+                    {/* Verification Actions */}
+                    <View style={styles.medActionRow}>
+                      <TouchableOpacity
+                        style={[styles.medActionBtn, styles.medConfirmBtn]}
+                        onPress={() => handleConfirmMedicine(index)}
+                      >
+                        <Text style={styles.medActionBtnText}>✓ Confirm</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[styles.medActionBtn, styles.medRejectBtn]}
+                        onPress={() => handleRejectMedicine(index)}
+                      >
+                        <Text style={styles.medActionBtnText}>✕ Reject</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    {/* Schedule Reminders (Only for confirmed medicines) */}
+                    {med.isConfirmedByUser && (
+                      <View style={styles.reminderSection}>
+                        <Text style={styles.reminderTitle}>⏰ Add Daily Medication Reminder:</Text>
+                        <View style={styles.reminderSlotsRow}>
+                          {['9:00 AM', '9:00 PM', '10:00 AM', '10:00 PM'].map((timeStr) => {
+                            const slot = timeStr === '9:00 AM' ? '09:00' : timeStr === '9:00 PM' ? '21:00' : timeStr === '10:00 AM' ? '10:00' : '22:00';
+                            return (
+                              <TouchableOpacity
+                                key={timeStr}
+                                style={styles.reminderSlotChip}
+                                onPress={() => handleScheduleReminder(med, slot)}
+                              >
+                                <Text style={styles.reminderSlotText}>+ {timeStr}</Text>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Extracted Lab Metrics */}
+            {activeScanResult?.extractedLabResults && activeScanResult.extractedLabResults.length > 0 && (
+              <View style={styles.reviewCard}>
+                <Text style={styles.reviewSectionLabel}>
+                  EXTRACTED LAB METRICS ({activeScanResult.extractedLabResults.length}):
+                </Text>
+                {activeScanResult.extractedLabResults.map((lab, index) => (
+                  <View key={index} style={styles.labReviewItem}>
+                    <Text style={styles.labReviewName}>{lab.testName}</Text>
+                    <Text
+                      style={[
+                        styles.labReviewValue,
+                        lab.isAbnormal && { color: '#F87171', fontWeight: 'bold' },
+                      ]}
+                    >
+                      {lab.value} {lab.unit} <Text style={{ color: '#64748B' }}>[Ref: {lab.referenceRange}]</Text>
+                      {lab.isAbnormal ? ' (FLAGGED)' : ''}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Raw OCR Text View & Editor */}
+            <View style={styles.reviewCard}>
+              <View style={styles.reviewCardRow}>
+                <Text style={styles.reviewSectionLabel}>RAW ON-DEVICE OCR TRANSCRIPT:</Text>
+                <TouchableOpacity onPress={() => setIsEditingOcr(!isEditingOcr)}>
+                  <Text style={styles.editOcrToggleText}>
+                    {isEditingOcr ? 'Done Editing' : '✏️ Edit Text'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {isEditingOcr ? (
+                <View>
+                  <TextInput
+                    style={styles.ocrTextInput}
+                    value={editableOcrText}
+                    onChangeText={setEditableOcrText}
+                    multiline={true}
+                    numberOfLines={8}
+                  />
+                  <TouchableOpacity style={styles.reanalyzeBtn} onPress={handleReanalyzeOcr}>
+                    <Text style={styles.reanalyzeBtnText}>🔄 Re-Analyze Edited Text</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <Text style={styles.ocrTextPreview} numberOfLines={8}>
+                  {editableOcrText || 'No text recognized'}
+                </Text>
+              )}
+            </View>
+
+            {/* Local AI Clinical Explanation Section */}
+            <View style={styles.reviewCard}>
+              <View style={styles.reviewCardRow}>
+                <Text style={styles.reviewSectionLabel}>LOCAL AI CLINICAL EXPLANATION:</Text>
+                <TouchableOpacity
+                  style={styles.aiExplainBtn}
+                  onPress={handleExplainWithLocalAI}
+                  disabled={isExplaining}
+                >
+                  <Text style={styles.aiExplainBtnText}>
+                    {isExplaining ? 'Generating...' : '✨ Explain with Local AI'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {isExplaining && (
+                <View style={styles.aiLoadingBox}>
+                  <ActivityIndicator size="small" color="#38BDF8" />
+                  <Text style={styles.aiLoadingText}>Streaming offline clinical explanation via llama.rn...</Text>
+                </View>
+              )}
+
+              {aiExplanation ? (
+                <View style={styles.aiExplanationBox}>
+                  <Text style={styles.aiExplanationText}>{aiExplanation}</Text>
+                </View>
+              ) : null}
+            </View>
+
+            {/* Confirm & Save Button */}
+            <View style={styles.reviewFooterButtons}>
+              <TouchableOpacity style={styles.confirmSaveBtn} onPress={handleConfirmSave}>
+                <Text style={styles.confirmSaveBtnText}>✓ Confirm & Commit to Case</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
+
+      {/* ======================================================== */}
+      {/* SAVED DOCUMENT DETAIL VIEWER MODAL */}
+      {/* ======================================================== */}
+      <Modal visible={detailModalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.detailModalContent}>
+            <View style={styles.detailHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.detailTitle}>{selectedReport?.title}</Text>
+                <Text style={styles.detailMeta}>
+                  {selectedReport?.type} • {selectedReport?.testDate}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => setDetailModalVisible(false)}>
+                <Text style={styles.detailCloseText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={{ maxHeight: 380 }}>
+              <Text style={styles.detailSectionHeading}>Facility / Doctor:</Text>
+              <Text style={styles.detailBodyText}>{selectedReport?.laboratoryOrHospital}</Text>
+
+              <Text style={styles.detailSectionHeading}>Clinical Summary:</Text>
+              <Text style={styles.detailBodyText}>{selectedReport?.summary}</Text>
+
+              {selectedReport?.results && selectedReport.results.length > 0 && (
+                <>
+                  <Text style={styles.detailSectionHeading}>Extracted Test Results:</Text>
+                  {selectedReport.results.map((res, i) => (
+                    <Text
+                      key={i}
+                      style={[
+                        styles.detailLabLine,
+                        res.isAbnormal && { color: '#F87171', fontWeight: 'bold' },
+                      ]}
+                    >
+                      • {res.testName}: {res.value} {res.unit} (Ref: {res.referenceRange})
+                      {res.isAbnormal ? ' [FLAGGED]' : ''}
+                    </Text>
+                  ))}
+                </>
+              )}
+
+              <Text style={styles.detailSectionHeading}>Raw Document OCR Text:</Text>
+              <Text style={styles.detailOcrText}>{selectedReport?.rawOcrText}</Text>
+            </ScrollView>
+
+            <View style={styles.detailFooter}>
+              <TouchableOpacity
+                style={styles.detailDeleteBtn}
+                onPress={() => selectedReport && handleDeleteReport(selectedReport)}
+              >
+                <Text style={styles.detailDeleteBtnText}>Delete Document</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -222,40 +765,110 @@ const styles = StyleSheet.create({
     borderBottomColor: '#1E293B',
   },
   headerTitle: { fontSize: 20, fontWeight: '800', color: '#F8FAFC' },
-  headerSubtitle: { fontSize: 12, color: '#94A3B8', marginTop: 2 },
-  actionButtonsRow: { flexDirection: 'row', gap: 10, marginTop: 12 },
-  scanActionBtn: {
-    backgroundColor: '#0284C7',
+  headerSubtitle: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
+  actionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 12 },
+  actionBtn: {
+    flexBasis: '48%',
+    flexGrow: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rxBtn: { backgroundColor: '#0284C7' },
+  labScanBtn: { backgroundColor: '#0D9488' },
+  galleryBtn: { backgroundColor: '#475569' },
+  fileBtn: { backgroundColor: '#6366F1' },
+  actionBtnText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  caseSelectorBox: { marginTop: 12, paddingTop: 8, borderTopWidth: 1, borderTopColor: '#1E293B' },
+  caseSelectorLabel: { fontSize: 10, fontWeight: '700', color: '#64748B', textTransform: 'uppercase' },
+  caseQuestionRow: { flexDirection: 'row', gap: 8, marginTop: 10 },
+  caseQuestionInput: {
+    flex: 1,
+    backgroundColor: '#1E293B',
+    color: '#F8FAFC',
+    borderRadius: 8,
+    paddingHorizontal: 12,
     paddingVertical: 8,
+    fontSize: 12,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  caseAskBtn: {
+    backgroundColor: '#8B5CF6',
     paddingHorizontal: 14,
     borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  labActionBtn: {
-    backgroundColor: '#0D9488',
+  caseAskBtnText: { color: '#FFFFFF', fontSize: 12, fontWeight: '700' },
+  aiExplanationBanner: {
+    margin: 16,
+    marginBottom: 0,
+    backgroundColor: '#1E293B',
+    padding: 12,
+    borderRadius: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#8B5CF6',
   },
-  scanActionBtnText: { color: '#FFFFFF', fontSize: 13, fontWeight: '700' },
+  aiExplanationHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  aiExplanationTitle: { fontSize: 12, fontWeight: '700', color: '#C084FC' },
+  aiExplanationText: { fontSize: 12, color: '#E2E8F0', lineHeight: 18 },
+  busyBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0369A122',
+    padding: 10,
+    gap: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#38BDF8',
+  },
+  busyText: { color: '#38BDF8', fontSize: 12, fontWeight: '600' },
   tabContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    gap: 8,
+    gap: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
   },
   tabButton: {
     paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     borderRadius: 8,
     backgroundColor: '#1E293B',
   },
   tabButtonActive: { backgroundColor: '#38BDF8' },
-  tabText: { fontSize: 11, fontWeight: '700', color: '#94A3B8' },
+  tabText: { fontSize: 10, fontWeight: '700', color: '#94A3B8' },
   tabTextActive: { color: '#0F172A' },
-  scrollContent: { padding: 16 },
-  emptyContainer: { alignItems: 'center', paddingTop: 60 },
+  scrollContent: { padding: 16, paddingBottom: 40 },
+  emptyContainer: { alignItems: 'center', paddingTop: 40 },
   emptyEmoji: { fontSize: 44, marginBottom: 12 },
   emptyTitle: { fontSize: 18, fontWeight: '700', color: '#F1F5F9' },
   emptySubtitle: { fontSize: 13, color: '#94A3B8', textAlign: 'center', maxWidth: 280, marginTop: 6 },
+  timelineHeading: { fontSize: 14, fontWeight: '700', color: '#38BDF8', marginBottom: 12 },
+  timelineCard: {
+    backgroundColor: '#1E293B',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    borderLeftWidth: 3,
+    borderLeftColor: '#38BDF8',
+  },
+  timelineCardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  timelineEventTypeBadge: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#38BDF8',
+    backgroundColor: '#0284C722',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  timelineDate: { fontSize: 11, color: '#94A3B8' },
+  timelineTitle: { fontSize: 14, fontWeight: '700', color: '#F8FAFC', marginTop: 6 },
+  timelineDescription: { fontSize: 12, color: '#CBD5E1', marginTop: 4, lineHeight: 16 },
+  timelineProvenance: { fontSize: 10, color: '#64748B', marginTop: 6 },
   reportCard: {
     backgroundColor: '#1E293B',
     borderRadius: 14,
@@ -295,45 +908,186 @@ const styles = StyleSheet.create({
     borderTopColor: '#334155',
   },
   provenanceText: { fontSize: 11, color: '#64748B' },
+  reviewModalContainer: { flex: 1, backgroundColor: '#0F172A' },
+  reviewModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E293B',
+  },
+  reviewModalTitle: { fontSize: 18, fontWeight: '800', color: '#F8FAFC' },
+  reviewModalSubtitle: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
+  closeReviewBtn: {
+    backgroundColor: '#334155',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  closeReviewBtnText: { color: '#F87171', fontWeight: '700', fontSize: 12 },
+  reviewScrollContent: { padding: 16, paddingBottom: 40 },
+  reviewCard: {
+    backgroundColor: '#1E293B',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  reviewCardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
+  reviewSectionLabel: { fontSize: 11, fontWeight: '800', color: '#64748B', letterSpacing: 1 },
+  typeBadgeLarge: {
+    backgroundColor: '#0369A1',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  typeBadgeLargeText: { color: '#FFFFFF', fontWeight: '800', fontSize: 11 },
+  confidenceText: { color: '#34D399', fontSize: 11, marginTop: 4, fontWeight: '600' },
+  caseScrollRow: { flexDirection: 'row', marginTop: 8 },
+  caseChip: {
+    backgroundColor: '#0F172A',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  caseChipActive: { backgroundColor: '#0284C7', borderColor: '#38BDF8' },
+  caseChipText: { color: '#94A3B8', fontSize: 11, fontWeight: '600' },
+  caseChipTextActive: { color: '#FFFFFF', fontWeight: '700' },
+  medReviewItem: {
+    backgroundColor: '#0F172A',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  medReviewHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  medReviewName: { color: '#F8FAFC', fontWeight: '700', fontSize: 13 },
+  medReviewDosage: { color: '#38BDF8', fontWeight: '700', fontSize: 12 },
+  medReviewGeneric: { color: '#94A3B8', fontSize: 11, marginTop: 2 },
+  medReviewInstruction: { color: '#CBD5E1', fontSize: 11, marginTop: 4 },
+  medActionRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
+  medActionBtn: { flex: 1, paddingVertical: 6, borderRadius: 6, alignItems: 'center' },
+  medConfirmBtn: { backgroundColor: '#10B981' },
+  medRejectBtn: { backgroundColor: '#EF4444' },
+  medActionBtnText: { color: '#FFFFFF', fontWeight: '700', fontSize: 11 },
+  reminderSection: {
+    marginTop: 10,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#1E293B',
+  },
+  reminderTitle: { fontSize: 11, fontWeight: '700', color: '#FBBF24', marginBottom: 4 },
+  reminderSlotsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  reminderSlotChip: {
+    backgroundColor: '#FBBF2422',
+    borderColor: '#FBBF24',
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  reminderSlotText: { color: '#FBBF24', fontSize: 10, fontWeight: '700' },
+  labReviewItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+  },
+  labReviewName: { color: '#E2E8F0', fontSize: 12, fontWeight: '600' },
+  labReviewValue: { color: '#38BDF8', fontSize: 12, fontWeight: '700' },
+  editOcrToggleText: { color: '#38BDF8', fontSize: 12, fontWeight: '700' },
+  ocrTextPreview: {
+    color: '#94A3B8',
+    fontSize: 11,
+    lineHeight: 16,
+    fontFamily: 'monospace',
+    backgroundColor: '#0F172A',
+    padding: 10,
+    borderRadius: 8,
+  },
+  ocrTextInput: {
+    backgroundColor: '#0F172A',
+    color: '#F8FAFC',
+    borderRadius: 8,
+    padding: 10,
+    fontFamily: 'monospace',
+    fontSize: 11,
+    height: 140,
+    textAlignVertical: 'top',
+    borderWidth: 1,
+    borderColor: '#38BDF8',
+  },
+  reanalyzeBtn: {
+    backgroundColor: '#0284C7',
+    padding: 8,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  reanalyzeBtnText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  aiExplainBtn: {
+    backgroundColor: '#8B5CF6',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 6,
+  },
+  aiExplainBtnText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  aiLoadingBox: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
+  aiLoadingText: { color: '#38BDF8', fontSize: 11 },
+  aiExplanationBox: {
+    marginTop: 8,
+    backgroundColor: '#0F172A',
+    padding: 12,
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#8B5CF6',
+  },
+  reviewFooterButtons: { marginTop: 10 },
+  confirmSaveBtn: {
+    backgroundColor: '#10B981',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  confirmSaveBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '800' },
   modalOverlay: {
     flex: 1,
     backgroundColor: '#000000AA',
     justifyContent: 'center',
     padding: 20,
   },
-  modalContent: {
+  detailModalContent: {
     backgroundColor: '#1E293B',
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
     borderColor: '#334155',
   },
-  modalTitle: { fontSize: 18, fontWeight: '800', color: '#F8FAFC' },
-  modalSubtitle: { fontSize: 12, color: '#94A3B8', marginTop: 4, marginBottom: 14 },
-  inputLabel: { fontSize: 12, fontWeight: '700', color: '#CBD5E1', marginBottom: 4 },
-  textInput: {
+  detailHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 14 },
+  detailTitle: { fontSize: 17, fontWeight: '700', color: '#F8FAFC' },
+  detailMeta: { fontSize: 12, color: '#94A3B8', marginTop: 2 },
+  detailCloseText: { fontSize: 18, color: '#94A3B8', fontWeight: '700' },
+  detailSectionHeading: { fontSize: 11, fontWeight: '700', color: '#38BDF8', marginTop: 10, marginBottom: 2 },
+  detailBodyText: { fontSize: 12, color: '#CBD5E1', lineHeight: 16 },
+  detailLabLine: { fontSize: 12, color: '#E2E8F0', marginVertical: 2 },
+  detailOcrText: {
+    fontSize: 10,
+    color: '#64748B',
+    fontFamily: 'monospace',
     backgroundColor: '#0F172A',
-    color: '#F8FAFC',
-    borderRadius: 8,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#334155',
-    marginBottom: 12,
+    padding: 8,
+    borderRadius: 6,
+    marginTop: 4,
   },
-  textArea: { height: 140, textAlignVertical: 'top' },
-  modalButtonRow: { flexDirection: 'row', justifyContent: 'flex-end', gap: 10, marginTop: 10 },
-  modalCancelBtn: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: '#334155',
-  },
-  modalCancelBtnText: { color: '#E2E8F0', fontWeight: '600' },
-  modalProcessBtn: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: '#0284C7',
-  },
-  modalProcessBtnText: { color: '#FFFFFF', fontWeight: '700' },
+  detailFooter: { marginTop: 16, borderTopWidth: 1, borderTopColor: '#334155', paddingTop: 10 },
+  detailDeleteBtn: { backgroundColor: '#EF444422', padding: 10, borderRadius: 8, alignItems: 'center' },
+  detailDeleteBtnText: { color: '#EF4444', fontWeight: '700', fontSize: 12 },
 });
+

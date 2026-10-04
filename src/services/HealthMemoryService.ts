@@ -5,6 +5,7 @@ import {
   CreateCasePayload,
   DailyCheckInEntity,
   DoctorInstructionEntity,
+  HealthTimelineEvent,
   MedicineEntity,
   PatientProfile,
   ProcedureEntity,
@@ -55,6 +56,7 @@ export class HealthMemoryService {
   private recoveryPlans: Map<string, RecoveryPlanEntity> = new Map();
   private doctorInstructions: Map<string, DoctorInstructionEntity> = new Map();
   private checkIns: DailyCheckInEntity[] = [];
+  private timelineEvents: HealthTimelineEvent[] = [];
 
   private constructor() {
     // Starts with clean empty state for real users
@@ -146,6 +148,62 @@ export class HealthMemoryService {
     SEED_PROCEDURES.forEach((p) => this.procedures.set(p.id, p));
     this.recoveryPlans.set(SEED_RECOVERY_PLAN.id, SEED_RECOVERY_PLAN);
     this.checkIns = [...SEED_CHECKINS];
+
+    // Seed realistic initial timeline events
+    this.timelineEvents = [
+      {
+        id: 'timeline_init_1',
+        caseId: 'case_demo_1',
+        eventType: 'PRESCRIPTION_ADDED',
+        title: 'Prescription Added - Dr. Ravi Swaminathan',
+        description: 'Telmisartan 40mg once daily recorded from consultation prescription.',
+        timestamp: '2026-09-15T09:15:00Z',
+        provenance: {
+          source: ProvenanceSource.ClinicallyDocumented,
+          confidence: 0.98,
+          recordedAt: '2026-09-15T09:15:00Z',
+        },
+      },
+      {
+        id: 'timeline_init_2',
+        caseId: 'case_demo_1',
+        eventType: 'MEDICINE_CONFIRMED',
+        title: 'Medicine Confirmed: Telmisartan 40mg',
+        description: 'Patient confirmed medication schedule: 1 tablet every morning after breakfast.',
+        timestamp: '2026-09-15T09:30:00Z',
+        provenance: {
+          source: ProvenanceSource.UserReported,
+          confidence: 1.0,
+          recordedAt: '2026-09-15T09:30:00Z',
+        },
+      },
+      {
+        id: 'timeline_init_3',
+        caseId: 'case_demo_2',
+        eventType: 'REPORT_ADDED',
+        title: 'Discharge Summary - Raju Hospital',
+        description: 'Laparoscopic appendectomy operative report and post-op wound care instructions.',
+        timestamp: '2026-09-28T15:00:00Z',
+        provenance: {
+          source: ProvenanceSource.ClinicallyDocumented,
+          confidence: 0.96,
+          recordedAt: '2026-09-28T15:00:00Z',
+        },
+      },
+      {
+        id: 'timeline_init_4',
+        caseId: 'case_demo_2',
+        eventType: 'DOCTOR_NOTE_ADDED',
+        title: 'Post-Op Instruction Recorded',
+        description: 'Keep surgical dressing clean and dry. Complete 7-day antibiotic course.',
+        timestamp: '2026-09-28T15:10:00Z',
+        provenance: {
+          source: ProvenanceSource.ClinicallyDocumented,
+          confidence: 0.99,
+          recordedAt: '2026-09-28T15:10:00Z',
+        },
+      },
+    ];
   }
 
   public clearAllData() {
@@ -159,6 +217,24 @@ export class HealthMemoryService {
     this.recoveryPlans.clear();
     this.doctorInstructions.clear();
     this.checkIns = [];
+    this.timelineEvents = [];
+  }
+
+  // ==========================================
+  // TIMELINE MANAGEMENT
+  // ==========================================
+
+  public getTimelineEvents(caseId?: string): HealthTimelineEvent[] {
+    const list = caseId
+      ? this.timelineEvents.filter((e) => !e.caseId || e.caseId === caseId)
+      : this.timelineEvents;
+    return [...list].sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+  }
+
+  public addTimelineEvent(event: HealthTimelineEvent): void {
+    this.timelineEvents.unshift(event);
   }
 
   // ==========================================
@@ -176,7 +252,7 @@ export class HealthMemoryService {
   }
 
   public createCase(payload: CreateCasePayload): CaseFile {
-    const id = `case_${Date.now()}`;
+    const id = `case_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const timestamp = new Date().toISOString();
 
     const instructions: string[] = [];
@@ -204,6 +280,21 @@ export class HealthMemoryService {
     };
 
     this.cases.set(id, newCase);
+
+    this.addTimelineEvent({
+      id: `timeline_case_${id}`,
+      caseId: id,
+      eventType: 'DOCTOR_NOTE_ADDED',
+      title: `Case File Created: ${newCase.title}`,
+      description: `New ${newCase.caseType.toLowerCase()} case opened for ${newCase.doctorName} at ${newCase.hospitalName}.`,
+      timestamp,
+      provenance: {
+        source: ProvenanceSource.UserReported,
+        confidence: 1.0,
+        recordedAt: timestamp,
+      },
+    });
+
     return newCase;
   }
 
@@ -228,6 +319,7 @@ export class HealthMemoryService {
     for (const [rId, rep] of this.reports.entries()) {
       if (rep.caseId === id) this.reports.delete(rId);
     }
+    this.timelineEvents = this.timelineEvents.filter((e) => e.caseId !== id);
     return this.cases.delete(id);
   }
 
@@ -241,7 +333,7 @@ export class HealthMemoryService {
   }
 
   // ==========================================
-  // CASE-SCOPED ENTITY QUERIES
+  // CASE-SCOPED ENTITY QUERIES & CONFIRMATIONS
   // ==========================================
 
   public getMedicinesByCase(caseId: string): MedicineEntity[] {
@@ -250,6 +342,17 @@ export class HealthMemoryService {
 
   public getReportsByCase(caseId: string): ReportEntity[] {
     return Array.from(this.reports.values()).filter((r) => r.caseId === caseId);
+  }
+
+  public getLatestReport(caseId?: string): ReportEntity | undefined {
+    const list = caseId ? this.getReportsByCase(caseId) : this.getReports();
+    if (list.length === 0) return undefined;
+    return list.sort((a, b) => new Date(b.testDate).getTime() - new Date(a.testDate).getTime())[0];
+  }
+
+  public getPrescriptions(caseId?: string): ReportEntity[] {
+    const list = caseId ? this.getReportsByCase(caseId) : this.getReports();
+    return list.filter((r) => r.type === 'Prescription');
   }
 
   public addMedicineToCase(caseId: string, med: MedicineEntity): void {
@@ -263,6 +366,43 @@ export class HealthMemoryService {
     }
   }
 
+  public confirmMedicine(medId: string): boolean {
+    const med = this.medicines.get(medId);
+    if (!med) return false;
+
+    med.isConfirmedByUser = true;
+    med.confirmationStatus = 'CONFIRMED';
+    med.isActive = true;
+
+    const timestamp = new Date().toISOString();
+    this.addTimelineEvent({
+      id: `timeline_med_conf_${med.id}`,
+      caseId: med.caseId,
+      eventType: 'MEDICINE_CONFIRMED',
+      title: `Medication Confirmed: ${med.name}`,
+      description: `Patient verified dosage: ${med.dosage}, frequency: ${med.frequency} (${med.timing}).`,
+      timestamp,
+      entityId: med.id,
+      provenance: {
+        source: ProvenanceSource.UserReported,
+        confidence: 1.0,
+        recordedAt: timestamp,
+      },
+    });
+
+    return true;
+  }
+
+  public rejectMedicine(medId: string): boolean {
+    const med = this.medicines.get(medId);
+    if (!med) return false;
+
+    med.isConfirmedByUser = false;
+    med.confirmationStatus = 'REJECTED';
+    med.isActive = false;
+    return true;
+  }
+
   public addReportToCase(caseId: string, report: ReportEntity): void {
     report.caseId = caseId;
     this.reports.set(report.id, report);
@@ -272,6 +412,23 @@ export class HealthMemoryService {
       c.documentIds.push(report.id);
       c.updatedAt = new Date().toISOString();
     }
+
+    const timestamp = new Date().toISOString();
+    const eventType = report.type === 'Prescription' ? 'PRESCRIPTION_ADDED' : 'REPORT_ADDED';
+    this.addTimelineEvent({
+      id: `timeline_rep_${report.id}`,
+      caseId,
+      eventType,
+      title: `${report.type === 'Prescription' ? 'Prescription' : 'Medical Report'} Added: ${report.title}`,
+      description: report.summary || `Added to ${c?.title || 'Case File'}.`,
+      timestamp,
+      entityId: report.id,
+      provenance: report.provenance || {
+        source: ProvenanceSource.ClinicallyDocumented,
+        confidence: 0.95,
+        recordedAt: timestamp,
+      },
+    });
   }
 
   public addInstructionToCase(caseId: string, instruction: string): void {
@@ -279,7 +436,94 @@ export class HealthMemoryService {
     if (c && instruction.trim()) {
       c.doctorInstructions.push(instruction.trim());
       c.updatedAt = new Date().toISOString();
+
+      const timestamp = new Date().toISOString();
+      this.addTimelineEvent({
+        id: `timeline_inst_${Date.now()}`,
+        caseId,
+        eventType: 'DOCTOR_NOTE_ADDED',
+        title: 'Doctor Instruction Logged',
+        description: instruction.trim(),
+        timestamp,
+        provenance: {
+          source: ProvenanceSource.ClinicallyDocumented,
+          confidence: 0.98,
+          recordedAt: timestamp,
+        },
+      });
     }
+  }
+
+  public addSymptom(symptom: SymptomEntity, caseId?: string): void {
+    this.symptoms.set(symptom.id, symptom);
+    if (caseId) {
+      const c = this.cases.get(caseId);
+      if (c && !c.symptoms.includes(symptom.symptom)) {
+        c.symptoms.push(symptom.symptom);
+        c.updatedAt = new Date().toISOString();
+      }
+    }
+
+    const timestamp = new Date().toISOString();
+    this.addTimelineEvent({
+      id: `timeline_symp_${symptom.id}`,
+      caseId,
+      eventType: 'SYMPTOM_RECORDED',
+      title: `Symptom Recorded: ${symptom.symptom}`,
+      description: `Severity: ${symptom.severity}/10${symptom.notes ? ` - ${symptom.notes}` : ''}`,
+      timestamp,
+      entityId: symptom.id,
+      provenance: symptom.provenance,
+    });
+  }
+
+  /**
+   * Retrieves dietary guidance grounded strictly in case context
+   */
+  public getDietGuidance(caseId?: string): {
+    hasSpecificGuidance: boolean;
+    guidanceText: string;
+    restrictions: string[];
+    disclaimer: string;
+  } {
+    if (!caseId) {
+      return {
+        hasSpecificGuidance: false,
+        guidanceText: "I don't have enough information in this case to give you a reliable personalized answer. Please check with your doctor or dietitian.",
+        restrictions: [],
+        disclaimer: 'Always verify dietary changes with your treating physician.',
+      };
+    }
+
+    const c = this.cases.get(caseId);
+    if (!c || (!c.dietGuidance && c.doctorInstructions.length === 0)) {
+      return {
+        hasSpecificGuidance: false,
+        guidanceText: "I don't have enough information in this case to give you a reliable personalized answer. Please check with your doctor or dietitian.",
+        restrictions: [],
+        disclaimer: 'Always verify dietary changes with your treating physician.',
+      };
+    }
+
+    const restrictions: string[] = [];
+    if (c.dietGuidance) {
+      restrictions.push(c.dietGuidance);
+    }
+
+    // Check doctor instructions for dietary mentions
+    for (const inst of c.doctorInstructions) {
+      const lower = inst.toLowerCase();
+      if (lower.includes('diet') || lower.includes('food') || lower.includes('eat') || lower.includes('sodium') || lower.includes('sugar') || lower.includes('spice') || lower.includes('water') || lower.includes('fluid')) {
+        restrictions.push(inst);
+      }
+    }
+
+    return {
+      hasSpecificGuidance: true,
+      guidanceText: c.dietGuidance || restrictions.join('. '),
+      restrictions,
+      disclaimer: `Based on documented case instructions from ${c.doctorName} (${c.hospitalName}).`,
+    };
   }
 
   // ==========================================

@@ -86,6 +86,78 @@ describe('CareBond General Health Track — Case Files System', () => {
     expect(contextStr).toContain('Soft bland diet for 7 days.');
   });
 
+  test('should guarantee strict case isolation between multiple cases', () => {
+    const caseA = memory.createCase({
+      title: 'Diabetes Clinic - Dr Kumar',
+      doctorName: 'Dr. Kumar',
+      hospitalName: 'Apollo Care',
+      dietGuidance: 'Low carb, strictly avoid sugar',
+      initialInstructions: 'Monitor fasting blood sugar daily',
+    });
+
+    memory.addMedicineToCase(caseA.id, {
+      id: 'med_metformin',
+      caseId: caseA.id,
+      name: 'Metformin 500mg',
+      genericName: 'Metformin',
+      dosage: '500mg',
+      frequency: 'Twice daily',
+      timing: 'With meals',
+      instructions: 'Take with food',
+      startDate: '2026-10-04',
+      isActive: true,
+      isConfirmedByUser: true,
+      reminderTimes: ['08:00', '20:00'],
+      prescribedForCondition: 'Type 2 Diabetes',
+      prescribingDoctor: 'Dr. Kumar',
+      provenance: { source: 'DOC' as any, confidence: 0.99, recordedAt: '2026-10-04' },
+    });
+
+    const caseB = memory.createCase({
+      title: 'Fracture Recovery - Rashi Hospital',
+      doctorName: 'Dr. Rashi Verma',
+      hospitalName: 'Rashi Ortho Center',
+      dietGuidance: 'High calcium and protein',
+      initialInstructions: 'Keep left leg elevated on pillows',
+    });
+
+    memory.addMedicineToCase(caseB.id, {
+      id: 'med_calcium',
+      caseId: caseB.id,
+      name: 'Calcium + Vitamin D3 500mg',
+      genericName: 'Calcium Carbonate',
+      dosage: '500mg',
+      frequency: 'Once daily',
+      timing: 'Night',
+      instructions: 'Take after dinner',
+      startDate: '2026-10-04',
+      isActive: true,
+      isConfirmedByUser: true,
+      reminderTimes: ['21:00'],
+      prescribedForCondition: 'Bone Healing',
+      prescribingDoctor: 'Dr. Rashi Verma',
+      provenance: { source: 'DOC' as any, confidence: 0.95, recordedAt: '2026-10-04' },
+    });
+
+    // Test Scoped Context for Case A
+    const contextA = memory.buildCaseContext(caseA.id);
+    expect(contextA).toContain('Diabetes Clinic - Dr Kumar');
+    expect(contextA).toContain('Metformin 500mg');
+    expect(contextA).toContain('Low carb, strictly avoid sugar');
+    expect(contextA).not.toContain('Fracture Recovery');
+    expect(contextA).not.toContain('Calcium + Vitamin D3');
+    expect(contextA).not.toContain('Keep left leg elevated');
+
+    // Test Scoped Context for Case B
+    const contextB = memory.buildCaseContext(caseB.id);
+    expect(contextB).toContain('Fracture Recovery - Rashi Hospital');
+    expect(contextB).toContain('Calcium + Vitamin D3');
+    expect(contextB).toContain('Keep left leg elevated');
+    expect(contextB).not.toContain('Diabetes Clinic');
+    expect(contextB).not.toContain('Metformin 500mg');
+    expect(contextB).not.toContain('Low carb, strictly avoid sugar');
+  });
+
   test('should load realistic demo data when explicitly requested', () => {
     memory.loadDemoData();
     const demoCases = memory.getCases();

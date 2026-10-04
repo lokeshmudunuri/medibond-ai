@@ -49,23 +49,50 @@ export interface AllergyEntity {
 
 export * from './case';
 
+export type ConfirmationStatus = 'PENDING_REVIEW' | 'CONFIRMED' | 'REJECTED';
+
 export interface MedicineEntity {
   id: string;
   caseId?: string;
   name: string;
+  normalizedName?: string;
   genericName: string;
   dosage: string;
+  strength?: string;
+  dose?: string;
   form?: string;
   frequency: string;
+  duration?: string;
   timing: string;
   instructions: string;
   startDate: string;
   endDate?: string;
   isActive: boolean;
   isConfirmedByUser: boolean;
+  confirmationStatus?: ConfirmationStatus;
+  sourceDocument?: string;
   reminderTimes: string[];
   prescribedForCondition: string;
   prescribingDoctor: string;
+  provenance: Provenance;
+}
+
+export type HealthTimelineEventType =
+  | 'PRESCRIPTION_ADDED'
+  | 'REPORT_ADDED'
+  | 'MEDICINE_CONFIRMED'
+  | 'DOCTOR_NOTE_ADDED'
+  | 'SYMPTOM_RECORDED'
+  | 'CHECKIN_COMPLETED';
+
+export interface HealthTimelineEvent {
+  id: string;
+  caseId?: string;
+  eventType: HealthTimelineEventType;
+  title: string;
+  description: string;
+  timestamp: string;
+  entityId?: string;
   provenance: Provenance;
 }
 
@@ -82,7 +109,7 @@ export interface ReportEntity {
   id: string;
   caseId?: string;
   title: string;
-  type: 'Lab' | 'Imaging' | 'Discharge' | 'Prescription' | 'General';
+  type: 'Lab' | 'Imaging' | 'Discharge' | 'Prescription' | 'DoctorNote' | 'MedicalReport' | 'General';
   testDate: string;
   laboratoryOrHospital: string;
   summary: string;

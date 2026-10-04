@@ -5,7 +5,7 @@ export class OfflineTTSService {
   private isSpeaking = false;
   private currentUtteranceId: string | null = null;
   private onPlaybackFinishedCallback: (() => void) | null = null;
-  private installedVoices: Set<VoiceLanguage> = new Set(['en', 'hi', 'te', 'kn', 'ta', 'mr']);
+  private installedVoices: Set<VoiceLanguage> = new Set(['en', 'hi', 'te', 'kn']);
 
   private constructor() {}
 

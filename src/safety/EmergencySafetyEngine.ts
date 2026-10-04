@@ -11,7 +11,15 @@ interface RedFlagRule {
 export class EmergencySafetyEngine {
   private static readonly RED_FLAG_PATTERNS: RedFlagRule[] = [
     {
-      keywords: ['crushing chest pain', 'chest tightness', 'pain radiating to left arm', 'jaw pain chest', 'heart attack'],
+      keywords: [
+        'crushing chest pain',
+        'chest pain',
+        'severe chest pain',
+        'chest tightness',
+        'pain radiating to left arm',
+        'jaw pain chest',
+        'heart attack',
+      ],
       title: 'Potential Acute Coronary / Cardiac Emergency',
       rationale: 'Crushing chest pain radiating to arm or jaw is a hallmark cardiac red flag requiring immediate emergency intervention.',
       action: 'Call emergency services (112 / 911 / 108) immediately. Sit upright, rest, do not exert yourself, and do not drive yourself.',

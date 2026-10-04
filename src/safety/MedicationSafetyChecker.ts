@@ -111,4 +111,31 @@ export class MedicationSafetyChecker {
 
     return flags;
   }
+
+  public static checkSafety(
+    medicines: MedicineEntity[],
+    allergies: AllergyEntity[]
+  ): { hasSevereInteraction: boolean; warnings: string[] } {
+    const warnings: string[] = [];
+    let hasSevere = false;
+
+    // Check allergies against all medicines
+    for (const med of medicines) {
+      const flags = this.evaluateSafety(medicines, allergies, med);
+      for (const flag of flags) {
+        if (flag.flagType === SafetyFlagSeverity.CriticalContraindication) {
+          hasSevere = true;
+          warnings.push(flag.title);
+        } else if (flag.flagType === SafetyFlagSeverity.PotentialInteraction) {
+          warnings.push(flag.title);
+        }
+      }
+    }
+
+    return {
+      hasSevereInteraction: hasSevere,
+      warnings,
+    };
+  }
 }
+

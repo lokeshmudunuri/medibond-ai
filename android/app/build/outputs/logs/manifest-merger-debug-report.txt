@@ -1,7 +1,11 @@
 -- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:38:7-46:18
+	android:authorities
+		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-29:12
-MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-29:12
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-48:12
+MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:1:1-48:12
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml:1:1-7:12
@@ -11,6 +15,12 @@ MERGED from [:react-native-screens] C:\Users\lokes\OneDrive\Documents\medicare a
 MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:2:1-24:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9e47b01a4e8c579ddf8d031bb6671842\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:17:1-26:12
+MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9f0ce4a8f995e499657a10ff6e18a91e\transformed\jetified-text-recognition-16.0.1\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\40131675e5554b152c9f927d2409afa6\transformed\jetified-play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:2:1-8:12
+MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\477ec76b1785318017be24b925d044fa\transformed\jetified-text-recognition-bundled-common-17.0.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:2:1-18:12
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:2:1-18:12
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:2:1-26:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3cecd2d2a59be5589d3048bff9b0a25d\transformed\appcompat-1.6.1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.facebook.fresco:fresco:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\71bcf29ccdd0a399a313c9fe8cae9235\transformed\jetified-fresco-3.4.0\AndroidManifest.xml:2:1-7:12
@@ -28,6 +38,10 @@ MERGED from [com.facebook.fresco:urimod:3.4.0] C:\Users\lokes\.gradle\caches\8.1
 MERGED from [com.facebook.fresco:vito-source:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\88a341a37b7b00e984513fd77fa1fbb3\transformed\jetified-vito-source-3.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f2c7bb646658a43bac8ad25bf6f4020b\transformed\jetified-middleware-3.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.mlkit:vision-interfaces:16.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3c9c9c228c85fea04c4424f047790f5c\transformed\jetified-vision-interfaces-16.3.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ba15d68ca73345b2dbcb79a4e64156f3\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:2:1-5:12
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.fragment:fragment:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\34af0cc46f5c6c96ff889bb506174318\transformed\fragment-1.6.1\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.fragment:fragment-ktx:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\fb62019cc0a6cfefebc869e3add7b7fb\transformed\jetified-fragment-ktx-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -71,7 +85,13 @@ MERGED from [androidx.tracing:tracing:1.1.0] C:\Users\lokes\.gradle\caches\8.10.
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\195dff63600e73cd57d7fbe1d3117b71\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b28e6dc209d3ef4142b62b32710cca72\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:15:1-38:12
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:15:1-41:12
+MERGED from [com.google.android.datatransport:transport-api:2.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\7a131761f7b4f6dd063879a3d9224cdc\transformed\jetified-transport-api-2.2.1\AndroidManifest.xml:15:1-22:12
+MERGED from [com.google.firebase:firebase-components:16.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\cab62c2de790a74f61db33d3ce464eaa\transformed\jetified-firebase-components-16.1.0\AndroidManifest.xml:15:1-23:12
+MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0822b95e9190efd90e9364a1e3dfbf41\transformed\jetified-firebase-encoders-json-17.1.0\AndroidManifest.xml:15:1-23:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8294d079fb6cfc88ca833a268bece427\transformed\exifinterface-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd6955be48662d0ef6e2e56c99874e90\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\c2e98e438c6afa339d563efca1ebf67c\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -79,6 +99,7 @@ MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\lokes\.gradle\cache
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f75267cedb23f29764b86bf7f71fd36d\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\78572bbe23e2ed53050c08f6a9620481\transformed\jetified-fbjni-0.7.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:2:1-17:12
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39edf77f38d84f31c7e6bd6a48aedb04\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:2:1-9:12
 	package
 		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
 	android:versionName
@@ -91,29 +112,79 @@ uses-permission#android.permission.INTERNET
 ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
 MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
 MERGED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:5-67
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:26:5-67
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:26:5-67
 	android:name
 		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:3:22-64
+uses-permission#android.permission.CAMERA
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:5-65
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:22-62
+uses-permission#android.permission.READ_MEDIA_IMAGES
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:5-76
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:22-73
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:5-80
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:5-80
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:4:22-77
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:22-77
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:5-81
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:7:5-81
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:5:22-78
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:7:22-78
 uses-permission#android.permission.READ_MEDIA_AUDIO
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:5-75
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:8:5-75
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:6:22-72
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:8:22-72
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:9:5-71
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:9:22-68
+uses-permission#android.permission.MODIFY_AUDIO_SETTINGS
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:10:5-80
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:10:22-77
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:11:5-77
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:11:22-74
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:12:5-79
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:12:22-76
+uses-feature#android.hardware.camera
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:14:5-85
+	android:required
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:14:58-82
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:14:19-57
+uses-feature#android.hardware.camera.autofocus
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:15:5-95
+	android:required
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:15:68-92
+	android:name
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:15:19-67
 application
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:8:5-28:19
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:17:5-47:19
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
 MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:18:5-22:19
 MERGED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:18:5-22:19
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:8:5-16:19
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:8:5-16:19
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:8:5-16:19
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:8:5-16:19
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:8:5-24:19
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:8:5-24:19
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:4:5-6:19
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:4:5-6:19
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ba15d68ca73345b2dbcb79a4e64156f3\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ba15d68ca73345b2dbcb79a4e64156f3\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
@@ -124,52 +195,58 @@ MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.g
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd777e3dca0fad4cdaf20894424e2aba\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:28:5-36:19
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:28:5-36:19
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:25:5-39:19
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:25:5-39:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
 MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:11:5-15:19
 MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:11:5-15:19
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39edf77f38d84f31c7e6bd6a48aedb04\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39edf77f38d84f31c7e6bd6a48aedb04\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 	android:extractNativeLibs
 		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1bd43259e664626f948db47b5b954127\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:15:7-33
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:24:7-33
 	android:label
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:10:7-34
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:19:7-34
 	android:roundIcon
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:12:7-46
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:21:7-46
 	android:icon
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:11:7-41
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:20:7-41
 	android:allowBackup
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:13:7-34
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:22:7-34
 	android:theme
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:14:7-38
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:23:7-38
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:9:7-38
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:18:7-38
 activity#com.carewatch.medicalcompanion.MainActivity
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:16:7-27:18
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:25:7-36:18
 	android:label
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:18:9-36
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:27:9-36
 	android:launchMode
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:20:9-40
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:29:9-40
 	android:windowSoftInputMode
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:21:9-51
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:30:9-51
 	android:exported
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:22:9-32
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:31:9-32
 	android:configChanges
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:19:9-118
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:28:9-118
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:17:9-37
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:26:9-37
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:23:9-26:25
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:32:9-35:25
 action#android.intent.action.MAIN
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:24:13-65
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:33:13-65
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:24:21-62
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:33:21-62
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:25:13-73
+ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:34:13-73
 	android:name
-		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:25:23-70
+		ADDED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\main\AndroidManifest.xml:34:23-70
 uses-sdk
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
@@ -186,6 +263,18 @@ MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradl
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9e47b01a4e8c579ddf8d031bb6671842\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1c09f7e2ded2ea51f98924779f51a211\transformed\material-1.6.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9f0ce4a8f995e499657a10ff6e18a91e\transformed\jetified-text-recognition-16.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9f0ce4a8f995e499657a10ff6e18a91e\transformed\jetified-text-recognition-16.0.1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\40131675e5554b152c9f927d2409afa6\transformed\jetified-play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:6:5-44
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\40131675e5554b152c9f927d2409afa6\transformed\jetified-play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:6:5-44
+MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\477ec76b1785318017be24b925d044fa\transformed\jetified-text-recognition-bundled-common-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\477ec76b1785318017be24b925d044fa\transformed\jetified-text-recognition-bundled-common-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:6:5-44
+MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:6:5-44
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:6:5-44
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:6:5-44
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:6:5-44
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:6:5-44
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3a46f7eb9aa845e04d631c892623bf8f\transformed\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3cecd2d2a59be5589d3048bff9b0a25d\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
@@ -220,6 +309,14 @@ MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches
 MERGED from [com.facebook.fresco:middleware:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\f2c7bb646658a43bac8ad25bf6f4020b\transformed\jetified-middleware-3.4.0\AndroidManifest.xml:5:5-44
 MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:5:5-44
 MERGED from [com.facebook.fresco:ui-common:3.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\4e2950aa2fb16ca97866f83627fb8618\transformed\jetified-ui-common-3.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.mlkit:vision-interfaces:16.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3c9c9c228c85fea04c4424f047790f5c\transformed\jetified-vision-interfaces-16.3.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.mlkit:vision-interfaces:16.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3c9c9c228c85fea04c4424f047790f5c\transformed\jetified-vision-interfaces-16.3.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ba15d68ca73345b2dbcb79a4e64156f3\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ba15d68ca73345b2dbcb79a4e64156f3\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:3:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\ae14f588ee08bae6ff1822ac659f2b62\transformed\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.fragment:fragment:1.6.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\34af0cc46f5c6c96ff889bb506174318\transformed\fragment-1.6.1\AndroidManifest.xml:20:5-44
@@ -306,8 +403,20 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\ca
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b28e6dc209d3ef4142b62b32710cca72\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\65cb2dc47edca0118871f1350c992609\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-api:2.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\7a131761f7b4f6dd063879a3d9224cdc\transformed\jetified-transport-api-2.2.1\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.android.datatransport:transport-api:2.2.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\7a131761f7b4f6dd063879a3d9224cdc\transformed\jetified-transport-api-2.2.1\AndroidManifest.xml:18:5-20:41
+MERGED from [com.google.firebase:firebase-components:16.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\cab62c2de790a74f61db33d3ce464eaa\transformed\jetified-firebase-components-16.1.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-components:16.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\cab62c2de790a74f61db33d3ce464eaa\transformed\jetified-firebase-components-16.1.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0822b95e9190efd90e9364a1e3dfbf41\transformed\jetified-firebase-encoders-json-17.1.0\AndroidManifest.xml:19:5-21:41
+MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\0822b95e9190efd90e9364a1e3dfbf41\transformed\jetified-firebase-encoders-json-17.1.0\AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\68eba243fc5c3f1f6d7afbf8b3d9c231\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8294d079fb6cfc88ca833a268bece427\transformed\exifinterface-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\8294d079fb6cfc88ca833a268bece427\transformed\exifinterface-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\53dabba67988526a7923e25552f0bef3\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\dd6955be48662d0ef6e2e56c99874e90\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
@@ -322,6 +431,8 @@ MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.
 MERGED from [com.facebook.fbjni:fbjni:0.7.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\78572bbe23e2ed53050c08f6a9620481\transformed\jetified-fbjni-0.7.0\AndroidManifest.xml:5:5-44
 MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:7:5-9:41
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39edf77f38d84f31c7e6bd6a48aedb04\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\39edf77f38d84f31c7e6bd6a48aedb04\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 	android:targetSdkVersion
 		INJECTED from C:\Users\lokes\OneDrive\Documents\medicare ai\android\app\src\debug\AndroidManifest.xml
 	android:minSdkVersion
@@ -336,6 +447,62 @@ ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\cach
 		ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:21:13-37
 	android:name
 		ADDED from [com.facebook.react:react-android:0.77.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\e75d431f0c7c758d8eb3e6db113a23e9\transformed\jetified-react-android-0.77.3-debug\AndroidManifest.xml:20:13-77
+service#com.google.mlkit.common.internal.MlKitComponentDiscoveryService
+ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:9:9-15:19
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:9:9-15:19
+MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:9:9-15:19
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:15:9-23:19
+MERGED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:15:9-23:19
+	android:exported
+		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:11:13-37
+	tools:targetApi
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:19:13-32
+	android:directBootAware
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:17:13-43
+	android:name
+		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:10:13-91
+meta-data#com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar
+ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:12:13-14:85
+	android:value
+		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:14:17-82
+	android:name
+		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\9802985f58ef900535896f96f01b033c\transformed\jetified-play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:13:17-114
+meta-data#com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar
+ADDED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:12:13-14:85
+	android:value
+		ADDED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:14:17-82
+	android:name
+		ADDED from [com.google.mlkit:vision-common:17.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\3622b5deba714f7870be8852d4080f2f\transformed\jetified-vision-common-17.3.0\AndroidManifest.xml:13:17-124
+provider#com.google.mlkit.common.internal.MlKitInitProvider
+ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:9:9-13:38
+	android:authorities
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:11:13-69
+	android:exported
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:12:13-37
+	android:initOrder
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:13:13-35
+	android:name
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:10:13-78
+meta-data#com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar
+ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:20:13-22:85
+	android:value
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:22:17-82
+	android:name
+		ADDED from [com.google.mlkit:common:18.11.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\626f339d0b17ea5d7ad0746978790fec\transformed\jetified-common-18.11.0\AndroidManifest.xml:21:17-120
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\1e9880168f798302d2e43ed61b46bcdb\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\b895e0f11442a6804f6c2ff1584f3379\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\348e0901f0709c65ad858aec162041ed\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\lokes\.gradle\caches\8.10.2\transforms\20a2c8d194b055d6065f8574a24d62e7\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:24:9-32:20
@@ -426,6 +593,40 @@ action#androidx.profileinstaller.action.BENCHMARK_OPERATION
 ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
 	android:name
 		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\lokes\.gradle\caches\8.10.2\transforms\42a016b9e07e3279360a5ed400e1f592\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:22:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:25:22-76
+service#com.google.android.datatransport.runtime.backends.TransportBackendDiscovery
+ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:29:9-35:19
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:36:9-38:40
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:36:9-38:40
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:30:13-103
+meta-data#backend:com.google.android.datatransport.cct.CctBackendFactory
+ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:32:13-34:39
+	android:value
+		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:34:17-36
+	android:name
+		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\lokes\.gradle\caches\8.10.2\transforms\55ae99b1594755d02aedcbc1cbd05654\transformed\jetified-transport-backend-cct-2.3.3\AndroidManifest.xml:33:17-94
+service#com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService
+ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:26:9-30:19
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:28:13-37
+	android:permission
+		ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:29:13-69
+	android:name
+		ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:27:13-117
+receiver#com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver
+ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:32:9-34:40
+	android:exported
+		ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:34:13-37
+	android:name
+		ADDED from [com.google.android.datatransport:transport-runtime:2.2.6] C:\Users\lokes\.gradle\caches\8.10.2\transforms\eeead76dbae04653da0ebd6887d03fc0\transformed\jetified-transport-runtime-2.2.6\AndroidManifest.xml:33:13-132
 meta-data#com.facebook.soloader.enabled
 ADDED from [com.facebook.soloader:soloader:0.12.1] C:\Users\lokes\.gradle\caches\8.10.2\transforms\14cf1d457bd5ab7725c43aae25368c18\transformed\jetified-soloader-0.12.1\AndroidManifest.xml:12:9-14:37
 	android:value

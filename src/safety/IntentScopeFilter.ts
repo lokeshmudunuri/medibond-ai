@@ -4,6 +4,9 @@ export class IntentScopeFilter {
   private static readonly OUT_OF_SCOPE_KEYWORDS = [
     'write python code',
     'write javascript',
+    'nginx',
+    'reverse proxy',
+    'web server',
     'crypto price',
     'stock market forecast',
     'who won the world cup',

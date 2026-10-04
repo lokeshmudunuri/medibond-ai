@@ -42,7 +42,7 @@ describe('AIEngine (End-to-End Safety + llama.rn Inference Pipeline)', () => {
     }
 
     const fullAlert = chunks.join('');
-    expect(fullAlert).toContain('EMERGENCY SAFETY ALERT');
+    expect(fullAlert).toContain('EMERGENCY MEDICAL ALERT');
     expect(fullAlert).toContain('Cardiac Emergency');
   });
 
@@ -79,7 +79,7 @@ describe('AIEngine (End-to-End Safety + llama.rn Inference Pipeline)', () => {
     await localLLM.loadModel('/path/to/qwen.gguf', mockMeta);
     const context = memory.buildCurrentContext();
 
-    const stream = aiEngine.streamChat('What is my Telmisartan for?', context);
+    const stream = aiEngine.streamChat('What is my Telmisartan for?', undefined, context);
     const receivedTokens: string[] = [];
 
     for await (const chunk of stream) {

@@ -1,24 +1,16 @@
+export type VoiceLanguage = 'en' | 'te' | 'hi' | 'kn';
+
 export enum VoiceState {
   IDLE = 'IDLE',
   LISTENING = 'LISTENING',
   TRANSCRIBING = 'TRANSCRIBING',
   UNDERSTANDING = 'UNDERSTANDING',
   RETRIEVING_CONTEXT = 'RETRIEVING_CONTEXT',
-  THINKING = 'THINKING',
   VALIDATING = 'VALIDATING',
+  THINKING = 'THINKING',
   SPEAKING = 'SPEAKING',
   INTERRUPTED = 'INTERRUPTED',
   ERROR = 'ERROR',
-}
-
-export type VoiceLanguage = 'en' | 'hi' | 'te' | 'kn' | 'ta' | 'mr';
-
-export interface VoiceLanguageMeta {
-  code: VoiceLanguage;
-  name: string;
-  nativeName: string;
-  sttInstalled: boolean;
-  ttsInstalled: boolean;
 }
 
 export interface VoiceTurn {
@@ -26,7 +18,6 @@ export interface VoiceTurn {
   speaker: 'user' | 'assistant';
   transcript: string;
   timestamp: string;
-  durationMs?: number;
   detectedLanguage?: VoiceLanguage;
   retrievedContextSummary?: string;
   safetyPassed?: boolean;
@@ -35,19 +26,28 @@ export interface VoiceTurn {
 export interface VoiceSession {
   sessionId: string;
   startTime: string;
-  endTime?: string;
   language: VoiceLanguage;
   turns: VoiceTurn[];
   state: VoiceState;
+  activeCaseId?: string;
 }
 
-export interface VoiceMetrics {
-  sttLatencyMs: number;
-  contextRetrievalMs: number;
-  llmFirstTokenMs: number;
-  llmTotalGenerationMs: number;
-  ttsStartupMs: number;
-  totalTurnMs: number;
+export interface VoiceRecoveryCheckInPayload {
+  painScore?: number;
+  sleepHours?: number;
+  fatigueScore?: number;
+  moodScore?: number;
+  tookAllMedications?: boolean;
+  reportedSymptoms?: string;
+  rawTranscript: string;
+}
+
+export interface VoiceDoctorInstructionPayload {
+  restriction?: string;
+  duration?: string;
+  followUpDays?: number;
+  guidance?: string;
+  rawTranscript: string;
 }
 
 export interface VoiceResourcePackage {
@@ -57,6 +57,5 @@ export interface VoiceResourcePackage {
   language: VoiceLanguage | 'all';
   sizeBytes: number;
   isInstalled: boolean;
-  localPath?: string;
   description: string;
 }

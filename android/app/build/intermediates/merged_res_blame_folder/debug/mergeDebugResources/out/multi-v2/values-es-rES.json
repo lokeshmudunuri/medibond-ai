@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.carewatch.medicalcompanion.app-mergeDebugResources-40:/values-es-rES/values-es-rES.xml",
+            "outputFile": "com.carewatch.medicalcompanion.app-mergeDebugResources-42:/values-es-rES/values-es-rES.xml",
             "map": [
                 {
                     "source": "C:\\Users\\lokes\\.gradle\\caches\\8.10.2\\transforms\\e75d431f0c7c758d8eb3e6db113a23e9\\transformed\\jetified-react-android-0.77.3-debug\\res\\values-es-rES\\values-es-rES.xml",
