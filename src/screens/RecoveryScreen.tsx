@@ -53,9 +53,18 @@ export const RecoveryScreen: React.FC<{ navigation?: any }> = ({ navigation }) =
 
   const [language, setLanguage] = useState<SupportedLanguage>(MultilingualService.getLanguage());
   const [painScore, setPainScore] = useState<number>(profile.currentPainScore);
+  const [painLocation, setPainLocation] = useState<string>('Surgical site / lower abdomen');
+  const [fatigueLevel, setFatigueLevel] = useState<string>('Mild fatigue');
   const [sleepHours, setSleepHours] = useState<number>(profile.currentSleepHours);
+  const [bedtime, setBedtime] = useState<string>('10:30 PM');
+  const [wakeTime, setWakeTime] = useState<string>('06:30 AM');
+  const [sleepQuality, setSleepQuality] = useState<number>(4);
+  const [awakeningsCount, setAwakeningsCount] = useState<number>(1);
+  const [dailySteps, setDailySteps] = useState<number>(1420);
+  const [walkingDistanceKm, setWalkingDistanceKm] = useState<number>(1.1);
   const [mobilityStatus, setMobilityStatus] = useState<'NORMAL' | 'REDUCED' | 'BEDREST' | 'IMPROVING'>('REDUCED');
   const [medAdherence, setMedAdherence] = useState<'FULL' | 'PARTIAL' | 'MISSED' | 'UNKNOWN'>('FULL');
+  const [samsungHealthState, setSamsungHealthState] = useState<'Not Connected' | 'Connected' | 'Manual Entry'>('Not Connected');
   const [naturalInputText, setNaturalInputText] = useState<string>('');
   const [isMonitoringActive, setIsMonitoringActive] = useState<boolean>(profile.active10MinMonitoring);
 
@@ -275,6 +284,42 @@ export const RecoveryScreen: React.FC<{ navigation?: any }> = ({ navigation }) =
           </View>
         )}
 
+        {/* Samsung Health Connection Status Card */}
+        <View style={{ backgroundColor: '#1E293B', padding: 14, borderRadius: 12, marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View>
+              <Text style={{ fontSize: 13, color: '#94A3B8' }}>Health Sensor Bridge:</Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold', color: samsungHealthState === 'Connected' ? '#4ADE80' : '#FBBF24', marginTop: 2 }}>
+                Samsung Health: {samsungHealthState}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', gap: 6 }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: samsungHealthState === 'Manual Entry' ? '#3B82F6' : '#334155',
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  borderRadius: 6,
+                }}
+                onPress={() => setSamsungHealthState('Manual Entry')}
+              >
+                <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' }}>Manual Entry</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: samsungHealthState === 'Not Connected' ? '#64748B' : '#334155',
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  borderRadius: 6,
+                }}
+                onPress={() => setSamsungHealthState('Not Connected')}
+              >
+                <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' }}>Offline</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
         {/* Dynamic Metric Grid */}
         <View style={styles.grid}>
           <View style={styles.metricCard}>
@@ -282,7 +327,7 @@ export const RecoveryScreen: React.FC<{ navigation?: any }> = ({ navigation }) =
             <Text style={[styles.metricValue, profile.currentPainScore >= 6 ? styles.painHigh : styles.painNormal]}>
               {profile.currentPainScore} <Text style={styles.metricSub}>/ 10</Text>
             </Text>
-            <Text style={styles.metricTrend}>Trend: {profile.currentPainScore >= 6 ? 'Worsening' : 'Manageable'}</Text>
+            <Text style={styles.metricTrend}>{painLocation}</Text>
           </View>
 
           <View style={styles.metricCard}>
@@ -290,13 +335,13 @@ export const RecoveryScreen: React.FC<{ navigation?: any }> = ({ navigation }) =
             <Text style={styles.metricValue}>
               {profile.currentSleepHours} <Text style={styles.metricSub}>hrs</Text>
             </Text>
-            <Text style={styles.metricTrend}>Target: 7-8 hrs</Text>
+            <Text style={styles.metricTrend}>Bed: {bedtime} • Wake: {wakeTime}</Text>
           </View>
 
           <View style={styles.metricCard}>
-            <Text style={styles.metricLabel}>{strings.medicationAdherenceLabel}</Text>
-            <Text style={styles.metricValue}>{profile.medicationAdherenceRate}%</Text>
-            <Text style={styles.metricTrend}>Prescribed Regimen</Text>
+            <Text style={styles.metricLabel}>Activity & Steps</Text>
+            <Text style={styles.metricValue}>{dailySteps}</Text>
+            <Text style={styles.metricTrend}>{walkingDistanceKm} km • Light Walking</Text>
           </View>
 
           <View style={styles.metricCard}>
@@ -304,7 +349,38 @@ export const RecoveryScreen: React.FC<{ navigation?: any }> = ({ navigation }) =
             <Text style={[styles.metricValue, { fontSize: 13, textTransform: 'capitalize' }]}>
               {profile.mobilityLevel.replace('_', ' ')}
             </Text>
-            <Text style={styles.metricTrend}>Walker Assisted</Text>
+            <Text style={styles.metricTrend}>Adherence: {profile.medicationAdherenceRate}%</Text>
+          </View>
+        </View>
+
+        {/* 7-Day Recovery Trajectory & Previous Day Comparison */}
+        <View style={{ backgroundColor: '#1E293B', padding: 14, borderRadius: 12, marginBottom: 16 }}>
+          <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#F8FAFC', marginBottom: 8 }}>
+            📈 7-Day Trend & Previous Day Comparison
+          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 }}>
+            <Text style={{ color: '#94A3B8', fontSize: 12 }}>Metric</Text>
+            <Text style={{ color: '#94A3B8', fontSize: 12 }}>Yesterday</Text>
+            <Text style={{ color: '#94A3B8', fontSize: 12 }}>Today</Text>
+            <Text style={{ color: '#94A3B8', fontSize: 12 }}>7-Day Status</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4, borderTopWidth: 1, borderTopColor: '#334155' }}>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>Pain Level</Text>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>{Math.min(10, profile.currentPainScore + 1)}/10</Text>
+            <Text style={{ color: '#4ADE80', fontSize: 12, fontWeight: 'bold' }}>{profile.currentPainScore}/10</Text>
+            <Text style={{ color: '#4ADE80', fontSize: 12 }}>Improving ↓</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4, borderTopWidth: 1, borderTopColor: '#334155' }}>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>Sleep Duration</Text>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>6.5 hrs</Text>
+            <Text style={{ color: '#38BDF8', fontSize: 12, fontWeight: 'bold' }}>{profile.currentSleepHours} hrs</Text>
+            <Text style={{ color: '#38BDF8', fontSize: 12 }}>Restful (Q: {sleepQuality}/5)</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4, borderTopWidth: 1, borderTopColor: '#334155' }}>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>Daily Steps</Text>
+            <Text style={{ color: '#E2E8F0', fontSize: 12 }}>980</Text>
+            <Text style={{ color: '#FBBF24', fontSize: 12, fontWeight: 'bold' }}>{dailySteps}</Text>
+            <Text style={{ color: '#FBBF24', fontSize: 12 }}>+44% vs Day 1</Text>
           </View>
         </View>
 

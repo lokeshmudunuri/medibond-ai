@@ -87,7 +87,7 @@ export const StorageScreen: React.FC<{ navigation?: any }> = ({ navigation }) =>
             <Text style={styles.categoryIcon}>🤖</Text>
             <View>
               <Text style={styles.categoryName}>Local AI Models (GGUF)</Text>
-              <Text style={styles.categoryDesc}>Offline LLM weights (Qwen / MedGemma)</Text>
+              <Text style={styles.categoryDesc}>Offline LLM weights (Gemma 4 E2B IT / Qwen)</Text>
             </View>
           </View>
           <Text style={styles.categorySize}>{breakdown.modelsFormatted}</Text>

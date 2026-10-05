@@ -250,4 +250,110 @@ Rx:
     expect(dietEmpty.hasSpecificGuidance).toBe(false);
     expect(dietEmpty.guidanceText).toContain("I don't have enough information in this case to give you a reliable personalized answer");
   });
+
+  test('should accurately parse Fixture A (Dolo 650, Augmentin 625, Montek-LC, BP, Pulse, SpO2) and retain 14 fields', async () => {
+    const fixtureAText = `
+Dr. R. K. Sharma, MD
+CareWell Clinic
+Date: 2026-10-05
+
+Vitals:
+BP: 110/70 mmHg
+Pulse ~112 bpm
+SpO2 ~96-97%
+
+Rx:
+1. Tab. Dolo 650 TDS after food
+2. Tab. Augmentin 625 1 tab BD x 5 days
+3. Tab. Montek-LC 1 tab OD at bedtime
+    `;
+
+    const result = await processor.processDocument(fixtureAText, 'Prescription Fixture A', 'fixtures/prescriptions/prescription_1.jpeg');
+
+    // 14 Mandatory fields check
+    const r = result.report;
+    expect(r.originalImagePath).toBe('fixtures/prescriptions/prescription_1.jpeg');
+    expect(r.documentType).toBe('Prescription');
+    expect(r.rawOcrText).toBeDefined();
+    expect(r.handwritingOcrText).toBeDefined();
+    expect(r.mergedTranscript).toBeDefined();
+    expect(r.extractedMedicines).toBeDefined();
+    expect(r.extractedVitals).toBeDefined();
+    expect(r.extractedLabs).toBeDefined();
+    expect(r.extractedDoctor).toBeDefined();
+    expect(r.extractedDate).toBeDefined();
+    expect(r.confidence).toBeGreaterThan(0.7);
+    expect(r.provenance).toBeDefined();
+    expect(r.requiresReview).toBeDefined();
+    expect(r.createdAt).toBeDefined();
+
+    // Specific Fixture A clinical assertions
+    const medNames = r.extractedMedicines!.map((m) => m.name.toLowerCase());
+    expect(medNames.some((n) => n.includes('dolo 650') || n.includes('dolo'))).toBe(true);
+    expect(medNames.some((n) => n.includes('augmentin 625') || n.includes('augmentin'))).toBe(true);
+    expect(medNames.some((n) => n.includes('montek-lc') || n.includes('montek'))).toBe(true);
+
+    // Vitals
+    expect(r.extractedVitals?.bloodPressure).toBe('110/70');
+    expect(r.extractedVitals?.pulse).toBe(112);
+    expect(r.extractedVitals?.spo2).toBe(96);
+  });
+
+  test('should accurately parse Fixture B (Tazloc-CT, Amlip, Pantocid 40, Provigon-HP, Vitals)', async () => {
+    const fixtureBText = `
+Dr. Anita Desai
+Apex Heart & Vascular
+Date: 2026-10-04
+
+Vitals:
+BP 140/100
+Pulse: 72 bpm
+SpO2: 98%
+Bilateral pedal edema present
+Facial puffiness noted
+
+Rx:
+1. Tab. Tazloc-CT 40/12.5 OD morning
+2. Tab. Amlip 5 OD
+3. Tab. Pantocid 40 OD before breakfast
+4. Tab. Provigon-HP OD
+    `;
+
+    const result = await processor.processDocument(fixtureBText, 'Prescription Fixture B', 'fixtures/prescriptions/prescription_2.jpeg');
+    const r = result.report;
+
+    const medNames = r.extractedMedicines!.map((m) => m.name.toLowerCase());
+    expect(medNames.some((n) => n.includes('tazloc'))).toBe(true);
+    expect(medNames.some((n) => n.includes('amlip') || n.includes('amlodipine'))).toBe(true);
+    expect(medNames.some((n) => n.includes('pantocid') || n.includes('pantoprazole'))).toBe(true);
+    expect(medNames.some((n) => n.includes('provigon'))).toBe(true);
+
+    expect(r.extractedVitals?.bloodPressure).toBe('140/100');
+    expect(r.extractedVitals?.pulse).toBe(72);
+    expect(r.extractedVitals?.spo2).toBe(98);
+    expect(r.extractedVitals?.observations?.some((o) => o.toLowerCase().includes('edema') || o.toLowerCase().includes('puffiness'))).toBe(true);
+  });
+
+  test('should accurately parse Fixture C (Pramipexole 0.25 mg, Syndopa-110, Rasagiline 0.5 mg, Amantadine)', async () => {
+    const fixtureCText = `
+Dr. Vikram Sengupta, DM Neurology
+Movement Disorders Clinic
+Date: 2026-10-03
+
+Rx:
+1. Tab. Pramipexole 0.25 mg TDS
+2. Tab. Syndopa-110 TDS
+3. Tab. Rasagiline 0.5 mg OD
+4. Cap. Amantadine 100 mg BD (Mirapex continuation)
+    `;
+
+    const result = await processor.processDocument(fixtureCText, 'Prescription Fixture C', 'fixtures/prescriptions/prescription_3.jpeg');
+    const r = result.report;
+
+    const medNames = r.extractedMedicines!.map((m) => m.name.toLowerCase());
+    expect(medNames.some((n) => n.includes('pramipexole'))).toBe(true);
+    expect(medNames.some((n) => n.includes('syndopa'))).toBe(true);
+    expect(medNames.some((n) => n.includes('rasagiline'))).toBe(true);
+    expect(medNames.some((n) => n.includes('amantadine'))).toBe(true);
+  });
 });

@@ -99,22 +99,17 @@ export class ModelRouter {
   public routeModel(taskType: 'medical_reasoning' | 'fast_checkin' | 'general' = 'general'): ModelRouteDecision {
     const packages = this.modelManager.getPackages();
 
-    const medGemmaPkg =
-      packages.find((p) => p.metadata.modelId.includes('medgemma')) ||
-      this.modelManager.getPackage('medgemma-4b-it-q4');
-
     const gemmaPkg =
-      packages.find(
-        (p) =>
-          (p.metadata.modelId.startsWith('gemma-4') || p.metadata.modelId.includes('gemma-4')) &&
-          !p.metadata.modelId.includes('medgemma')
-      ) || this.modelManager.getPackage('gemma-4-e2b-q4_k_m');
+      packages.find((p) => p.metadata.modelId.includes('gemma-4-e2b-it')) ||
+      packages.find((p) => p.metadata.modelId.includes('gemma-4')) ||
+      this.modelManager.getPackage('gemma-4-e2b-it-q4_0');
 
     const qwenPkg =
       packages.find(
         (p) =>
           p.metadata.modelId === 'qwen3-0.6b-q4_0' ||
-          (p.metadata.modelId.includes('qwen') && !p.metadata.modelId.includes('gemma'))
+          p.metadata.modelId === 'qwen2.5-0.5b-instruct-q4' ||
+          p.metadata.modelId.includes('qwen')
       ) || this.modelManager.getPackage('qwen3-0.6b-q4_0');
 
     // 1. Determine Device Tier
@@ -126,33 +121,16 @@ export class ModelRouter {
     }
 
     // 2. User Manual Overrides
-    if (this.userMode === ModelOperatingMode.MedicalReasoning) {
-      const isMemorySafe = this.detectedRamGb >= 6.0;
-      const targetId = medGemmaPkg?.metadata.modelId || 'medgemma-4b-it-q4';
+    if (this.userMode === ModelOperatingMode.MedicalReasoning || this.userMode === ModelOperatingMode.GeneralCompanion) {
+      const targetId = gemmaPkg?.metadata.modelId || 'gemma-4-e2b-it-q4_0';
       return {
         selectedModelId: targetId,
-        modelDisplayName: medGemmaPkg?.metadata.displayName || 'MedGemma 4B Instruct',
-        isMedGemmaActive: true,
-        tier,
-        mode: ModelOperatingMode.MedicalReasoning,
-        isMemorySafe,
-        reason: isMemorySafe
-          ? 'Manual Medical Reasoning Mode: MedGemma 4B selected for clinical depth.'
-          : '⚠️ Manual Override Caution: MedGemma 4B selected on a device with limited RAM. Safe execution enabled with 2048 context.',
-        deviceRamEstimateGb: this.detectedRamGb,
-      };
-    }
-
-    if (this.userMode === ModelOperatingMode.GeneralCompanion) {
-      const targetId = gemmaPkg?.metadata.modelId || 'gemma-4-e2b-q4_k_m';
-      return {
-        selectedModelId: targetId,
-        modelDisplayName: gemmaPkg?.metadata.displayName || 'Gemma 4 E2B Instruct',
+        modelDisplayName: gemmaPkg?.metadata.displayName || 'Gemma 4 E2B IT (Large Model)',
         isMedGemmaActive: false,
         tier,
-        mode: ModelOperatingMode.GeneralCompanion,
+        mode: this.userMode,
         isMemorySafe: true,
-        reason: 'Manual General Companion Mode: Gemma 4 E2B selected for conversational balance.',
+        reason: 'Large Offline Model Mode: Gemma 4 E2B IT selected for on-device reasoning and companion dialogue.',
         deviceRamEstimateGb: this.detectedRamGb,
       };
     }
@@ -173,24 +151,10 @@ export class ModelRouter {
 
     // 3. Automatic Device-Based Routing
     // Check what is currently installed on disk
-    const isMedGemmaInstalled = medGemmaPkg?.status === ModelInstallStatus.Installed;
     const isGemmaInstalled = gemmaPkg?.status === ModelInstallStatus.Installed;
     const isQwenInstalled = qwenPkg?.status === ModelInstallStatus.Installed;
 
-    if (tier === DevicePerformanceTier.Ultra && isMedGemmaInstalled) {
-      return {
-        selectedModelId: medGemmaPkg!.metadata.modelId,
-        modelDisplayName: medGemmaPkg!.metadata.displayName,
-        isMedGemmaActive: true,
-        tier,
-        mode: ModelOperatingMode.Automatic,
-        isMemorySafe: true,
-        reason: 'Ultra Device Detected (12GB+ RAM): Automatic route to MedGemma 4B Medical Specialist.',
-        deviceRamEstimateGb: this.detectedRamGb,
-      };
-    }
-
-    if ((tier === DevicePerformanceTier.Standard || tier === DevicePerformanceTier.Ultra) && isGemmaInstalled) {
+    if (isGemmaInstalled) {
       return {
         selectedModelId: gemmaPkg!.metadata.modelId,
         modelDisplayName: gemmaPkg!.metadata.displayName,
@@ -198,7 +162,7 @@ export class ModelRouter {
         tier,
         mode: ModelOperatingMode.Automatic,
         isMemorySafe: true,
-        reason: 'Standard Device Detected (6GB - 8GB RAM): Automatic route to Gemma 4 E2B General Companion.',
+        reason: 'Installed Large Model Detected: Automatic route to Gemma 4 E2B IT.',
         deviceRamEstimateGb: this.detectedRamGb,
       };
     }
@@ -211,23 +175,21 @@ export class ModelRouter {
         tier,
         mode: ModelOperatingMode.Automatic,
         isMemorySafe: true,
-        reason: 'Automatic route to installed Qwen 0.6B Lightweight model.',
+        reason: 'Automatic route to installed Qwen Lightweight model.',
         deviceRamEstimateGb: this.detectedRamGb,
       };
     }
 
     // Fallback recommendation based on device hardware
     const defaultModelId =
-      tier === DevicePerformanceTier.Ultra
-        ? 'medgemma-4b-it-q4'
-        : tier === DevicePerformanceTier.Standard
-        ? 'gemma-4-e2b-q4_k_m'
+      tier === DevicePerformanceTier.Ultra || tier === DevicePerformanceTier.Standard
+        ? 'gemma-4-e2b-it-q4_0'
         : 'qwen3-0.6b-q4_0';
 
     return {
       selectedModelId: defaultModelId,
-      modelDisplayName: this.modelManager.getPackage(defaultModelId)?.metadata.displayName || 'Local GGUF Model',
-      isMedGemmaActive: defaultModelId.includes('medgemma'),
+      modelDisplayName: this.modelManager.getPackage(defaultModelId)?.metadata.displayName || 'Gemma 4 E2B IT',
+      isMedGemmaActive: false,
       tier,
       mode: ModelOperatingMode.Automatic,
       isMemorySafe: true,

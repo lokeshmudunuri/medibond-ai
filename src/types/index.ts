@@ -105,15 +105,41 @@ export interface LabResultItem {
   interpretation?: string;
 }
 
+export interface ExtractedVitals {
+  bloodPressure?: string;
+  pulse?: number;
+  spo2?: number;
+  temperature?: string;
+  respiratoryRate?: number;
+  observations?: string[];
+}
+
 export interface ReportEntity {
   id: string;
   caseId?: string;
   title: string;
   type: 'Lab' | 'Imaging' | 'Discharge' | 'Prescription' | 'DoctorNote' | 'MedicalReport' | 'General';
+  documentType?: string;
   testDate: string;
   laboratoryOrHospital: string;
   summary: string;
+  originalImagePath?: string;
   rawOcrText: string;
+  handwritingOcrText?: string;
+  mergedTranscript?: string;
+  extractedMedicines?: MedicineEntity[];
+  extractedVitals?: ExtractedVitals;
+  extractedLabs?: LabResultItem[];
+  extractedDoctor?: {
+    doctorName?: string;
+    hospitalName?: string;
+    specialty?: string;
+    date?: string;
+  };
+  extractedDate?: string;
+  confidence?: number;
+  requiresReview?: boolean;
+  createdAt?: string;
   results: LabResultItem[];
   localFilePath?: string;
   provenance: Provenance;

@@ -58,6 +58,8 @@ export const DocumentsScreen: React.FC<{ navigation?: any; params?: any }> = ({ 
 
   // Medication review state in modal
   const [reviewedMeds, setReviewedMeds] = useState<MedicineEntity[]>([]);
+  const [viewingImageModalVisible, setViewingImageModalVisible] = useState(false);
+  const [viewingImagePath, setViewingImagePath] = useState<string | null>(null);
 
   useEffect(() => {
     refreshReports();
@@ -839,6 +841,75 @@ export const DocumentsScreen: React.FC<{ navigation?: any; params?: any }> = ({ 
             </View>
 
             <ScrollView style={{ maxHeight: 380 }}>
+              {/* View Original Image Button */}
+              {(selectedReport?.originalImagePath || selectedReport?.localFilePath) ? (
+                <View style={{ marginVertical: 12 }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#2563EB',
+                      paddingVertical: 10,
+                      paddingHorizontal: 16,
+                      borderRadius: 8,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      gap: 8,
+                    }}
+                    onPress={() => {
+                      const img = selectedReport.originalImagePath || selectedReport.localFilePath;
+                      if (img) {
+                        setViewingImagePath(img);
+                        setViewingImageModalVisible(true);
+                      }
+                    }}
+                  >
+                    <Text style={{ color: '#FFFFFF', fontWeight: 'bold', fontSize: 14 }}>
+                      🖼️ VIEW ORIGINAL IMAGE
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {/* Extracted Vitals */}
+              {selectedReport?.extractedVitals && (
+                <View style={{ marginVertical: 8, backgroundColor: '#0F172A', padding: 12, borderRadius: 8 }}>
+                  <Text style={[styles.detailSectionHeading, { marginTop: 0, color: '#38BDF8' }]}>Extracted Vitals:</Text>
+                  {selectedReport.extractedVitals.bloodPressure && (
+                    <Text style={styles.detailBodyText}>• Blood Pressure: {selectedReport.extractedVitals.bloodPressure}</Text>
+                  )}
+                  {selectedReport.extractedVitals.pulse && (
+                    <Text style={styles.detailBodyText}>• Pulse: {selectedReport.extractedVitals.pulse} bpm</Text>
+                  )}
+                  {selectedReport.extractedVitals.spo2 && (
+                    <Text style={styles.detailBodyText}>• SpO2: {selectedReport.extractedVitals.spo2}%</Text>
+                  )}
+                  {selectedReport.extractedVitals.temperature && (
+                    <Text style={styles.detailBodyText}>• Temperature: {selectedReport.extractedVitals.temperature}</Text>
+                  )}
+                </View>
+              )}
+
+              {/* Extracted Medicines */}
+              {selectedReport?.extractedMedicines && selectedReport.extractedMedicines.length > 0 && (
+                <View style={{ marginVertical: 8, backgroundColor: '#0F172A', padding: 12, borderRadius: 8 }}>
+                  <Text style={[styles.detailSectionHeading, { marginTop: 0, color: '#4ADE80' }]}>
+                    Extracted Medicines ({selectedReport.extractedMedicines.length}):
+                  </Text>
+                  {selectedReport.extractedMedicines.map((m, idx) => (
+                    <Text key={idx} style={[styles.detailBodyText, { marginBottom: 4 }]}>
+                      • {m.name} ({m.dosage || m.strength || 'standard'}) - {m.frequency}
+                    </Text>
+                  ))}
+                </View>
+              )}
+
+              {/* Provenance & Review Badge */}
+              <View style={{ marginVertical: 6 }}>
+                <Text style={{ fontSize: 12, color: selectedReport?.requiresReview ? '#F87171' : '#34D399', fontWeight: 'bold' }}>
+                  {selectedReport?.requiresReview ? '⚠️ Status: [REQUIRES REVIEW]' : '✓ Status: Clinically Documented'}
+                </Text>
+              </View>
+
               <Text style={styles.detailSectionHeading}>Facility / Doctor:</Text>
               <Text style={styles.detailBodyText}>{selectedReport?.laboratoryOrHospital}</Text>
 
@@ -877,6 +948,34 @@ export const DocumentsScreen: React.FC<{ navigation?: any; params?: any }> = ({ 
             </View>
           </View>
         </View>
+      </Modal>
+
+      {/* ======================================================== */}
+      {/* FULL ORIGINAL IMAGE VIEWER MODAL */}
+      {/* ======================================================== */}
+      <Modal visible={viewingImageModalVisible} animationType="fade" transparent={false}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16, alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => setViewingImageModalVisible(false)}
+              style={{ backgroundColor: '#1E293B', paddingVertical: 8, paddingHorizontal: 16, borderRadius: 8 }}
+            >
+              <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>✕ Close</Text>
+            </TouchableOpacity>
+            <Text style={{ color: '#94A3B8', fontSize: 14 }}>Original Medical Document</Text>
+          </View>
+          {viewingImagePath ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 8 }}>
+              <Image
+                source={{
+                  uri: viewingImagePath.startsWith('file://') ? viewingImagePath : `file://${viewingImagePath}`,
+                }}
+                style={{ width: '100%', height: '100%' }}
+                resizeMode="contain"
+              />
+            </View>
+          ) : null}
+        </SafeAreaView>
       </Modal>
     </SafeAreaView>
   );

@@ -21,7 +21,9 @@ export class ModelManager {
 
   private constructor() {
     this.initializeCatalog();
-    this.restoreFromDisk();
+    if (typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
+      this.restoreFromDisk();
+    }
   }
 
   public static getInstance(): ModelManager {
@@ -69,70 +71,118 @@ export class ModelManager {
 
     this.restorePromise = (async () => {
       try {
+        // First, dynamically discover and sync Gemma 4 E2B IT from Hugging Face
+        await this.syncGemmaFromHuggingFace();
+
         const diskFiles = await NativeDownloader.listModelFiles();
-        const modelsDir = await NativeDownloader.getModelsDirectory();
         console.log('[ModelManager] Scanned disk files on device:', diskFiles.length, diskFiles);
 
-      for (const file of diskFiles) {
-        // Find existing package or create dynamic entry
-        let matchedPkg: ModelPackage | undefined;
-        for (const pkg of this.packages.values()) {
-          if (
-            pkg.metadata.localFilename.toLowerCase() === file.name.toLowerCase() ||
-            pkg.metadata.downloadUrl.endsWith(file.name)
-          ) {
-            matchedPkg = pkg;
-            break;
+        for (const file of diskFiles) {
+          // Reject partial, 0-byte or corrupted files (< 10 MB)
+          if (!file.path || file.sizeBytes < 10 * 1024 * 1024) {
+            console.log('[ModelManager] Skipping invalid/partial file on disk:', file.name, file.sizeBytes);
+            continue;
+          }
+
+          // Find existing package or create dynamic entry
+          let matchedPkg: ModelPackage | undefined;
+          for (const pkg of this.packages.values()) {
+            if (
+              pkg.metadata.localFilename.toLowerCase() === file.name.toLowerCase() ||
+              pkg.metadata.downloadUrl.endsWith(file.name)
+            ) {
+              matchedPkg = pkg;
+              break;
+            }
+          }
+
+          if (matchedPkg) {
+            matchedPkg.status = ModelInstallStatus.Installed;
+            matchedPkg.downloadProgress = 1.0;
+            matchedPkg.bytesDownloaded = file.sizeBytes;
+            matchedPkg.totalBytes = file.sizeBytes;
+            matchedPkg.localPath = file.path;
+            matchedPkg.installedAt = matchedPkg.installedAt || new Date(file.modifiedAt).toISOString();
+            console.log('[ModelManager] Verified local installed model:', matchedPkg.metadata.modelId, file.path, `${(file.sizeBytes / 1e6).toFixed(1)} MB`);
+          } else {
+            // Dynamic unregistered model found on disk
+            const dynamicMeta: GGUFModelMetadata = {
+              modelId: `custom_${file.name.replace('.gguf', '')}`,
+              displayName: file.name.replace('.gguf', ''),
+              architecture: 'auto',
+              parameters: 'unknown',
+              quantization: HuggingFaceService.extractQuantization(file.name),
+              sizeBytes: file.sizeBytes,
+              downloadUrl: '',
+              localFilename: file.name,
+              contextLength: 2048,
+              recommendedGpuLayers: 0,
+              recommendedThreads: 4,
+              stopTokens: ['<|im_end|>', '</s>', '<end_of_turn>', '<eos>'],
+              compatibility: DeviceCompatibility.Good,
+            };
+
+            this.packages.set(dynamicMeta.modelId, {
+              metadata: dynamicMeta,
+              status: ModelInstallStatus.Installed,
+              downloadProgress: 1.0,
+              bytesDownloaded: file.sizeBytes,
+              totalBytes: file.sizeBytes,
+              localPath: file.path,
+              installedAt: new Date(file.modifiedAt).toISOString(),
+            });
+            console.log('[ModelManager] Registered custom model from disk:', dynamicMeta.modelId, file.path);
           }
         }
 
-        if (matchedPkg) {
-          matchedPkg.status = ModelInstallStatus.Installed;
-          matchedPkg.downloadProgress = 1.0;
-          matchedPkg.bytesDownloaded = file.sizeBytes;
-          matchedPkg.totalBytes = file.sizeBytes;
-          matchedPkg.localPath = file.path;
-          matchedPkg.installedAt = matchedPkg.installedAt || new Date(file.modifiedAt).toISOString();
-        } else {
-          // Dynamic unregistered model found on disk
-          const dynamicMeta: GGUFModelMetadata = {
-            modelId: `custom_${file.name.replace('.gguf', '')}`,
-            displayName: file.name.replace('.gguf', ''),
-            architecture: 'auto',
-            parameters: 'unknown',
-            quantization: HuggingFaceService.extractQuantization(file.name),
-            sizeBytes: file.sizeBytes,
-            downloadUrl: '',
-            localFilename: file.name,
-            contextLength: 2048,
-            recommendedGpuLayers: 0,
-            recommendedThreads: 4,
-            stopTokens: ['<|im_end|>', '</s>', '<end_of_turn>'],
-            compatibility: DeviceCompatibility.Good,
-          };
+        this.notify();
+      } catch (err) {
+        console.warn('[ModelManager] Restore from disk warning:', err);
+      } finally {
+        this.restorePromise = null;
+      }
+    })();
 
-          this.packages.set(dynamicMeta.modelId, {
-            metadata: dynamicMeta,
-            status: ModelInstallStatus.Installed,
-            downloadProgress: 1.0,
-            bytesDownloaded: file.sizeBytes,
-            totalBytes: file.sizeBytes,
-            localPath: file.path,
-            installedAt: new Date(file.modifiedAt).toISOString(),
+    return this.restorePromise;
+  }
+
+  /**
+   * Dynamically queries Hugging Face API for ggml-org/gemma-4-E2B-it-GGUF and updates metadata
+   */
+  public async syncGemmaFromHuggingFace(): Promise<void> {
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
+      return;
+    }
+    const repoId = 'ggml-org/gemma-4-E2B-it-GGUF';
+    const targetModelId = 'gemma-4-e2b-it-q4_0';
+    console.log(`[ModelManager] HF Sync: GET https://huggingface.co/api/models/${repoId}`);
+
+    try {
+      const details = await HuggingFaceService.inspectModelRepo(repoId);
+      if (details && details.files.length > 0) {
+        // Find Q4_0 artifact or default to primary file
+        const q4File =
+          details.files.find((f) => f.filename.includes('Q4_0') || f.quantization.includes('Q4_0')) ||
+          details.files[0];
+
+        const existingPkg = this.packages.get(targetModelId);
+        if (existingPkg && q4File) {
+          existingPkg.metadata.localFilename = q4File.filename;
+          existingPkg.metadata.downloadUrl = q4File.downloadUrl;
+          existingPkg.metadata.sizeBytes = q4File.sizeBytes > 0 ? q4File.sizeBytes : 2841481184;
+          existingPkg.totalBytes = existingPkg.metadata.sizeBytes;
+          console.log('[ModelManager] Dynamically resolved Gemma 4 E2B IT artifact:', {
+            repo: repoId,
+            filename: q4File.filename,
+            url: q4File.downloadUrl,
+            sizeBytes: existingPkg.metadata.sizeBytes,
           });
         }
       }
-
-      this.notify();
-    } catch (err) {
-      console.warn('[ModelManager] Restore from disk warning:', err);
-    } finally {
-      this.restorePromise = null;
+    } catch (e) {
+      console.warn('[ModelManager] HF dynamic sync notice (offline or network fallback):', e);
     }
-  })();
-
-  return this.restorePromise;
-}
+  }
 
   public getPackages(): ModelPackage[] {
     return Array.from(this.packages.values());
@@ -224,6 +274,16 @@ export class ModelManager {
     const modelsDir = await NativeDownloader.getModelsDirectory();
     const destPath = `${modelsDir}/${targetFilename}`;
 
+    console.log('[ModelManager:DiagnosticLog]', {
+      step: 'START_DOWNLOAD',
+      modelId,
+      repositoryId: pkg.metadata.repositoryId,
+      resolvedFilename: targetFilename,
+      resolveUrl: targetUrl,
+      expectedSizeBytes: targetSizeBytes,
+      destinationPath: destPath,
+    });
+
     pkg.status = ModelInstallStatus.Downloading;
     pkg.downloadProgress = 0;
     pkg.bytesDownloaded = 0;
@@ -250,6 +310,14 @@ export class ModelManager {
         },
       });
 
+      console.log('[ModelManager:DiagnosticLog]', {
+        step: 'DOWNLOAD_COMPLETE',
+        modelId,
+        contentLength: result.totalBytes,
+        downloadedBytes: result.totalBytes,
+        finalFilePath: result.localPath,
+      });
+
       // Verification phase
       pkg.status = ModelInstallStatus.Verifying;
       this.notify();
@@ -259,6 +327,15 @@ export class ModelManager {
         pkg.totalBytes,
         pkg.metadata.expectedSha256
       );
+
+      console.log('[ModelManager:DiagnosticLog]', {
+        step: 'VERIFY_RESULT',
+        modelId,
+        filePath: result.localPath,
+        checksumValid: verify.valid,
+        actualSize: verify.size,
+        reason: verify.reason || 'OK',
+      });
 
       if (!verify.valid) {
         throw new Error(`Model file validation failed: ${verify.reason || 'corrupted'}`);
@@ -277,6 +354,11 @@ export class ModelManager {
       this.notify();
       return true;
     } catch (err: any) {
+      console.error('[ModelManager:DiagnosticLog]', {
+        step: 'DOWNLOAD_ERROR',
+        modelId,
+        error: err?.message || err,
+      });
       if (pkg.status === ModelInstallStatus.Downloading || pkg.status === ModelInstallStatus.Verifying) {
         pkg.status = ModelInstallStatus.Error;
         pkg.errorMessage = err?.message || 'Download failed';
@@ -292,6 +374,11 @@ export class ModelManager {
   public async cancelDownload(modelId: string): Promise<boolean> {
     const pkg = this.packages.get(modelId);
     if (!pkg || pkg.status !== ModelInstallStatus.Downloading) return false;
+
+    console.log('[ModelManager:DiagnosticLog]', {
+      step: 'CANCEL_DOWNLOAD',
+      modelId,
+    });
 
     pkg.status = ModelInstallStatus.NotInstalled;
     pkg.downloadProgress = 0;
@@ -317,8 +404,22 @@ export class ModelManager {
       throw new Error(`Model ${modelId} is not installed locally (status: ${pkg.status})`);
     }
 
+    console.log('[ModelManager:DiagnosticLog]', {
+      step: 'LLAMA_LOAD_INIT',
+      modelId,
+      localPath: pkg.localPath,
+      contextLength: pkg.metadata.contextLength,
+    });
+
     const engine = LocalLLMEngine.getInstance();
     const success = await engine.loadModel(pkg.localPath, pkg.metadata);
+    console.log('[ModelManager:DiagnosticLog]', {
+      step: 'LLAMA_LOAD_RESULT',
+      modelId,
+      success,
+      engineState: engine.getState(),
+    });
+
     if (success) {
       this.activeModelId = modelId;
       this.notify();

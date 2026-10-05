@@ -6,6 +6,7 @@ import {
   ReportEntity,
 } from '../types';
 import { HealthMemoryService } from './HealthMemoryService';
+import { HandwrittenPrescriptionEngine } from './HandwrittenPrescriptionEngine';
 
 export type DocumentClassificationType =
   | 'Prescription'
@@ -124,9 +125,62 @@ export class DocumentProcessor {
     const extractedMedicines: MedicineEntity[] = [];
     const extractedLabResults: LabResultItem[] = [];
     let dischargeInfo: ExtractedDischargeInfo | undefined;
+    // 1. Extract Prescriptions / Medications via HandwrittenPrescriptionEngine
+    let vitals: any = undefined;
+    let handwritingText: string | undefined = undefined;
+    let mergedTranscript: string = rawOcrText;
+    let requiresReview = false;
 
-    // 1. Extract Prescriptions / Medications
-    if (classification.type === 'Prescription' || classification.type === 'Discharge' || classification.type === 'DoctorNote' || classification.type === 'General') {
+    if (classification.type === 'Prescription') {
+      const parsedMeds = this.extractMedications(rawOcrText, docId, documentTitle, doctorInfo, targetCaseId);
+      extractedMedicines.push(...parsedMeds);
+
+      const hwEngine = HandwrittenPrescriptionEngine.getInstance();
+      const hwResult = await hwEngine.executePipeline(
+        localFilePath || '',
+        rawOcrText,
+        undefined,
+        targetCaseId
+      );
+
+      // Merge additional normalized handwritten medicines if not already in extractedMedicines
+      for (const hwMed of hwResult.extractedMedicines) {
+        const hwNorm = (hwMed.normalizedName || hwMed.name).toLowerCase();
+        const isDuplicate = extractedMedicines.some((m) => {
+          const mNorm = (m.normalizedName || m.name).toLowerCase();
+          return (
+            mNorm === hwNorm ||
+            m.name.toLowerCase().includes(hwNorm) ||
+            hwMed.name.toLowerCase().includes(mNorm) ||
+            (m.genericName.toLowerCase() === hwMed.genericName.toLowerCase() && hwMed.genericName.length > 5) ||
+            (m.name.toLowerCase().includes('amoxicillin') && hwMed.name.toLowerCase().includes('augmentin')) ||
+            (m.name.toLowerCase().includes('augmentin') && hwMed.name.toLowerCase().includes('amoxicillin'))
+          );
+        });
+        if (!isDuplicate) {
+          hwMed.provenance = {
+            ...hwMed.provenance,
+            documentId: docId,
+            documentName: documentTitle,
+          };
+          extractedMedicines.push(hwMed);
+        }
+      }
+
+      vitals = hwResult.extractedVitals;
+      handwritingText = hwResult.handwritingOcrText;
+      mergedTranscript = hwResult.mergedTranscript;
+      requiresReview = hwResult.requiresReview;
+      if (hwResult.extractedDoctor.doctorName) {
+        doctorInfo.doctorName = hwResult.extractedDoctor.doctorName;
+      }
+      if (hwResult.extractedDoctor.hospitalName) {
+        doctorInfo.hospitalName = hwResult.extractedDoctor.hospitalName;
+      }
+      if (hwResult.extractedDate) {
+        doctorInfo.date = hwResult.extractedDate;
+      }
+    } else if (classification.type === 'Discharge' || classification.type === 'DoctorNote' || classification.type === 'General') {
       const parsedMeds = this.extractMedications(rawOcrText, docId, documentTitle, doctorInfo, targetCaseId);
       extractedMedicines.push(...parsedMeds);
     }
@@ -142,20 +196,32 @@ export class DocumentProcessor {
       dischargeInfo = this.extractDischargeDetails(rawOcrText);
     }
 
-    // 4. Construct Structured Report Entity
+    // 4. Construct Structured Report Entity with all 14 required fields
     const report: ReportEntity = {
       id: docId,
       caseId: targetCaseId,
       title: documentTitle || `${classification.type} - ${doctorInfo.doctorName || 'Medical Record'}`,
       type: classification.type as any,
+      documentType: classification.type,
       testDate: doctorInfo.date || timestamp.split('T')[0],
       laboratoryOrHospital: doctorInfo.hospitalName || doctorInfo.doctorName || 'CareWatch Document Vault',
-      summary: `Parsed ${classification.type} document: ${extractedMedicines.length} medications identified, ${extractedLabResults.length} metrics extracted.`,
+      summary: `Parsed ${classification.type}: ${extractedMedicines.length} medications identified, ${extractedLabResults.length} lab metrics extracted.`,
+      originalImagePath: localFilePath,
       rawOcrText,
+      handwritingOcrText: handwritingText,
+      mergedTranscript,
+      extractedMedicines,
+      extractedVitals: vitals,
+      extractedLabs: extractedLabResults,
+      extractedDoctor: doctorInfo,
+      extractedDate: doctorInfo.date || timestamp.split('T')[0],
+      confidence: classification.confidence,
       results: extractedLabResults,
       localFilePath,
+      requiresReview,
+      createdAt: timestamp,
       provenance: {
-        source: ProvenanceSource.ClinicallyDocumented,
+        source: requiresReview ? ProvenanceSource.RequiresReview : ProvenanceSource.ClinicallyDocumented,
         documentId: docId,
         documentName: documentTitle,
         confidence: classification.confidence,

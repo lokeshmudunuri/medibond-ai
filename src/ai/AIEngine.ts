@@ -86,7 +86,7 @@ export class AIEngine {
     if (!activeModel || this.localLLM.getState() !== 'ready') {
       yield {
         token:
-          '⚠️ **No Local Model Loaded**: Please open the Offline Model Manager to load an on-device GGUF model (such as MedGemma 4B, Gemma 4 E2B, or Qwen 0.5B). All AI inference executes 100% locally on your device.',
+          '⚠️ **No Local Model Loaded**: Please open the Offline Model Manager to load an on-device GGUF model (such as Gemma 4 E2B IT or Qwen 0.5B). All AI inference executes 100% locally on your device.',
         isPolicyWarning: true,
       };
       return;
@@ -124,7 +124,7 @@ export class AIEngine {
     // 6. Execute Real Streaming Inference via llama.rn / llama.cpp
     const stream = this.localLLM.generateStream(formattedPrompt, {
       maxTokens: 512,
-      temperature: activeModel.modelId.includes('medgemma') ? 0.4 : 0.6,
+      temperature: 0.6,
       stopTokens: activeModel.stopTokens,
     });
 

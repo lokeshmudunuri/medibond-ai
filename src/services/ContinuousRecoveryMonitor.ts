@@ -183,7 +183,7 @@ export class ContinuousRecoveryMonitor {
       escalationReason = 'Pain spike / mobility reduction exceeds recovery baseline. Recommended to monitor closely.';
     }
 
-    // Determine model routing: lightweight Qwen 2.5 0.5B for periodic updates; MedGemma for deeper clinical reasoning
+    // Determine model routing: lightweight Qwen 2.5 0.5B for periodic updates; Gemma 4 E2B IT for deeper clinical reasoning
     let modelUsed = 'Qwen 2.5 0.5B (Local)';
     let modelAnalysis = summary;
 

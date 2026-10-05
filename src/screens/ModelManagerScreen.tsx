@@ -141,15 +141,14 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
     if (activeModelId === pkg.metadata.modelId) {
       await unloadModel();
     } else {
-      // Memory safety check before loading
-      const isMedGemma = pkg.metadata.modelId.includes('medgemma');
-      const isGemma = pkg.metadata.modelId.includes('gemma');
+      // Memory safety check before loading large model
+      const isLargeModel = pkg.metadata.modelId.includes('gemma-4');
       const ramGb = modelRouter.getDeviceRamGb();
 
-      if (isMedGemma && ramGb < 6.0) {
+      if (isLargeModel && ramGb < 4.0) {
         Alert.alert(
           'High Memory Warning',
-          `This device profile (~${ramGb}GB RAM) has limited memory. Loading MedGemma 4B (~2.5GB GGUF) may cause memory pressure. Proceed with safe 2048 context length?`,
+          `This device profile (~${ramGb}GB RAM) has limited memory. Loading large model (~2.8GB GGUF) may cause memory pressure. Proceed with safe 2048 context length?`,
           [
             { text: 'Cancel', style: 'cancel' },
             {
@@ -216,9 +215,10 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
 
   const renderModelItem = ({ item }: { item: ModelPackage }) => {
     const isActive = activeModelId === item.metadata.modelId;
-    const isInstalled = item.status === ModelInstallStatus.Installed;
+    const isInstalled = item.status === ModelInstallStatus.Installed && !!item.localPath;
     const isDownloading = item.status === ModelInstallStatus.Downloading;
     const isVerifying = item.status === ModelInstallStatus.Verifying;
+    const isError = item.status === ModelInstallStatus.Error || !!item.errorMessage;
 
     const sizeMb = Math.round((item.totalBytes || item.metadata.sizeBytes) / (1024 * 1024));
     const downloadedMb = Math.round(item.bytesDownloaded / (1024 * 1024));
@@ -230,6 +230,18 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
 
     const variants = item.metadata.variants || [];
     const selectedVariant = selectedVariantMap[item.metadata.modelId] || variants[0];
+
+    const statusBadgeLabel = isActive
+      ? 'LOADED'
+      : isInstalled
+      ? 'DOWNLOADED'
+      : isDownloading
+      ? 'DOWNLOADING'
+      : isVerifying
+      ? 'VERIFYING'
+      : isError
+      ? 'ERROR'
+      : 'NOT INSTALLED';
 
     return (
       <View style={[styles.modelCard, isActive && styles.activeModelCard]}>
@@ -247,15 +259,7 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
                 isActive ? styles.activeBadgeText : styles.inactiveBadgeText,
               ]}
             >
-              {isActive
-                ? 'LOADED'
-                : isInstalled
-                ? 'UNLOADED'
-                : isDownloading
-                ? 'DOWNLOADING'
-                : isVerifying
-                ? 'VERIFYING'
-                : 'NOT DOWNLOADED'}
+              {statusBadgeLabel}
             </Text>
           </View>
         </View>
@@ -333,9 +337,10 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
           <Text style={styles.errorText}>⚠️ Error: {item.errorMessage}</Text>
         ) : null}
 
-        {/* Actions row */}
+        {/* Actions row: strictly deterministic states */}
         <View style={styles.actionRow}>
-          {isInstalled ? (
+          {isActive ? (
+            // LOADED: [ UNLOAD ]
             <>
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -345,36 +350,63 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
                 <Text style={styles.deleteButtonText}>Delete</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[
-                  styles.loadButton,
-                  isActive ? styles.unloadButton : styles.activeLoadButton,
-                ]}
+                style={[styles.loadButton, styles.unloadButton]}
+                onPress={() => handleToggleLoad(item)}
+                disabled={isLoadingModel}
+              >
+                {isLoadingModel ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.loadButtonText}>UNLOAD</Text>
+                )}
+              </TouchableOpacity>
+            </>
+          ) : isInstalled ? (
+            // DOWNLOADED_NOT_LOADED: [ LOAD ]
+            <>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDelete(item)}
+                disabled={isLoadingModel}
+              >
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.loadButton, styles.activeLoadButton]}
                 onPress={() => handleToggleLoad(item)}
                 disabled={isLoadingModel}
               >
                 {isLoadingModel && activeModelId === item.metadata.modelId ? (
                   <ActivityIndicator size="small" color="#FFFFFF" />
                 ) : (
-                  <Text style={styles.loadButtonText}>
-                    {isActive ? 'Unload' : 'Load Model'}
-                  </Text>
+                  <Text style={styles.loadButtonText}>LOAD</Text>
                 )}
               </TouchableOpacity>
             </>
           ) : isDownloading ? (
+            // DOWNLOADING: progress + cancel
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => handleCancel(item.metadata.modelId)}
             >
-              <Text style={styles.cancelButtonText}>Cancel Download</Text>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          ) : isError ? (
+            // ERROR: [ RETRY ]
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={() => handleDownload(item.metadata.modelId, selectedVariant)}
+            >
+              <Text style={styles.retryButtonText}>RETRY</Text>
             </TouchableOpacity>
           ) : (
+            // NOT_INSTALLED: [ DOWNLOAD ]
             <TouchableOpacity
               style={styles.downloadButton}
               onPress={() => handleDownload(item.metadata.modelId, selectedVariant)}
             >
               <Text style={styles.downloadButtonText}>
-                Download GGUF ({sizeMb} MB)
+                DOWNLOAD ({sizeMb} MB)
               </Text>
             </TouchableOpacity>
           )}
@@ -400,7 +432,7 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
           <Text style={styles.headerTitle}>Offline AI Models</Text>
         </View>
         <Text style={styles.headerSubtitle}>
-          On-device GGUF models: MedGemma 4B • Gemma 4 E2B • Qwen 0.6B
+          On-device GGUF models: Gemma 4 E2B IT (Large 2.8GB) • Qwen (Lightweight)
         </Text>
       </View>
 
@@ -438,7 +470,7 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
                 operatingMode === ModelOperatingMode.MedicalReasoning && styles.modeTabTextActive,
               ]}
             >
-              🩺 Medical (MedGemma)
+              🩺 Large Model (Gemma 4 E2B IT)
             </Text>
           </TouchableOpacity>
 
@@ -522,7 +554,7 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation 
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search Hugging Face (e.g. Qwen3-0.6B, MedGemma)..."
+            placeholder="Search Hugging Face (e.g. Qwen3-0.6B, Gemma-4-E2B)..."
             placeholderTextColor="#64748B"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -817,6 +849,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   deleteButtonText: { color: '#EF4444', fontWeight: '700', fontSize: 12 },
+  retryButton: {
+    backgroundColor: '#D97706',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  retryButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
   loadButton: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
   activeLoadButton: { backgroundColor: '#10B981' },
   unloadButton: { backgroundColor: '#EF4444' },

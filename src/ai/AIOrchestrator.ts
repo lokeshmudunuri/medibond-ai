@@ -90,6 +90,41 @@ export class AIOrchestrator {
 
     // 3. DIET GUIDANCE QUESTION HANDLER ("Can I eat biryani?")
     const lower = trimmed.toLowerCase();
+
+    // 3A. STRICT MEDICINE QUERY HANDLER ("What medicines do I have?")
+    if (
+      lower.includes('what medicines do i have') ||
+      lower.includes('what medications do i have') ||
+      lower.includes('my medicines') ||
+      lower.includes('what meds do i take') ||
+      lower.includes('list my medicines')
+    ) {
+      if (!activeCaseId) {
+        const noCaseMsg = 'Please select an active Case File first to see the medicines prescribed for that specific condition.';
+        yield { token: noCaseMsg, sentenceComplete: true, completedSentence: noCaseMsg };
+        if (options?.streamingSentenceCallback) options.streamingSentenceCallback(noCaseMsg);
+        return;
+      }
+
+      const caseMeds = this.memoryService.getMedicinesByCase(activeCaseId).filter((m) => m.isActive);
+      if (caseMeds.length === 0) {
+        const emptyMsg = `You do not have any active medications recorded in this case yet. You can add a prescription from the Documents screen.`;
+        yield { token: emptyMsg, sentenceComplete: true, completedSentence: emptyMsg };
+        if (options?.streamingSentenceCallback) options.streamingSentenceCallback(emptyMsg);
+        return;
+      }
+
+      const medListLines = caseMeds.map((m, idx) => `${idx + 1}. **${m.name}** (${m.dosage || m.strength || 'standard dose'}) - ${m.frequency}`);
+      const medListResponse =
+        `Your medicines in this case:\n\n` +
+        `${medListLines.join('\n')}\n\n` +
+        `What time did your doctor ask you to take each medicine?`;
+
+      yield { token: medListResponse, sentenceComplete: true, completedSentence: medListResponse };
+      if (options?.streamingSentenceCallback) options.streamingSentenceCallback(medListResponse);
+      return;
+    }
+
     if (
       lower.includes('can i eat') ||
       lower.includes('what can i eat') ||
@@ -123,11 +158,11 @@ export class AIOrchestrator {
       yield { token: warningMsg, isSafetyWarning: true };
     }
 
-    // 6. MODEL ROUTER SELECTION (MedGemma vs Qwen fallback)
+    // 6. MODEL ROUTER SELECTION (Gemma 4 E2B IT vs Qwen fallback)
     const activeModel = this.localLLM.getActiveModel();
     if (!activeModel || this.localLLM.getState() !== 'ready') {
       const noModelMsg =
-        '⚠️ **No Local Model Loaded**: Please open the Offline Model Manager to load an on-device GGUF model (such as MedGemma 4B or Qwen 0.5B). All AI inference executes 100% locally on your device.';
+        '⚠️ **No Local Model Loaded**: Please open the Offline Model Manager to load an on-device GGUF model (such as Gemma 4 E2B IT or Qwen 0.5B). All AI inference executes 100% locally on your device.';
       yield { token: noModelMsg, isPolicyWarning: true, sentenceComplete: true, completedSentence: noModelMsg };
       return;
     }
@@ -156,7 +191,7 @@ export class AIOrchestrator {
     // 8. STREAM INFERENCE WITH REAL-TIME SENTENCE BUFFERING
     const stream = this.localLLM.generateStream(formattedPrompt, {
       maxTokens: options?.maxTokens || 512,
-      temperature: options?.temperature || (activeModel.modelId.includes('medgemma') ? 0.4 : 0.6),
+      temperature: options?.temperature || 0.6,
       stopTokens: activeModel.stopTokens,
     });
 
