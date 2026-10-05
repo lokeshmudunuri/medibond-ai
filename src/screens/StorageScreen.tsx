@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { StorageAccountingService, StorageCategoryBreakdown } from '../services/StorageAccountingService';
 
-export const StorageScreen: React.FC = () => {
+export const StorageScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
   const [breakdown, setBreakdown] = useState<StorageCategoryBreakdown | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +61,15 @@ export const StorageScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.headerCard}>
-        <Text style={styles.headerTitle}>Storage & Data Vault</Text>
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Storage & Data Vault</Text>
+        </View>
         <Text style={styles.headerSubtitle}>
           CareBond operates 100% on-device. All medical documents, case memories, and AI models reside strictly on your local phone storage.
         </Text>
@@ -188,7 +196,22 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
   },
-  headerTitle: { color: '#ffffff', fontSize: 20, fontWeight: '700', marginBottom: 6 },
+  headerTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  backBtn: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 10,
+  },
+  backBtnText: { color: '#38bdf8', fontSize: 13, fontWeight: '700' },
+  headerTitle: { color: '#ffffff', fontSize: 20, fontWeight: '700' },
   headerSubtitle: { color: '#94a3b8', fontSize: 13, lineHeight: 18, marginBottom: 16 },
   totalBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',

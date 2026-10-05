@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, BackHandler } from 'react-native';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { CaseDetailScreen } from '../screens/CaseDetailScreen';
@@ -43,15 +43,36 @@ export const AppNavigator = () => {
     setNavState(newState);
   };
 
-  const goBack = () => {
-    if (stack.length > 1) {
-      const newStack = [...stack];
-      newStack.pop();
-      const prev = newStack[newStack.length - 1];
-      setStack(newStack);
-      setNavState(prev);
-    }
-  };
+  const goBack = useCallback(() => {
+    setStack((prevStack) => {
+      if (prevStack.length > 1) {
+        const newStack = [...prevStack];
+        newStack.pop();
+        const prev = newStack[newStack.length - 1];
+        setNavState(prev);
+        return newStack;
+      }
+      if (navState.screen !== 'Home') {
+        const homeState: NavigationState = { screen: 'Home' };
+        setNavState(homeState);
+        return [homeState];
+      }
+      return prevStack;
+    });
+  }, [navState.screen]);
+
+  useEffect(() => {
+    const onHardwareBack = () => {
+      if (stack.length > 1 || navState.screen !== 'Home') {
+        goBack();
+        return true;
+      }
+      return false;
+    };
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onHardwareBack);
+    return () => subscription.remove();
+  }, [stack.length, navState.screen, goBack]);
 
   const switchTab = (tab: ScreenType) => {
     const newState = { screen: tab };
@@ -78,11 +99,11 @@ export const AppNavigator = () => {
           />
         );
       case 'Voice':
-        return <VoiceScreen />;
+        return <VoiceScreen navigation={navigation} />;
       case 'Documents':
-        return <DocumentsScreen />;
+        return <DocumentsScreen navigation={navigation} params={navState.params} />;
       case 'Vault':
-        return <DocumentVaultScreen />;
+        return <DocumentVaultScreen navigation={navigation} />;
       case 'Recovery':
         return <RecoveryScreen navigation={navigation} />;
       case 'Doctor':
@@ -94,9 +115,9 @@ export const AppNavigator = () => {
       case 'Models':
         return <ModelManagerScreen navigation={navigation} />;
       case 'Storage':
-        return <StorageScreen />;
+        return <StorageScreen navigation={navigation} />;
       case 'Debug':
-        return <DebugScreen />;
+        return <DebugScreen navigation={navigation} />;
       default:
         return <HomeScreen navigation={navigation} />;
     }

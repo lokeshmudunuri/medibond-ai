@@ -129,13 +129,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => navigation.navigate('Storage')}
+            style={[styles.actionButton, styles.modelsBtn]}
+            onPress={() => navigation.navigate('Models')}
             activeOpacity={0.8}
           >
-            <Text style={styles.actionIcon}>💾</Text>
-            <Text style={styles.actionTitle}>Storage</Text>
-            <Text style={styles.actionSubtitle}>Models & Data</Text>
+            <Text style={styles.actionIcon}>🧠</Text>
+            <Text style={[styles.actionTitle, styles.modelsTitle]}>Offline Models</Text>
+            <Text style={styles.actionSubtitle}>Download & Manage</Text>
           </TouchableOpacity>
         </View>
 
@@ -290,9 +290,14 @@ const styles = StyleSheet.create({
   voiceBtn: {
     borderColor: '#38BDF8',
   },
+  modelsBtn: {
+    borderColor: '#818CF8',
+    backgroundColor: '#818CF815',
+  },
   actionIcon: { fontSize: 22, marginBottom: 6 },
   actionTitle: { fontSize: 14, fontWeight: '700', color: '#F8FAFC' },
   voiceTitle: { color: '#38BDF8' },
+  modelsTitle: { color: '#A5B4FC' },
   actionSubtitle: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
   sectionHeaderRow: {
     flexDirection: 'row',

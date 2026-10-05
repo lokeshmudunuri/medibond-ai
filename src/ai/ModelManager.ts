@@ -347,8 +347,23 @@ export class ModelManager {
       await this.unloadActiveModel();
     }
 
-    if (pkg.localPath) {
-      await NativeDownloader.deleteModelFile(pkg.localPath);
+    try {
+      const modelsDir = await NativeDownloader.getModelsDirectory();
+      const targetFilename = pkg.metadata.localFilename;
+      const pathsToDelete = new Set<string>();
+
+      if (pkg.localPath) {
+        pathsToDelete.add(pkg.localPath);
+      }
+      if (modelsDir && targetFilename) {
+        pathsToDelete.add(`${modelsDir}/${targetFilename}`);
+      }
+
+      for (const p of pathsToDelete) {
+        await NativeDownloader.deleteModelFile(p);
+      }
+    } catch (e) {
+      console.warn('[ModelManager] Error deleting model files from disk:', e);
     }
 
     pkg.status = ModelInstallStatus.NotInstalled;
@@ -357,6 +372,7 @@ export class ModelManager {
     pkg.localPath = undefined;
     pkg.installedAt = undefined;
     pkg.lastValidatedAt = undefined;
+    pkg.errorMessage = undefined;
     this.notify();
     return true;
   }

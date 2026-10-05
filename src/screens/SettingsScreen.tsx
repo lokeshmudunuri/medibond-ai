@@ -135,6 +135,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
           </TouchableOpacity>
 
           <TouchableOpacity
+            style={styles.navRow}
+            onPress={() => navigation.navigate('Storage')}
+          >
+            <View>
+              <Text style={styles.navRowTitle}>💾 Storage & Data Accounting</Text>
+              <Text style={styles.navRowSub}>Device storage breakdown: models, records, images & cache</Text>
+            </View>
+            <Text style={styles.navArrow}>→</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[styles.navRow, { borderBottomWidth: 0 }]}
             onPress={() => navigation.navigate('Debug')}
           >

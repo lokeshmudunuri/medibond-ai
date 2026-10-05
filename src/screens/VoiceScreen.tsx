@@ -20,7 +20,7 @@ const SUPPORTED_LANGUAGES: { code: VoiceLanguage; label: string; subLabel: strin
   { code: 'kn', label: 'ಕನ್ನಡ (Kannada)', subLabel: 'kn-IN' },
 ];
 
-export const VoiceScreen: React.FC<{ navigation?: any }> = () => {
+export const VoiceScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
   const {
     state,
     activeLanguage,
@@ -101,12 +101,20 @@ export const VoiceScreen: React.FC<{ navigation?: any }> = () => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>CareBond Voice Agent</Text>
-          <Text style={styles.subtitle}>100% Offline On-Device Multi-Language Medical AI</Text>
+        <View style={styles.headerLeftRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.title}>Voice Agent</Text>
+            <Text style={styles.subtitle}>100% Offline On-Device Medical AI</Text>
+          </View>
         </View>
         <TouchableOpacity style={styles.clearButton} onPress={clearConversation}>
-          <Text style={styles.clearButtonText}>New Session</Text>
+          <Text style={styles.clearButtonText}>New</Text>
         </TouchableOpacity>
       </View>
 
@@ -308,6 +316,22 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 8,
   },
+  headerLeftRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 8,
+  },
+  backBtn: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#1E293B',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 10,
+  },
+  backBtnText: { color: '#38BDF8', fontSize: 13, fontWeight: '700' },
   title: { fontSize: 20, fontWeight: '800', color: '#F8FAFC' },
   subtitle: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
   clearButton: {

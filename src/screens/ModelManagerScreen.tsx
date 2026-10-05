@@ -23,7 +23,7 @@ import { ModelOperatingMode, ModelRouter, ModelRouteDecision } from '../ai/Model
 import { NativeDownloader, StorageInfo } from '../services/NativeDownloader';
 import { HFModelSummary } from '../services/HuggingFaceService';
 
-export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
+export const ModelManagerScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
   const {
     packages,
     activeModelId,
@@ -247,7 +247,15 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
                 isActive ? styles.activeBadgeText : styles.inactiveBadgeText,
               ]}
             >
-              {isActive ? 'ACTIVE' : item.status.toUpperCase()}
+              {isActive
+                ? 'LOADED'
+                : isInstalled
+                ? 'UNLOADED'
+                : isDownloading
+                ? 'DOWNLOADING'
+                : isVerifying
+                ? 'VERIFYING'
+                : 'NOT DOWNLOADED'}
             </Text>
           </View>
         </View>
@@ -382,9 +390,17 @@ export const ModelManagerScreen: React.FC<{ navigation?: any }> = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Offline AI Model Intelligence</Text>
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Offline AI Models</Text>
+        </View>
         <Text style={styles.headerSubtitle}>
-          Local GGUF routing: MedGemma 4B • Gemma 4 E2B • Qwen 0.6B
+          On-device GGUF models: MedGemma 4B • Gemma 4 E2B • Qwen 0.6B
         </Text>
       </View>
 
@@ -565,6 +581,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
   },
+  headerTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  backBtn: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#1E293B',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 10,
+  },
+  backBtnText: { color: '#38BDF8', fontSize: 13, fontWeight: '700' },
   headerTitle: { color: '#F8FAFC', fontSize: 18, fontWeight: '800' },
   headerSubtitle: { color: '#94A3B8', fontSize: 12, marginTop: 4 },
   modeSection: {

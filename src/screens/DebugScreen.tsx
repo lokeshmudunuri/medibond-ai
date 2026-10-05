@@ -4,7 +4,7 @@ import { useModelStore } from '../store/useModelStore';
 import { useChatStore } from '../store/useChatStore';
 import { useVoiceStore } from '../store/useVoiceStore';
 
-export const DebugScreen: React.FC = () => {
+export const DebugScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
   const { activeMetadata, engineState, activeModelId } = useModelStore();
   const { isGenerating } = useChatStore();
   const { state: voiceState, activeLanguage } = useVoiceStore();
@@ -13,10 +13,18 @@ export const DebugScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Developer Diagnostics & AI Engine</Text>
-          <Text style={styles.headerSubtitle}>
-            Real-time native llama.rn / llama.cpp / GGUF execution telemetry
-          </Text>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Developer Diagnostics</Text>
+            <Text style={styles.headerSubtitle}>
+              Real-time native llama.rn / llama.cpp / GGUF execution telemetry
+            </Text>
+          </View>
         </View>
 
         {/* Core AI Engine Telemetry */}
@@ -126,7 +134,18 @@ export const DebugScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0F172A' },
   scrollContent: { padding: 16 },
-  header: { marginBottom: 16 },
+  header: { marginBottom: 16, flexDirection: 'row', alignItems: 'flex-start' },
+  backBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: '#1E293B',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 12,
+    marginTop: 2,
+  },
+  backBtnText: { color: '#38BDF8', fontSize: 13, fontWeight: '700' },
   headerTitle: { fontSize: 20, fontWeight: '800', color: '#F8FAFC' },
   headerSubtitle: { fontSize: 12, color: '#94A3B8', marginTop: 2 },
   card: {

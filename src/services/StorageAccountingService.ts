@@ -33,10 +33,7 @@ export class StorageAccountingService {
       const diskModels = await NativeDownloader.listModelFiles();
       modelsBytes = diskModels.reduce((acc, m) => acc + (m.sizeBytes || 0), 0);
     } catch {
-      modelsBytes = 397808192;
-    }
-    if (modelsBytes === 0) {
-      modelsBytes = 397808192; // 397.8 MB Qwen model baseline
+      modelsBytes = 0;
     }
 
     // 2. Document vault records & images

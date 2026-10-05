@@ -13,7 +13,7 @@ import {
 import { DocumentVaultService, DocumentVaultRecord } from '../services/DocumentVaultService';
 import { useCaseStore } from '../store/useCaseStore';
 
-export const DocumentVaultScreen: React.FC = () => {
+export const DocumentVaultScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
   const { activeCaseId, activeCase } = useCaseStore();
   const [records, setRecords] = useState<DocumentVaultRecord[]>([]);
   const [selectedDocType, setSelectedDocType] = useState<string>('ALL');
@@ -64,7 +64,15 @@ export const DocumentVaultScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Medical Document Vault</Text>
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Medical Document Vault</Text>
+        </View>
         <Text style={styles.headerSubtitle}>
           {activeCase ? `Scoped to: ${activeCase.title}` : 'All On-Device Patient Records'}
         </Text>
@@ -148,13 +156,15 @@ export const DocumentVaultScreen: React.FC = () => {
         <Modal visible={true} animationType="slide" onRequestClose={() => setActiveModalRecord(null)}>
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <View>
-                <Text style={styles.modalTitle}>{activeModalRecord.title}</Text>
-                <Text style={styles.modalSubtitle}>{activeModalRecord.documentType} • {activeModalRecord.fileSizeFormatted}</Text>
+              <View style={styles.modalHeaderLeft}>
+                <TouchableOpacity onPress={() => setActiveModalRecord(null)} style={styles.backBtn}>
+                  <Text style={styles.backBtnText}>← Back</Text>
+                </TouchableOpacity>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.modalTitle} numberOfLines={1}>{activeModalRecord.title}</Text>
+                  <Text style={styles.modalSubtitle}>{activeModalRecord.documentType} • {activeModalRecord.fileSizeFormatted}</Text>
+                </View>
               </View>
-              <TouchableOpacity onPress={() => setActiveModalRecord(null)} style={styles.closeBtn}>
-                <Text style={styles.closeBtnText}>✕</Text>
-              </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.modalBody}>
@@ -244,7 +254,19 @@ export const DocumentVaultScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8fafc' },
-  header: { backgroundColor: '#0f172a', padding: 16, paddingTop: 20 },
+  header: { backgroundColor: '#0f172a', padding: 16, paddingTop: 16 },
+  headerTopRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
+  modalHeaderLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  backBtn: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 10,
+  },
+  backBtnText: { color: '#38bdf8', fontSize: 13, fontWeight: '700' },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#ffffff' },
   headerSubtitle: { fontSize: 13, color: '#94a3b8', marginTop: 2, marginBottom: 12 },
   filterBar: { flexDirection: 'row', marginTop: 4 },

@@ -10,6 +10,7 @@ import {
   TextInput,
   Modal,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useDocumentStore } from '../store/useDocumentStore';
 import { HealthMemoryService } from '../services/HealthMemoryService';
@@ -19,7 +20,7 @@ import { DocumentVaultService } from '../services/DocumentVaultService';
 import { DocumentClassificationType } from '../services/DocumentProcessor';
 import { CaseFile, HealthTimelineEvent, MedicineEntity, ReportEntity } from '../types';
 
-export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
+export const DocumentsScreen: React.FC<{ navigation?: any; params?: any }> = ({ navigation, params }) => {
   const {
     reports,
     processingState,
@@ -71,6 +72,14 @@ export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
       setReviewModalVisible(true);
     }
   }, [activeScanResult]);
+
+  useEffect(() => {
+    if (params?.scanMode === 'prescription') {
+      handleScanPrescription();
+    } else if (params?.scanMode === 'lab') {
+      handleScanReport();
+    }
+  }, [params?.scanMode]);
 
   const handleScanPrescription = async () => {
     try {
@@ -251,11 +260,19 @@ export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>Medical Document Intelligence</Text>
-          <Text style={styles.headerSubtitle}>
-            Offline OCR • Clinical Extraction • Case Memory • Local Medical AI
-          </Text>
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => (navigation ? navigation.goBack() : null)}
+          >
+            <Text style={styles.backBtnText}>← Back</Text>
+          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Medical Document Intelligence</Text>
+            <Text style={styles.headerSubtitle}>
+              Offline OCR • Clinical Extraction • Case Memory • Local Medical AI
+            </Text>
+          </View>
         </View>
 
         {/* 4 Dedicated Document Capture Triggers */}
@@ -479,24 +496,116 @@ export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
       <Modal visible={reviewModalVisible} animationType="slide" transparent={false}>
         <SafeAreaView style={styles.reviewModalContainer}>
           <View style={styles.reviewModalHeader}>
-            <View>
-              <Text style={styles.reviewModalTitle}>Document Verification & Review</Text>
-              <Text style={styles.reviewModalSubtitle}>
-                Verify on-device clinical extraction before committing to Case Memory
-              </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <TouchableOpacity
+                style={styles.backBtn}
+                onPress={() => {
+                  resetActiveScan();
+                  setReviewModalVisible(false);
+                }}
+              >
+                <Text style={styles.backBtnText}>← Back</Text>
+              </TouchableOpacity>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.reviewModalTitle}>Document Verification & Review</Text>
+                <Text style={styles.reviewModalSubtitle}>
+                  Verify on-device clinical extraction before committing to Case Memory
+                </Text>
+              </View>
             </View>
-            <TouchableOpacity
-              style={styles.closeReviewBtn}
-              onPress={() => {
-                resetActiveScan();
-                setReviewModalVisible(false);
-              }}
-            >
-              <Text style={styles.closeReviewBtnText}>✕ Discard</Text>
-            </TouchableOpacity>
           </View>
 
           <ScrollView contentContainerStyle={styles.reviewScrollContent}>
+            {/* Preserved Original Captured Document Image Preview & Quality Check */}
+            <View style={styles.reviewCard}>
+              <Text style={styles.reviewSectionLabel}>ORIGINAL DOCUMENT PREVIEW (PRESERVED):</Text>
+              {activeScanResult?.localFilePath ? (
+                <View style={styles.scanImageContainer}>
+                  <Image
+                    source={{
+                      uri: activeScanResult.localFilePath.startsWith('file://')
+                        ? activeScanResult.localFilePath
+                        : `file://${activeScanResult.localFilePath}`,
+                    }}
+                    style={styles.scanPreviewImage}
+                    resizeMode="contain"
+                  />
+                </View>
+              ) : (
+                <View style={styles.noImagePlaceholder}>
+                  <Text style={styles.noImageText}>📄 Document scanned directly from device</Text>
+                </View>
+              )}
+
+              {/* Quality & Confidence Status */}
+              <View style={styles.qualityCheckRow}>
+                <View style={styles.qualityItem}>
+                  <Text style={styles.qualityLabel}>Quality Check:</Text>
+                  <Text style={styles.qualityValue}>
+                    {(activeScanResult?.confidenceScore || 0.9) < 0.75
+                      ? '⚠️ Attention Required'
+                      : '✓ Good Contrast & Resolution'}
+                  </Text>
+                </View>
+                <View style={styles.qualityItem}>
+                  <Text style={styles.qualityLabel}>Confidence:</Text>
+                  <Text
+                    style={[
+                      styles.qualityValue,
+                      {
+                        color:
+                          (activeScanResult?.confidenceScore || 0.9) < 0.75
+                            ? '#F87171'
+                            : '#34D399',
+                      },
+                    ]}
+                  >
+                    {Math.round((activeScanResult?.confidenceScore || 0.9) * 100)}%
+                  </Text>
+                </View>
+              </View>
+
+              {/* Low Confidence Warning per Requirement 9 */}
+              {(activeScanResult?.confidenceScore || 0.9) < 0.75 && (
+                <View style={styles.lowConfidenceAlert}>
+                  <Text style={styles.lowConfidenceTitle}>⚠️ Could not reliably read this document.</Text>
+                  <Text style={styles.lowConfidenceDesc}>
+                    Handwriting or low contrast detected. Do NOT silently save incorrect OCR. Please verify, edit text, or retake:
+                  </Text>
+                  <View style={styles.lowConfidenceActions}>
+                    <TouchableOpacity
+                      style={styles.retakeBtn}
+                      onPress={() => {
+                        setReviewModalVisible(false);
+                        resetActiveScan();
+                        handleScanPrescription();
+                      }}
+                    >
+                      <Text style={styles.retakeBtnText}>📷 Retake</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.galleryBtnSmall}
+                      onPress={() => {
+                        setReviewModalVisible(false);
+                        resetActiveScan();
+                        handleGalleryPick();
+                      }}
+                    >
+                      <Text style={styles.galleryBtnSmallText}>🖼️ Use Gallery</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.editOcrBtnSmall}
+                      onPress={() => setIsEditingOcr(true)}
+                    >
+                      <Text style={styles.editOcrBtnSmallText}>✏️ Edit Text</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            </View>
+
             {/* Document Classification */}
             <View style={styles.reviewCard}>
               <View style={styles.reviewCardRow}>
@@ -715,15 +824,18 @@ export const DocumentsScreen: React.FC<{ navigation?: any }> = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.detailModalContent}>
             <View style={styles.detailHeader}>
-              <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => setDetailModalVisible(false)}
+                style={styles.backBtn}
+              >
+                <Text style={styles.backBtnText}>← Back</Text>
+              </TouchableOpacity>
+              <View style={{ flex: 1, marginLeft: 8 }}>
                 <Text style={styles.detailTitle}>{selectedReport?.title}</Text>
                 <Text style={styles.detailMeta}>
                   {selectedReport?.type} • {selectedReport?.testDate}
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => setDetailModalVisible(false)}>
-                <Text style={styles.detailCloseText}>✕</Text>
-              </TouchableOpacity>
             </View>
 
             <ScrollView style={{ maxHeight: 380 }}>
@@ -777,8 +889,84 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
   },
+  headerTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  backBtn: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#1E293B',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginRight: 10,
+  },
+  backBtnText: { color: '#38BDF8', fontSize: 13, fontWeight: '700' },
   headerTitle: { fontSize: 20, fontWeight: '800', color: '#F8FAFC' },
   headerSubtitle: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
+  scanImageContainer: {
+    height: 180,
+    backgroundColor: '#000000',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 10,
+    marginTop: 6,
+  },
+  scanPreviewImage: { width: '100%', height: '100%' },
+  noImagePlaceholder: {
+    padding: 16,
+    backgroundColor: '#0F172A',
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 6,
+  },
+  noImageText: { color: '#94A3B8', fontSize: 12 },
+  qualityCheckRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#334155',
+    marginBottom: 6,
+  },
+  qualityItem: { flexDirection: 'row', alignItems: 'center' },
+  qualityLabel: { fontSize: 11, color: '#94A3B8', marginRight: 6 },
+  qualityValue: { fontSize: 12, fontWeight: '700', color: '#F8FAFC' },
+  lowConfidenceAlert: {
+    backgroundColor: '#450A0A',
+    borderColor: '#EF4444',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 8,
+  },
+  lowConfidenceTitle: { color: '#F87171', fontSize: 13, fontWeight: '700' },
+  lowConfidenceDesc: { color: '#FECACA', fontSize: 11, marginTop: 2, marginBottom: 8 },
+  lowConfidenceActions: { flexDirection: 'row', gap: 6 },
+  retakeBtn: {
+    backgroundColor: '#EF4444',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+  },
+  retakeBtnText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  galleryBtnSmall: {
+    backgroundColor: '#334155',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+  },
+  galleryBtnSmallText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  editOcrBtnSmall: {
+    backgroundColor: '#0284C7',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+  },
+  editOcrBtnSmallText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
   actionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 12 },
   actionBtn: {
     flexBasis: '48%',
