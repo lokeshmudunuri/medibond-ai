@@ -112,6 +112,8 @@ Local AI Engine (src/ai/LocalLLMEngine.ts)
  ↓
 Android Runtime (arm64-v8a / CPU & NPU Acceleration)
 ```
+
+```text
 Base Architecture Contract
 
 CareBond AI strictly adheres to the fixed core architecture contract:
@@ -176,7 +178,7 @@ text
                               ▼
                            TTS / UI
 
-
+```
 ---
 ---
 
