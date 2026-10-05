@@ -213,7 +213,7 @@ The prototype has been validated on a physical Samsung Galaxy S24 Ultra (`SM-S92
 | ![Home](docs/screenshots/s_home.png) | ![Documents](docs/screenshots/s_doc.png) | ![Storage](docs/screenshots/phase9-s24-storage.png) |
 
  | Medical Documents scanning | Interface Dashboard |
-|:---:|:---:|:---:|
+|:---:|:---:|
  ![Verified](docs/screenshots/phase9-s24-verified.png) | ![Recovery](docs/screenshots/phase9-s24-front.png) |
 
 ---
