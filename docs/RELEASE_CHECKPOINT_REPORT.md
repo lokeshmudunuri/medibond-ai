@@ -7,7 +7,7 @@ https://github.com/lokeshmudunuri/medibond-ai.git
 main
 
 ## Commit
-PENDING_COMMIT_HASH
+60ac818384db9947d4cbc753f69ec0af0a9396b8
 
 ## Release
 v1.0.0-jury
