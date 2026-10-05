@@ -1,193 +1,171 @@
-# CareBond AI — Offline-First Android Health & Recovery Companion
+# CareBond AI
 
-CareBond AI is a production-oriented, offline-first personal health and recovery companion built with Flutter for Android. It learns the user's personal health context over time and helps them understand, remember, monitor, and communicate their health safely.
+**Offline Medical Companion — Android Prototype**
+
+> A privacy-first, on-device clinical and recovery assistant designed to help patients and caregivers organize medical records, interpret prescriptions, track recovery baselines, and prepare doctor handoffs—**without a single byte of sensitive health data leaving the phone.**
+
+[![Android Build](https://img.shields.io/badge/Android%20Build-PASSING-brightgreen.svg)](https://github.com/lokeshmudunuri/medibond-ai/releases/tag/v1.0.0-jury)
+[![Offline AI](https://img.shields.io/badge/Offline%20AI-llama.rn%20%2F%20llama.cpp-blue.svg)](https://github.com/lokeshmudunuri/medibond-ai)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Latest Release](https://img.shields.io/badge/Release-v1.0.0--jury-orange.svg)](https://github.com/lokeshmudunuri/medibond-ai/releases/tag/v1.0.0-jury)
 
 ---
 
-## 1. Base Architecture Contract
+# 🚀 JURY QUICK START
 
-CareBond AI strictly adheres to the fixed core architecture contract:
+**Judges and evaluators do NOT need to clone this repository or set up a React Native / Android development environment to evaluate CareBond AI.**
+
+You can install and test the complete Android prototype in **under 2 minutes**:
+
+1. **Download the APK directly to your Android device:**
+   * 📲 **[Download CareBondAI-Jury-Demo.apk](https://github.com/lokeshmudunuri/medibond-ai/releases/download/v1.0.0-jury/CareBondAI-Jury-Demo.apk)** *(~168 MB)*
+   * 🏷️ **GitHub Release Page:** [https://github.com/lokeshmudunuri/medibond-ai/releases/tag/v1.0.0-jury](https://github.com/lokeshmudunuri/medibond-ai/releases/tag/v1.0.0-jury)
+   * 🔒 **SHA-256 Checksum:** `51f80a0b1f9664111274a2fa776bbc4b8ede32a02625fe5f70a9b074af34156e`
+2. **Install the APK:**
+   * Open the downloaded file. When Android prompts *"Install unknown apps"*, tap **Settings** -> enable **Allow from this source**, then tap **Install**.
+3. **Launch CareBond AI:**
+   * Tap the **CareBond AI** icon in your app launcher.
+4. **Follow the 5-Minute Jury Demo Script:**
+   * 📖 **[Read the Step-by-Step Jury Testing Guide](docs/JURY_TEST_GUIDE.md)** for 5 guided tests covering Case Isolation, Document Vault, Emergency Safety, Recovery Check-in, and 100% Airplane Mode verification.
+
+---
+
+## 1. The Healthcare Problem
+
+Patients and caregivers face critical pain points in modern healthcare:
+* **Fragmented Health History:** Prescriptions, discharge summaries, and lab reports are scattered across paper documents, PDF files, and WhatsApp chats, leading to lost clinical context during doctor visits.
+* **Complex Clinical Jargon:** Patients struggle to decipher doctor handwriting, dosage instructions, and lab values, often resorting to unverified internet searches.
+* **Post-Discharge Blindspots:** After leaving the hospital, patients and caretakers lack structured, objective tools to track pain, mobility, and symptom baselines, making follow-up consultations anecdotal rather than data-driven.
+* **Extreme Privacy Hazards:** Uploading sensitive prescriptions, lab reports, and daily medical logs to public cloud LLMs creates catastrophic HIPAA/GDPR privacy liabilities and corporate data harvesting risks.
+
+---
+
+## 2. The CareBond AI Solution
+
+CareBond AI provides an **offline-first medical companion** that runs local intelligence directly on the user's Android phone. The application is structured around two synchronized care tracks:
 
 ```text
-                         CAREBOND AI
-                              │
-          ┌───────────────────┴───────────────────┐
-          │                                       │
-          ▼                                       ▼
-       MODE A                                   MODE B
-   EVERYDAY HEALTH                           RECOVERY
-          │                                       │
-          └───────────────────┬───────────────────┘
-                              ▼
-                    SHARED HEALTH CORE
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
-      VOICE                 DOCUMENT              SENSORS
-        │                     │                     │
-       STT                   OCR              Signal Processing
-        │                     │                     │
-      Intent              Medical NER        Personal Baseline
-        │                     │                     │
-        └─────────────────────┼─────────────────────┘
-                              ▼
-                       HEALTH MEMORY
-                              │
-                              ▼
-                  PERSONAL HEALTH CONTEXT
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-        ▼                     ▼                     ▼
-   Medical KB          Medication Safety       Recovery Engine
-        │                     │                     │
-        └─────────────────────┼─────────────────────┘
-                              ▼
-                    MEDICAL REASONING
-                              │
-                    ┌─────────┴─────────┐
-                    │                   │
-              LIGHT MODEL          MEDGEMMA 4B
-              4GB PROFILE          6GB+ PROFILE
-                    │                   │
-                    └─────────┬─────────┘
-                              ▼
-                       SAFETY VALIDATION
-                              │
-                              ▼
-                   HEALTH CONTEXT ENGINE
-                              │
-                              ▼
-                    DOCTOR HANDOFF ENGINE
-                              │
-               ┌──────────────┼──────────────┐
-               ▼              ▼              ▼
-            Patient        Specialist       Doctor
-            Summary         Summary         Summary
-                              │
-                              ▼
-                           TTS / UI
+                                CAREBOND AI
+                                     │
+                 ┌───────────────────┴───────────────────┐
+                 │                                       │
+                 ▼                                       ▼
+       GENERAL HEALTH TRACK                    RECOVERY / CARETAKER TRACK
+     • Clinical Case Files                   • Doctor Instructions & Protocol
+     • Prescription & Document Vault         • Daily Symptom & Pain Check-in
+     • Local Medication Memory               • Objective Recovery Trends (7-Day)
+     • Patient-Friendly Explanations         • Medication Adherence Tracking
+     • Deterministic Safety Guardrails       • Structured Doctor Handoff Brief
 ```
 
----
+### General Health Track
+* **Isolated Case Files:** Partition medical data by clinical episode (e.g. *Type 2 Diabetes* vs. *Knee Replacement*). No cross-condition contamination.
+* **Document Vault:** Ingest paper prescriptions, diagnostic lab reports, and discharge notes.
+* **Medication Intelligence:** Tracks drug schedules, dosages, and frequencies with clear provenance markers (`[VERIFIED]` vs `[REQUIRES REVIEW]`).
+* **Timeline & Memory:** Maintains an immutable local timeline of symptoms, medication changes, and clinical observations.
 
-## 2. Primary Modes
-
-### Mode A — Everyday Health Companion
-- **Voice-Driven Health Querying**: Offline intent recognition & speech synthesis.
-- **Prescription & Document Parsing**: PP-OCR and Medical NER with mandatory user confirmation.
-- **Medication Management**: Dosage, frequency, adherence, and cross-drug allergy contraindication checking.
-- **Longitudinal Health Timeline**: Persistent tracking of conditions, allergies, lab trends, and procedures.
-
-### Mode B — Recovery Companion
-- **Discharge Protocol Ingestion**: Structured extraction of wound care, red-flag symptoms, and recovery plans.
-- **Daily Adaptive Voice Check-ins**: Longitudinal check-in history drives dynamic, context-aware follow-up questions.
-- **Deterministic Personal Baseline Engine**: Robust Exponentially Weighted Moving Average (EWMA), Median Absolute Deviation (MAD), and Cumulative Sum (CUSUM) persistence filters to avoid noisy false alarms.
-- **Explainable Anomaly Alerts**: Alerts provide clinical rationale (e.g. *"Mobility is 45% below your 7-day personal baseline for 2 consecutive days"*) rather than speculative diagnoses.
+### Recovery / Caretaker Track
+* **Doctor Instructions Engine:** Digitizes post-op recovery orders and care instructions into actionable daily checklists.
+* **Objective Daily Check-ins:** Records pain severity (0–10 scale), pain locations, daily mobility/steps, and recovery symptoms.
+* **Continuous Baseline Monitoring:** Automatically calculates 7-day moving recovery trends.
+* **Doctor Handoff Generator:** Automatically compiles a concise, high-density clinical summary formatted specifically for physician review during follow-up visits.
 
 ---
 
-## 3. Shared Health Core & Storage Architecture
+## 3. Why 100% Offline AI?
 
-### Structured Health Memory
-Unlike raw chat-history approaches, CareBond AI maintains structured relational tables with explicit **provenance**:
-- `DOCUMENTED`: Extracted from signed discharge summaries, lab reports, or doctor prescriptions.
-- `USER_REPORTED`: Provided directly by the patient or caregiver during check-ins.
-- `SYSTEM_DETECTED`: Derived via continuous sensor telemetry or baseline analytics.
-- `REQUIRES_REVIEW`: OCR or NLP extractions awaiting user verification before activation.
-- `URGENT_ESCALATION`: Red-flag deviations requiring immediate medical attention.
+| Cloud Health Apps | CareBond AI (Offline-First) |
+|---|---|
+| ❌ Sensitive prescriptions uploaded to cloud servers | ✅ **100% on-device processing; zero health data leaves the phone** |
+| ❌ Fails or hangs in low-connectivity areas (rural / transit) | ✅ **Operates identically in Airplane Mode with zero network access** |
+| ❌ High latency and recurring cloud API costs | ✅ **Instant local database queries and on-device GGUF inference** |
+| ❌ Opaque cloud logging and corporate data retention | ✅ **Sandboxed local storage encrypted with Android hardware keystore** |
 
-### Dedicated Storage Segregation
+---
+
+## 4. Current System Architecture
+
 ```text
-CareBond/
-├── models/
-│   ├── voice/              (Silero VAD, Offline STT Whisper/Vosk, Piper TTS)
-│   ├── ocr/                (PP-OCR detection & recognition)
-│   ├── medical_ner/        (OpenMed Pharma & Anatomy NER)
-│   ├── medical_reasoning/  (Lightweight 4GB & MedGemma 4B GGUF)
-│   └── tts/                (Indic & English neural voices)
-├── knowledge/              (Verified offline medical knowledge base)
-├── safety/                 (Deterministic drug interaction & emergency rules)
-├── database/               (SQLite structured health database with FTS5)
-├── medical_documents/      (Encrypted scans, PDFs, and thumbnails)
-├── cache/                  (Temporary OCR buffers, safely pruned)
-└── metadata/               (Resource registry & installation manifests)
+User
+ ↓
+CareBond AI (React Native 0.77.3 on Android)
+ ├── General Health Track
+ │    ├── Case Files (useCaseStore)
+ │    └── Document Vault (DocumentVaultService)
+ └── Recovery / Caretaker Track
+      ├── Doctor Instructions
+      └── Daily Check-ins (RecoveryEngine)
+ ↓
+Offline Health Memory & Database
+ ↓
+AI Orchestrator (src/ai/AIOrchestrator.ts)
+ ├── Emergency Safety Engine (Deterministic Red-Flag Interceptor)
+ ├── Medication Safety Checker (Allergy & Duplicate Therapy Rules)
+ ├── Case Context Filter (Strict Active Case Scoping)
+ └── Model Router (Task & Model Profile Selector)
+ ↓
+Local AI Engine (src/ai/LocalLLMEngine.ts)
+ React Native
+ → llama.rn Bridge (v0.13.0-rc.6)
+ → native llama.cpp (C++)
+ → Quantized GGUF Models (MedGemma 4B / Gemma 4 / etc.)
+ ↓
+Android Runtime (arm64-v8a / CPU & NPU Acceleration)
 ```
 
 ---
 
-## 4. Hardware Profiles & Dynamic Resource Management
+## 5. Current Prototype Features & Verification Status
 
-CareBond supports dynamic hardware profiles:
-- **Essential Profile (4GB RAM devices)**: Lightweight quantized models (~1.2 GB RAM footprint), aggressive model unloading, serial execution.
-- **Advanced Profile (6GB+ RAM devices)**: MedGemma 4B ONNX/GGUF model (~3.8 GB RAM footprint) for rich clinical explanations and complex multi-morbid summaries.
-- **Automatic Detection**: Dynamic RAM scanning on app startup.
+We uphold total honesty regarding the verification status of all capabilities in this prototype checkpoint:
 
-### 17 Modular Offline Model Packages
-1. **Silero VAD (v4.0)** — Offline Voice Activity Detection (2.5 MB)
-2. **Offline STT Base (Whisper-Tiny)** — English Voice Recognition (75 MB)
-3. **Offline STT Indic Multi** — Hindi, Telugu, Tamil, Kannada, Marathi (145 MB)
-4. **PP-OCRv4 Medical Engine** — Document text recognition (18 MB)
-5. **OpenMed Pharma NER** — Medication entity extraction (42 MB)
-6. **OpenMed Clinical Anatomy NER** — Lab & diagnosis entity recognition (48 MB)
-7. **CareBond Light Medical Model (Q4)** — 4GB device reasoning (1,250 MB)
-8. **MedGemma 4B Clinical Model (Q4_K_M)** — 6GB+ device reasoning (2,450 MB)
-9. **Piper TTS High-Fidelity English** — Offline neural voice (28 MB)
-10. **Piper TTS Indic Hindi** — Neural voice synthesis (32 MB)
-11. **Piper TTS Indic Telugu** — Neural voice synthesis (30 MB)
-12. **Piper TTS Indic Tamil** — Neural voice synthesis (31 MB)
-13. **Piper TTS Indic Kannada** — Neural voice synthesis (29 MB)
-14. **Piper TTS Indic Marathi** — Neural voice synthesis (30 MB)
-15. **Offline Drug Safety Database** — 14,000+ interactions & contraindications (14 MB)
-16. **Offline Medical Knowledge Base** — 8,500+ conditions & lab ranges (22 MB)
-17. **Recovery Baseline Analytics Engine** — Sensor calibration & EWMA rules (1.2 MB)
+| Feature Area | Component | Status | How to Test in the Demo |
+|---|---|:---:|---|
+| **Case Files** | Isolated Case Management | ✅ **Verified** | Tap **+ New Case**, create cases, switch cases in header. Verify timeline isolation. |
+| **Document Vault** | Medical Record Storage | ✅ **Verified** | In **Documents** tab, tap upload/scan to view sample prescriptions and records. |
+| **Safety Guardrails** | Emergency Safety Engine | ✅ **Verified** | Ask *"I have severe chest pain"* in Chat. Immediate emergency screen triggers. |
+| **Safety Guardrails** | Medication Conflict Check | ✅ **Verified** | Ingest duplicate NSAID or antibiotic; safety alert notifies user. |
+| **Recovery Engine** | Daily Check-ins & Trends | ✅ **Verified** | In **Recovery** tab, log pain (0-10), symptoms, and view 7-day trend analysis. |
+| **Doctor Handoff** | Clinical Brief Export | ✅ **Verified** | Tap **"Generate Doctor Handoff"** in Recovery to view provenance-tagged summary. |
+| **Storage Manager** | Safe Storage Breakdown | ✅ **Verified** | Open **Storage** tab. View model/vault breakdown and tap **Clear Cache** safely. |
+| **Offline Runtime** | Airplane Mode Verification | ✅ **Verified** | Enable Airplane Mode; verify cases, docs, recovery, and safety run without network. |
+| **Local LLM Engine** | llama.rn Native C++ Bridge | ✅ **Verified** | Native `llama.rn` library compiles cleanly into Android release APK (`arm64-v8a`). |
+| **OCR Handwriting** | Native OCR Pipeline | ⚠️ **Experimental** | Heuristic NER parses standard prescriptions; ambiguous text marked `[REQUIRES REVIEW]`. |
+| **Model Downloader** | Native GGUF Downloader | ⚠️ **Experimental** | Native chunked download engine implemented; upstream HF filename resolver in progress. |
+| **Multilingual Voice** | Hindi & Kannada Offline STT | 🚧 **In Progress** | Native Android speech recognition bridge in active development. |
+| **Samsung Health** | Samsung Health Data SDK | 🚧 **In Progress** | Native Samsung Health SDK background bridge planned for Phase 10. |
 
 ---
 
-## 5. Medical Safety & LLM Boundaries
+## 6. Real Device Screenshots (Samsung Galaxy S24 Ultra)
 
-Emergency handling and medication safety are strictly **deterministic**:
-1. **Intent & Medical Scope Gatekeeper**: Rejects non-health prompts (coding, math, creative writing) before touching reasoning models.
-2. **Deterministic Emergency Rulebook**: Pre-LLM pattern matching flags critical red flags (severe chest pain radiating to arm, anaphylaxis, acute stroke symptoms, severe dyspnea) and triggers immediate emergency protocols.
-3. **Allergy & Contraindication Validator**: Intercepts extracted or proposed medications against patient allergies (e.g. Penicillin cross-reactivity with Amoxicillin/Augmentin) deterministically.
-4. **LLM Boundary Rule**: The local LLM never prescribes, never alters dosages, and never overrides doctor instructions.
+The prototype has been validated on a physical Samsung Galaxy S24 Ultra (`SM-S928B`):
 
----
+| Home & Case Management | Document Vault & Records | Storage & Model Accounting |
+|:---:|:---:|:---:|
+| ![Home](docs/screenshots/s_home.png) | ![Documents](docs/screenshots/s_doc.png) | ![Storage](docs/screenshots/phase9-s24-storage.png) |
 
-## 6. Real-World Doctor Handoff Problem
-
-When a patient with existing chronic conditions (e.g., Hypertension, Type 2 Diabetes, Penicillin Allergy) visits a new doctor for an unrelated issue, CareBond synthesizes a concise, provenance-aware **Clinical Dossier**:
-- **Current Conditions & Diagnoses** (with onset date and verification level)
-- **Active Medications** (exact dosage, frequency, and adherence score)
-- **Documented Allergies & Severity**
-- **Recent Lab Trends & Out-of-Range Flags**
-- **Recent Post-Surgical Recovery Status**
-- **Clinician Review Items & Safety Warnings**
-
-Supported formats:
-- *General Physician Summary*
-- *Specialist Consultation Summary* (Cardiology, Endocrinology, Nephrology, Neurology, Orthopedics, Gastroenterology)
-- *Routine Follow-up Summary*
-- *Post-Surgical Recovery Review*
-- *Second Opinion Dossier*
-- *Urgent Consultation Handoff*
+| Model Manager | Verified Clinical Baseline | Recovery Dashboard |
+|:---:|:---:|:---:|
+| ![Models](docs/screenshots/s_models.png) | ![Verified](docs/screenshots/phase9-s24-verified.png) | ![Recovery](docs/screenshots/phase9-s24-front.png) |
 
 ---
 
-## 7. Zero-Cloud Offline Guarantee
+## 7. Medical Safety & Clinical Disclaimer
 
-CareBond AI operates completely without an internet connection:
-- Tested and verified under **Airplane Mode**.
-- Zero mandatory cloud dependencies.
-- Zero telemetry transmitting Protected Health Information (PHI).
-- Sanitized logging filters prevent patient names, medications, and conditions from ever entering debug logs.
+> [!IMPORTANT]
+> ### Clinical Disclaimer
+> CareBond AI is an investigational prototype built for hackathon demonstration. It is designed to assist patients in organizing personal records and preparing structured observations for their doctors. **It does NOT provide medical diagnoses, prescribe treatments, or replace professional clinical judgment.**
+> 
+> * **Deterministic Overrides:** All emergency and allergy guardrails operate via deterministic rule sets that take precedence over any LLM generation.
+> * **Human-in-the-Loop:** Incomplete, faint, or ambiguous handwritten prescriptions are flagged with a mandatory `[REQUIRES REVIEW]` prompt requiring explicit human confirmation.
 
 ---
 
-## 8. Verification & Test Suite
+## 8. Documentation Index
 
-All unit and integration tests are verified:
-```bash
-flutter analyze  # 0 issues found
-flutter test     # 8/8 test suites passing cleanly
-```
+* 🚀 **[Jury Testing Guide](docs/JURY_TEST_GUIDE.md):** Step-by-step instructions and 5-minute evaluation script.
+* 📦 **[Model Setup & Management](docs/MODEL_SETUP.md):** GGUF model profiles, storage specifications, and sideloading instructions.
+* 🏗️ **[System Architecture](docs/ARCHITECTURE.md):** Detailed layer breakdown, data flow, and implemented vs. planned matrix.
+* 🛠️ **[Jury Troubleshooting Guide](docs/TROUBLESHOOTING.md):** Common Android install questions and quick solutions.
+* 📋 **[Release Checkpoint Report](docs/RELEASE_CHECKPOINT_REPORT.md):** Forensic verification metrics, build results, and SHA-256 hashes.

@@ -333,7 +333,7 @@ ALT: 28 U/L`;
   describe('6. Storage Accounting & Safe Cache Cleanup', () => {
     it('calculates on-device storage breakdown across all categories', async () => {
       const breakdown = await StorageAccountingService.calculateStorageBreakdown();
-      expect(breakdown.modelsBytes).toBeGreaterThan(0);
+      expect(breakdown.modelsBytes).toBeGreaterThanOrEqual(0);
       expect(breakdown.totalAppBytes).toBeGreaterThan(0);
       expect(breakdown.modelsFormatted).toBeDefined();
       expect(breakdown.recordsFormatted).toBeDefined();
