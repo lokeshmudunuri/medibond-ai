@@ -112,7 +112,72 @@ Local AI Engine (src/ai/LocalLLMEngine.ts)
  ↓
 Android Runtime (arm64-v8a / CPU & NPU Acceleration)
 ```
+Base Architecture Contract
 
+CareBond AI strictly adheres to the fixed core architecture contract:
+
+text
+                         CAREBOND AI
+                              │
+          ┌───────────────────┴───────────────────┐
+          │                                       │
+          ▼                                       ▼
+       MODE A                                   MODE B
+   EVERYDAY HEALTH                           RECOVERY
+          │                                       │
+          └───────────────────┬───────────────────┘
+                              ▼
+                    SHARED HEALTH CORE
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        ▼                     ▼                     ▼
+      VOICE                 DOCUMENT              SENSORS
+        │                     │                     │
+       STT                   OCR              Signal Processing
+        │                     │                     │
+      Intent              Medical NER        Personal Baseline
+        │                     │                     │
+        └─────────────────────┼─────────────────────┘
+                              ▼
+                       HEALTH MEMORY
+                              │
+                              ▼
+                  PERSONAL HEALTH CONTEXT
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+        ▼                     ▼                     ▼
+   Medical KB          Medication Safety       Recovery Engine
+        │                     │                     │
+        └─────────────────────┼─────────────────────┘
+                              ▼
+                    MEDICAL REASONING
+                              │
+                    ┌─────────┴─────────┐
+                    │                   │
+              LIGHT MODEL          MEDGEMMA 4B
+              4GB PROFILE          6GB+ PROFILE
+                    │                   │
+                    └─────────┬─────────┘
+                              ▼
+                       SAFETY VALIDATION
+                              │
+                              ▼
+                   HEALTH CONTEXT ENGINE
+                              │
+                              ▼
+                    DOCTOR HANDOFF ENGINE
+                              │
+               ┌──────────────┼──────────────┐
+               ▼              ▼              ▼
+            Patient        Specialist       Doctor
+            Summary         Summary         Summary
+                              │
+                              ▼
+                           TTS / UI
+
+
+---
 ---
 
 ## 5. Current Prototype Features & Verification Status
@@ -141,13 +206,13 @@ We uphold total honesty regarding the verification status of all capabilities in
 
 The prototype has been validated on a physical Samsung Galaxy S24 Ultra (`SM-S928B`):
 
-| Home & Case Management | Document Vault & Records | Storage & Model Accounting |
+| Ai voice Agent| Doctor Handoff | voice Agent in work |
 |:---:|:---:|:---:|
 | ![Home](docs/screenshots/s_home.png) | ![Documents](docs/screenshots/s_doc.png) | ![Storage](docs/screenshots/phase9-s24-storage.png) |
 
-| Model Manager | Verified Clinical Baseline | Recovery Dashboard |
+ | Medical Documents scanning | Interface Dashboard |
 |:---:|:---:|:---:|
-| ![Models](docs/screenshots/s_models.png) | ![Verified](docs/screenshots/phase9-s24-verified.png) | ![Recovery](docs/screenshots/phase9-s24-front.png) |
+ ![Verified](docs/screenshots/phase9-s24-verified.png) | ![Recovery](docs/screenshots/phase9-s24-front.png) |
 
 ---
 
